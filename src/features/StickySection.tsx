@@ -1,6 +1,5 @@
 "use client";
 
-import { useParityFreeze } from "@/features/useParityFreeze";
 import {
   createContext,
   useCallback,
@@ -122,7 +121,6 @@ export function TestimonialCardReveal({
   const y = useTransform(scrollYProgress ?? ZERO_PROGRESS, [0, 1], [config.y[0], config.y[1]]);
 
   const ref = useRef<HTMLDivElement>(null);
-  const frozen = useParityFreeze(ref);
   const [inViewNow, setInViewNow] = useState(false);
   const hiddenOpacity = parseOpacity(style) <= 0.001 ? String(parseOpacity(style)) : "0";
   const hiddenTransform =
@@ -175,26 +173,6 @@ export function TestimonialCardReveal({
         className={className}
         data-framer-name={dataFramerName}
         style={style}
-      >
-        {children}
-      </div>
-    );
-  }
-
-  if (frozen) {
-    return (
-      <div
-        ref={ref}
-        className={className}
-        data-framer-name={dataFramerName}
-        style={{
-          ...(style ?? {}),
-          opacity: frozen.opacity,
-          transform: frozen.transform,
-          transition: "none",
-          willChange: "auto",
-          pointerEvents: "none",
-        }}
       >
         {children}
       </div>

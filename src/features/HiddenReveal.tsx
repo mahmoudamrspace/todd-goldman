@@ -22,7 +22,6 @@ import {
 } from "react";
 import { useHeroScroll } from "@/features/HeroScrollContext";
 import { LENIS_SCROLL_EVENT } from "@/features/SmoothScroll";
-import { useParityFreeze } from "@/features/useParityFreeze";
 
 const REVEAL_SAFETY_MS = 2000;
 const REVEAL_TRANSITION = "opacity 0.6s ease, transform 0.6s ease";
@@ -336,7 +335,6 @@ function IntroCharacterReveal({
   const reduced = useReducedMotion();
   const heroScroll = useHeroScroll();
   const ref = useRef<HTMLDivElement>(null);
-  const frozen = useParityFreeze(ref);
   const { scrollYProgress } = useScroll({
     target: heroScroll?.introRef ?? ref,
     offset: ["start start", "end start"],
@@ -361,7 +359,7 @@ function IntroCharacterReveal({
     return 0.5 + ((p - 0.2) / 0.35) * 0.5;
   });
 
-  if (reduced || frozen) {
+  if (reduced) {
     return (
       <div
         ref={ref}
@@ -369,20 +367,12 @@ function IntroCharacterReveal({
         data-framer-name={dataFramerName}
         style={{
           ...style,
-          opacity: frozen?.opacity ?? "1",
-          transform: frozen?.transform ?? "none",
+          opacity: "1",
+          transform: "none",
           transition: "none",
           willChange: "auto",
         }}
       >
-        {children}
-      </div>
-    );
-  }
-
-  if (reduced) {
-    return (
-      <div ref={ref} className={className} data-framer-name={dataFramerName} style={style}>
         {children}
       </div>
     );

@@ -6,7 +6,7 @@ import boundaries from "eslint-plugin-boundaries";
 export default defineConfig([
   ...nextVitals,
   ...nextTs,
-  globalIgnores([".next/**", "out/**", "reference/**", "qa/**", "public/**", "scripts/**"]),
+  globalIgnores([".next/**", "out/**", "public/**", "scripts/**"]),
   {
     plugins: { boundaries },
     settings: {

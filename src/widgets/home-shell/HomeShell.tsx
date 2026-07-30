@@ -1,20 +1,12 @@
-import { About } from "@/widgets/sections/About";
 import { Footer } from "@/widgets/sections/Footer";
 import { Header } from "@/widgets/sections/Header";
 import { HeroIntroRegion } from "@/features/HeroScrollContext";
 import { Hero } from "@/widgets/sections/Hero";
 import { Intro } from "@/widgets/sections/Intro";
-import { ServicesSection } from "@/widgets/interactive/ServicesSection";
-import { SneakPeak } from "@/widgets/sections/SneakPeak";
 import { SvgTemplates } from "@/widgets/sections/SvgTemplates";
-import { Testimonial } from "@/widgets/sections/Testimonial";
-import { FaqSection } from "@/widgets/interactive/FaqSection";
-import { FooterSection } from "@/widgets/interactive/FooterSection";
-import { MarqueeSection } from "@/widgets/interactive/MarqueeSection";
-import { NavMenu } from "@/widgets/interactive/NavMenu";
-import { WorksSection } from "@/widgets/interactive/WorksSection";
 import { ToddHomeSections } from "@/widgets/home-shell/ToddHomeSections";
-import { StickySection } from "@/features/StickySection";
+import { FooterSection } from "@/widgets/interactive/FooterSection";
+import { NavMenu } from "@/widgets/interactive/NavMenu";
 import {
   toAboutContent,
   toFaqContent,
@@ -26,22 +18,15 @@ import {
   toTestimonialContent,
   toWorksContent,
 } from "@/content/section-types";
-import type { ContentProfile } from "@/content";
 import type { SiteSettings, Work } from "@/content/types";
 
 export interface HomeShellProps {
   site: SiteSettings;
   works: Work[];
-  contentProfile?: ContentProfile;
 }
 
 /** Composes all home sections with Framer layout classes and feature behaviors. */
-export function HomeShell({
-  site,
-  works,
-  contentProfile = "default",
-}: HomeShellProps) {
-  const isToddProfile = contentProfile === "default";
+export function HomeShell({ site, works }: HomeShellProps) {
   const worksContent = toWorksContent(works, site);
   const testimonialContent = toTestimonialContent(site);
   const showTestimonials = testimonialContent.items.length > 0;
@@ -62,32 +47,15 @@ export function HomeShell({
             <Hero content={toHeroContent(site)} />
             <Intro content={toIntroContent(site)} />
           </HeroIntroRegion>
-          {isToddProfile ? (
-            <ToddHomeSections
-              worksContent={worksContent}
-              sneakPeakContent={toSneakPeakContent(site)}
-              servicesContent={toServicesContent(site)}
-              testimonialContent={testimonialContent}
-              showTestimonials={showTestimonials}
-              aboutContent={toAboutContent(site)}
-              faqContent={toFaqContent(site)}
-            />
-          ) : (
-            <>
-              <WorksSection content={worksContent} />
-              <MarqueeSection>
-                <SneakPeak content={toSneakPeakContent(site)} />
-              </MarqueeSection>
-              <ServicesSection content={toServicesContent(site)} />
-              {showTestimonials ? (
-                <StickySection>
-                  <Testimonial content={testimonialContent} />
-                </StickySection>
-              ) : null}
-              <About content={toAboutContent(site)} />
-              <FaqSection content={toFaqContent(site)} />
-            </>
-          )}
+          <ToddHomeSections
+            worksContent={worksContent}
+            sneakPeakContent={toSneakPeakContent(site)}
+            servicesContent={toServicesContent(site)}
+            testimonialContent={testimonialContent}
+            showTestimonials={showTestimonials}
+            aboutContent={toAboutContent(site)}
+            faqContent={toFaqContent(site)}
+          />
           <div className={"framer-vwz6y7"} data-framer-name={"Footer-For scroll only"} id={"contact"} />
           <div className={"framer-17h3w0h-container"}>
             <div />

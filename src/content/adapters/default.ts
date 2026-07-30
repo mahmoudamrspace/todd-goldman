@@ -3,7 +3,7 @@ import { siteSettingsSchema, workSchema } from "@/content/schemas";
 import { defaultSiteSeed } from "@/content/seeds/default-site";
 import { defaultWorksSeed } from "@/content/seeds/default-works";
 
-/** Default production profile — Todd Goldman. */
+/** Todd Goldman content repository. */
 export const defaultContentRepository: ContentRepository = {
   async getSite() {
     return siteSettingsSchema.parse(defaultSiteSeed);

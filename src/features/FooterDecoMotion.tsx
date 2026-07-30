@@ -13,11 +13,10 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
-import { useParityFreeze } from "@/features/useParityFreeze";
 
 export type FooterDecoPreset = "default" | "stem4" | "stem6";
 
-/** Loop phase-0 pose used by verify-route capture sync. */
+/** Loop phase-0 pose for footer decoration motion. */
 export const FOOTER_DECO_SETTLED_TRANSFORM = "translate3d(0px, 0px, 0px) scale(1) rotate(0deg)";
 
 const ENTER_DEFAULT = { x: -10, y: 50, scale: 0.9, opacity: 1 };
@@ -65,23 +64,16 @@ export function FooterDecoMotion({
 }) {
   const reduced = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
-  const frozen = useParityFreeze(ref);
   const isInView = useInView(ref, { amount: 0.5 });
   const [hasEntered, setHasEntered] = useState(false);
 
-  if (reduced || frozen) {
+  if (reduced) {
     return (
       <div
         ref={ref}
         className={className}
         data-framer-name={dataFramerName}
-        style={{
-          ...style,
-          opacity: frozen?.opacity ?? style?.opacity ?? "1",
-          transform: frozen?.transform ?? "none",
-          transition: "none",
-          willChange: "auto",
-        }}
+        style={style}
       >
         {children}
       </div>

@@ -6,7 +6,7 @@
   "engines": {
     "node": ">=20"
   },
-  "description": "Todd Goldman portfolio — standalone Next.js app with Framer design parity",
+  "description": "Todd Goldman portfolio — standalone Next.js app",
   "scripts": {
     "dev": "next dev -p 3010",
     "build": "next build",
@@ -14,15 +14,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test:contract": "tsx scripts/test-content-contract.ts",
-    "extract:framer": "node scripts/extract-framer-assets.mjs",
-    "snapshot:hydrated": "node scripts/snapshot-hydrated.mjs",
-    "verify:parity-dom": "node scripts/verify-parity-dom.mjs",
-    "verify:route": "node scripts/verify-route.mjs",
-    "verify:behavior": "node scripts/verify-behavior.mjs",
-    "verify": "pnpm run verify:route && pnpm run verify:behavior",
-    "gate": "CONTENT_PROFILE=reference pnpm run build && CONTENT_PROFILE=reference pnpm run verify",
-    "check:static": "pnpm run lint && pnpm run typecheck && pnpm run test:contract && CONTENT_PROFILE=reference pnpm run build && pnpm run verify:parity-dom && CONTENT_PROFILE=default pnpm run build",
-    "check": "pnpm run check:static && CONTENT_PROFILE=reference pnpm run verify",
+    "check": "pnpm run lint && pnpm run typecheck && pnpm run test:contract && pnpm run build",
     "preview:out": "serve out -l 3460"
   },
   "dependencies": {
@@ -41,10 +33,6 @@
     "eslint-config-next": "16.2.12",
     "eslint-plugin-boundaries": "^7.1.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "node-html-parser": "^9.0.0",
-    "pixelmatch": "^7.2.0",
-    "playwright": "^1.62.0",
-    "pngjs": "^7.0.0",
     "serve": "^14.2.4",
     "tsx": "^4.19.0",
     "typescript": "^5"
