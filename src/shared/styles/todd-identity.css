@@ -25,17 +25,26 @@ body[data-content-profile="default"] {
 .todd-works {
   padding: 48px 0 56px;
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .todd-works__inner {
   max-width: var(--container-max, 1128px);
   margin: 0 auto;
   padding: 0 var(--container-pad, 24px);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .todd-works__header {
   margin-bottom: 28px;
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .todd-works__title {
@@ -87,15 +96,23 @@ body[data-content-profile="default"] {
   transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
-.todd-works__filter:hover,
-.todd-works__filter:focus-visible {
-  background: var(--todd-yellow);
-  transform: translateY(-1px);
-}
-
 .todd-works__filter.is-active {
   background: var(--todd-ink);
   color: var(--todd-paper);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .todd-works__filter:hover,
+  .todd-works__filter:focus-visible {
+    background: var(--todd-yellow);
+    transform: translateY(-1px);
+  }
+
+  .todd-scene__panel:hover .todd-scene__frame,
+  .todd-scene__panel:focus-visible .todd-scene__frame {
+    box-shadow: var(--todd-shadow-hover);
+    transform: translate(-2px, -2px);
+  }
 }
 
 .todd-works__scenes {
@@ -190,12 +207,6 @@ body[data-content-profile="default"] {
   display: block;
 }
 
-.todd-scene__panel:hover .todd-scene__frame,
-.todd-scene__panel:focus-visible .todd-scene__frame {
-  box-shadow: var(--todd-shadow-hover);
-  transform: translate(-2px, -2px);
-}
-
 .todd-scene__number {
   position: absolute;
   top: 10px;
@@ -244,6 +255,8 @@ body[data-content-profile="default"] {
   letter-spacing: -0.03em;
   margin: 0 0 4px;
   line-height: 1.15;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .todd-scene__panel--supporting .todd-scene__title {
@@ -289,9 +302,16 @@ body[data-content-profile="default"] {
 
 .todd-chapter {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   flex: none;
   align-self: stretch;
+}
+
+.todd-chapter .framer-1m3xm2 {
+  margin-inline: auto;
 }
 
 .todd-chapter__line {
@@ -496,14 +516,85 @@ body[data-content-profile="default"] .framer-1ezlif8 {
     padding: 40px 0 48px;
   }
 
+  .todd-works__header {
+    margin-bottom: 22px;
+    min-width: 0;
+  }
+
+  .todd-works__title {
+    font-size: clamp(1.75rem, 8vw, 2.25rem);
+    min-width: 0;
+  }
+
+  .todd-works__subtitle {
+    font-size: 0.9375rem;
+    max-width: none;
+    min-width: 0;
+    overflow-wrap: break-word;
+  }
+
+  .todd-works__filters {
+    flex-wrap: wrap;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .todd-works__filter {
+    flex: 0 0 auto;
+    min-height: 44px;
+    padding: 10px 16px;
+    font-size: 0.6875rem;
+  }
+
+  .todd-works__scenes {
+    gap: 28px;
+    overflow-x: clip;
+  }
+
+  .todd-works__mobile-list {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    width: 100%;
+  }
+
+  .todd-scene__panel--uniform {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    will-change: auto;
+  }
+
+  .todd-scene__panel--uniform .todd-scene__frame {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-width: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .todd-scene__panel--uniform .todd-scene__frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
   .todd-scene {
     min-height: auto;
+    overflow: hidden;
   }
 
   .todd-scene__stage {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
-    gap: 16px;
+    gap: 20px;
+    width: 100%;
+  }
+
+  .todd-scene__panel {
+    will-change: auto;
   }
 
   .todd-scene__panel--dominant,
@@ -512,11 +603,46 @@ body[data-content-profile="default"] .framer-1ezlif8 {
   .todd-scene--reversed .todd-scene__panel--supporting {
     grid-column: 1;
     grid-row: auto;
+    width: 100%;
+    align-self: stretch;
+    justify-self: stretch;
   }
 
-  .todd-scene__panel--supporting .todd-scene__frame {
+  .todd-scene__panel--dominant .todd-scene__frame,
+  .todd-scene__panel--supporting .todd-scene__frame,
+  .todd-scene--reversed .todd-scene__panel--supporting .todd-scene__frame {
+    width: 100%;
+    aspect-ratio: 1 / 1;
     max-width: 100%;
     margin-left: 0;
+    margin-inline: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .todd-scene__frame img {
+    width: 100%;
+    height: 100%;
+    margin-inline: auto;
+    object-fit: contain;
+  }
+
+  .todd-scene__copy {
+    padding: 8px 0 0;
+  }
+
+  .todd-scene__title {
+    font-size: 1.125rem;
+  }
+
+  .todd-scene__panel--supporting .todd-scene__title {
+    font-size: 1.0625rem;
+  }
+
+  .todd-scene__hook {
+    font-size: 0.875rem;
+    -webkit-line-clamp: 3;
   }
 
   .todd-scene__meta-rail {

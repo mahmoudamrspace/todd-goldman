@@ -113,11 +113,49 @@ function StaticWorkPanel({
   );
 }
 
+/** Uniform single card for mobile flat list. */
+export function MobileWorkCard({ work, index }: { work: Work; index: number }) {
+  return (
+    <a
+      href={`/works/${work.slug}`}
+      className="todd-scene__panel todd-scene__panel--uniform"
+    >
+      <div className="todd-scene__frame">
+        <span className="todd-scene__number" aria-hidden="true">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <img
+          src={work.gridThumbnail.src}
+          alt={work.gridThumbnail.alt}
+          loading={index < 4 ? "eager" : "lazy"}
+          decoding="async"
+        />
+      </div>
+      <div className="todd-scene__copy">
+        {work.category ? (
+          <span
+            className={cn(
+              "todd-scene__category",
+              work.accentTone && `todd-scene__category--${work.accentTone}`,
+            )}
+          >
+            {work.category}
+          </span>
+        ) : null}
+        <h3 className="todd-scene__title">{work.title}</h3>
+        {work.hook ? <p className="todd-scene__hook">{work.hook}</p> : null}
+      </div>
+    </a>
+  );
+}
+
 export interface EditorialWorkSceneProps {
   dominant: Work;
   supporting: Work | null;
   sceneIndex: number;
   startIndex: number;
+  /** When true, use static panels (no scroll parallax / clip-path). */
+  isMobile?: boolean;
 }
 
 /** Two-work editorial scene with scroll-linked mask and parallax. */
@@ -126,10 +164,12 @@ export function EditorialWorkScene({
   supporting,
   sceneIndex,
   startIndex,
+  isMobile = false,
 }: EditorialWorkSceneProps) {
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
   const reversed = sceneIndex % 2 === 1;
+  const useStaticPanels = reduced || isMobile;
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -161,7 +201,7 @@ export function EditorialWorkScene({
   const metaOpacity = useTransform(smooth, [0.18, 0.48], [0, 1]);
   const metaX = useTransform(smooth, [0.18, 0.48], [reversed ? 28 : -28, 0]);
 
-  if (reduced) {
+  if (useStaticPanels) {
     return (
       <section
         ref={ref}
