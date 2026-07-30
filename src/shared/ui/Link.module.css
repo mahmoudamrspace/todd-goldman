@@ -1,0 +1,11 @@
+.root {
+  color: var(--link-fg);
+  text-decoration: none;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+.root:hover {
+  opacity: 0.65;
+}
+.underline {
+  text-decoration: underline;
+}

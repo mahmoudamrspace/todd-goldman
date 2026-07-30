@@ -1,0 +1,44 @@
+{
+  "routes": [
+    {
+      "id": "home",
+      "previewPath": "/",
+      "referencePath": "/",
+      "sections": [
+        { "id": "header", "selector": "nav", "region": "header" },
+        { "id": "hero", "selector": "section[data-framer-name=\"Hero\"]", "region": "hero" },
+        { "id": "intro", "selector": "#text_intro", "region": "content", "threshold": 0.02 },
+        { "id": "works", "selector": "#works", "region": "content", "threshold": 0.02 },
+        { "id": "sneak", "selector": "section[data-framer-name=\"Sneak peak\"]", "region": "content", "threshold": 0.02 },
+        { "id": "services", "selector": "section[data-framer-name=\"Services\"]", "region": "content", "threshold": 0.02 },
+        { "id": "testimonial", "selector": "#testimonial-section", "region": "content", "threshold": 0.016 },
+        { "id": "about", "selector": "#about", "region": "content", "threshold": 0.02 },
+        { "id": "faq", "selector": "section[data-framer-name=\"FAQ\"]", "region": "content", "threshold": 0.018 },
+        { "id": "footer", "selector": "footer.framer-1f12llc", "region": "content", "threshold": 0.02 }
+      ],
+      "thresholds": { "header": 0.002, "hero": 0.007, "content": 0.01 },
+      "viewports": {
+        "desktop": { "width": 1440, "height": 900, "headerH": 90, "heroH": 968 },
+        "tablet": { "width": 810, "height": 1024, "headerH": 90, "heroH": 968 },
+        "tabletWide": { "width": 1024, "height": 800, "headerH": 90, "heroH": 968 },
+        "phone": { "width": 390, "height": 844, "headerH": 70, "heroH": 517 }
+      }
+    },
+    {
+      "id": "work-oxbridge",
+      "previewPath": "/works/oxbridge-press/",
+      "referencePath": "/works/oxbridge-press/",
+      "sections": [
+        { "id": "header", "selector": "nav", "region": "header", "threshold": 0.02 },
+        { "id": "main", "selector": "main[data-framer-name=\"Main\"]", "region": "content", "threshold": 0.02 },
+        { "id": "footer", "selector": "footer.framer-1f12llc", "region": "content", "threshold": 0.02 }
+      ],
+      "thresholds": { "header": 0.002, "hero": 0.01, "content": 0.01 },
+      "viewports": {
+        "desktop": { "width": 1440, "height": 900, "headerH": 90, "heroH": 1200 },
+        "tablet": { "width": 810, "height": 1024, "headerH": 90, "heroH": 1200 },
+        "phone": { "width": 390, "height": 844, "headerH": 70, "heroH": 900 }
+      }
+    }
+  ]
+}

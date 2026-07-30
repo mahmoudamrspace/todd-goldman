@@ -1,0 +1,33 @@
+.root {
+  margin: 0;
+  color: var(--text-primary);
+  line-height: var(--leading-tight);
+  font-weight: 500;
+}
+.hero {
+  font-family: var(--font-serif);
+  font-size: var(--text-hero);
+  font-weight: 400;
+}
+.display {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.section {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.card {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+}
+.script {
+  font-family: var(--font-script);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 400;
+}

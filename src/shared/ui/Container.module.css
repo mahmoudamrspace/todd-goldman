@@ -1,0 +1,4 @@
+.root {
+  width: min(100% - (var(--container-pad) * 2), var(--container-max));
+  margin-inline: auto;
+}

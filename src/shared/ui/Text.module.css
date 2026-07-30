@@ -1,0 +1,12 @@
+.root {
+  margin: 0;
+  font-family: var(--font-sans);
+  line-height: var(--leading-normal);
+}
+.primary { color: var(--text-primary); }
+.secondary { color: var(--text-secondary); }
+.muted { color: var(--text-muted); }
+.xs { font-size: var(--text-xs); }
+.sm { font-size: var(--text-sm); }
+.md { font-size: var(--text-md); }
+.lg { font-size: var(--text-lg); }

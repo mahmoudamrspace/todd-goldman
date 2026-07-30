@@ -1,0 +1,44 @@
+:root {
+  --color-ink: #0f0f0f;
+  --color-muted: #42423a;
+  --color-muted-soft: #949389;
+  --color-cream: #f7f4ed;
+  --color-border: #cfcac0;
+  --color-white: #ffffff;
+  --color-blue: #2978f3;
+  --color-yellow: #f0cd3e;
+  --color-orange: #ff5324;
+  --color-green: #0e9c6c;
+  --color-navy: #2f4c9c;
+  --color-sky: #69afeb;
+
+  --surface-canvas: var(--color-cream);
+  --surface-elevated: var(--color-white);
+  --surface-blue: var(--color-blue);
+  --surface-green: var(--color-green);
+  --text-primary: var(--color-ink);
+  --text-secondary: var(--color-muted);
+  --text-muted: var(--color-muted-soft);
+  --border-subtle: var(--color-border);
+
+  --font-serif: var(--font-averia), "Times New Roman", serif;
+  --font-display: var(--font-inter-display), "Helvetica Neue", sans-serif;
+  --font-sans: var(--font-inter), "Helvetica Neue", sans-serif;
+  --font-script: var(--font-grape-nuts), cursive;
+  --font-grotesk: var(--font-cabinet), "Helvetica Neue", sans-serif;
+
+  --container-max: 1128px;
+  --container-pad: 24px;
+  --bp-tablet: 810px;
+  --bp-desktop: 1200px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-faq: cubic-bezier(0.12, 0.23, 0.17, 0.99);
+  --ease-nav: cubic-bezier(0.27, 0.1, 0.17, 1);
+}
+
+@media (max-width: 809.98px) {
+  :root {
+    --container-pad: 16px;
+  }
+}

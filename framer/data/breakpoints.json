@@ -1,0 +1,26 @@
+[
+  {
+    "hash": "72rtr7",
+    "mediaQuery": "(min-width: 1200px)"
+  },
+  {
+    "hash": "r4q9g",
+    "mediaQuery": "(min-width: 810px) and (max-width: 1199.98px)"
+  },
+  {
+    "hash": "g5y12p",
+    "mediaQuery": "(max-width: 809.98px)"
+  },
+  {
+    "hash": "16i3gsx",
+    "mediaQuery": "(min-width: 1200px)"
+  },
+  {
+    "hash": "14eie82",
+    "mediaQuery": "(min-width: 810px) and (max-width: 1199.98px)"
+  },
+  {
+    "hash": "qk48ah",
+    "mediaQuery": "(max-width: 809.98px)"
+  }
+]

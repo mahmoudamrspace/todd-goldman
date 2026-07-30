@@ -1,0 +1,16 @@
+/* FAQ accordion open variant — matches Framer E5ePz runtime state */
+.framer-E5ePz.framer-v-wlit4m {
+  overflow: visible;
+}
+
+.framer-E5ePz.framer-v-wlit4m .framer-1ue276m {
+  padding: 0 0 16px;
+}
+
+.framer-E5ePz .framer-ohg0r path {
+  transition: fill-opacity 0.4s cubic-bezier(0.12, 0.23, 0.17, 0.99);
+}
+
+.framer-E5ePz[data-framer-name="Closed"]:hover {
+  --border-color: rgb(251, 251, 251);
+}

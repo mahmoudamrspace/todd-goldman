@@ -1,0 +1,10 @@
+.root {
+  display: flex;
+  gap: var(--stack-gap, var(--space-4));
+}
+.column { flex-direction: column; }
+.row {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
