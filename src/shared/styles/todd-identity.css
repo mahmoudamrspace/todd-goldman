@@ -669,3 +669,85 @@ body[data-content-profile="default"] .framer-1ezlif8 {
     transform: none;
   }
 }
+
+/* ── Nav overlay (burger menu open) ── */
+
+.framer-XP9RI .framer-miowvv-container:has(nav[data-nav-open="true"]) {
+  height: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.framer-XP9RI nav[data-nav-open="true"].framer-Lbjyv {
+  height: 100vh !important;
+  height: 100dvh !important;
+  width: 100% !important;
+  max-width: none;
+  min-height: unset;
+  background-color: var(--todd-ink) !important;
+}
+
+nav[data-nav-open="true"] .framer-1qmc12j .framer-2f5fbf .framer-text {
+  --variable-reference-F_WTFf8Qd-oKXSe7xX5: var(
+    --token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55,
+    rgb(247, 244, 237)
+  );
+  --framer-text-color: var(
+    --token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55,
+    rgb(247, 244, 237)
+  );
+}
+
+@media (max-width: 809.98px) {
+  nav[data-nav-open="true"] .framer-bnx3m7-container .framer-text {
+    --framer-font-size: clamp(2.5rem, 12vw, 5.625rem);
+  }
+}
+
+nav[data-nav-open="false"] .framer-76vnp9,
+nav[data-nav-open="false"] .framer-14nq1fn {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Desktop + tablet open: middle column fills height, links centered */
+nav[data-nav-open="true"].framer-v-pw2coq .framer-ijjr0j {
+  width: 100%;
+}
+
+nav[data-nav-open="true"].framer-v-pw2coq .framer-bnx3m7-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+nav[data-nav-open="true"].framer-v-pw2coq .framer-WwdNp.framer-1gc058m {
+  height: 100%;
+  width: 100%;
+  align-items: center;
+}
+
+/* Phone open: single centered column */
+nav[data-nav-open="true"].framer-v-wwyydj .framer-ijjr0j {
+  justify-content: center;
+}
+
+nav[data-nav-open="true"].framer-v-wwyydj .framer-bnx3m7-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+nav[data-nav-open="true"].framer-v-wwyydj .framer-WwdNp.framer-1gc058m {
+  height: 100%;
+  width: 100%;
+  align-items: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  nav[data-nav-open="true"] .framer-WwdNp .framer-text {
+    transition: none;
+  }
+}

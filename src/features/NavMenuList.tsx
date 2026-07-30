@@ -1,0 +1,153 @@
+"use client";
+
+import type { IntroContent } from "@/content/section-types";
+import { NavMenuLink } from "@/entities/NavMenuLink";
+import { navOverlaySpring } from "@/shared/lib/motion";
+import { motion, useReducedMotion } from "motion/react";
+import { useState } from "react";
+
+const CREAM =
+  "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))";
+const GRAY =
+  "var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(148, 147, 137))";
+
+const NAV_ITEMS = [
+  {
+    className: "framer-p33yb2 framer-rqn908",
+    textClassName: "framer-1gfizoq",
+    hoverVariant: "framer-v-1t8jhiu",
+    defaultLabel: "Works",
+    defaultHref: "/#works",
+  },
+  {
+    className: "framer-2bu14n framer-rqn908",
+    textClassName: "framer-170psbw",
+    hoverVariant: "framer-v-13jtyaq",
+    defaultLabel: "About",
+    defaultHref: "/#about",
+  },
+  {
+    className: "framer-18y0jlw framer-rqn908",
+    textClassName: "framer-15tz0mu",
+    hoverVariant: "framer-v-eormac",
+    defaultLabel: "Contact",
+    defaultHref: "/#contact",
+  },
+] as const;
+
+const TEXT_STYLE = {
+  "--font-selector": "R0Y7QXZlcmlhIFNlcmlmIExpYnJlLTMwMA==",
+  "--framer-font-family": '"Averia Serif Libre", sans-serif',
+  "--framer-font-open-type-features":
+    "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on",
+  "--framer-font-size": "90px",
+  "--framer-font-weight": "300",
+  "--framer-letter-spacing": "-0.03em",
+  "--framer-line-height": "1.1em",
+} as const;
+
+export interface NavMenuListProps {
+  content: IntroContent;
+  open: boolean;
+}
+
+function NavMenuLinkText({
+  textClassName,
+  label,
+  dimmed,
+}: {
+  textClassName: string;
+  label: string;
+  dimmed: boolean;
+}) {
+  const reduced = useReducedMotion();
+  const textColor = dimmed ? GRAY : CREAM;
+  const colorVars = {
+    "--extracted-tcooor": textColor,
+    "--framer-text-color": textColor,
+  };
+
+  if (reduced) {
+    return (
+      <div
+        className={textClassName}
+        data-framer-component-type={"RichTextContainer"}
+        style={{ ...colorVars, transform: "none" }}
+      >
+        <div dir={"auto"} className={"framer-text"} style={{ ...TEXT_STYLE, ...colorVars }}>
+          {label}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <motion.div
+      className={textClassName}
+      data-framer-component-type={"RichTextContainer"}
+      style={{ transform: "none" }}
+      initial={false}
+      animate={colorVars}
+      transition={navOverlaySpring}
+    >
+      <motion.div
+        dir={"auto"}
+        className={"framer-text"}
+        style={TEXT_STYLE}
+        initial={false}
+        animate={colorVars}
+        transition={navOverlaySpring}
+      >
+        {label}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/** Nav menu links with Framer hover-dim sibling behavior. */
+export function NavMenuList({ content, open }: NavMenuListProps) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const hoveredItem = hoveredIndex === null ? null : NAV_ITEMS[hoveredIndex];
+  const parentVariant = hoveredItem?.hoverVariant ?? "framer-v-1gc058m";
+  const parentName =
+    hoveredIndex === null
+      ? "Default"
+      : (content.nav[hoveredIndex]?.label ?? hoveredItem?.defaultLabel ?? "Default");
+
+  return (
+    <div className={"framer-bnx3m7-container"} data-framer-name={"Menu Items"}>
+      <div
+        className={`framer-WwdNp framer-1gc058m ${parentVariant}`}
+        data-framer-name={parentName}
+        data-highlight={true}
+        tabIndex={0}
+        style={{ "--1o1r33v": "16px", "--frfhbi": "center" }}
+        onMouseLeave={() => setHoveredIndex(null)}
+      >
+        {NAV_ITEMS.map((item, index) => {
+          const label = content.nav[index]?.label ?? item.defaultLabel;
+          const dimmed = hoveredIndex !== null && hoveredIndex !== index;
+
+          return (
+            <NavMenuLink
+              key={item.defaultHref}
+              className={item.className}
+              data-framer-name={label}
+              href={content.nav[index]?.href ?? item.defaultHref}
+              open={open}
+              index={index}
+              onMouseEnter={() => setHoveredIndex(index)}
+            >
+              <NavMenuLinkText
+                textClassName={item.textClassName}
+                label={label}
+                dimmed={dimmed}
+              />
+            </NavMenuLink>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

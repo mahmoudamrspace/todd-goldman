@@ -98,3 +98,20 @@ export const editorialFilterTransition = {
   layout: { type: "spring" as const, stiffness: 120, damping: 22 },
   opacity: { duration: 0.25 },
 };
+
+/** Nav overlay springs — recovered from Framer reference. */
+export const navOverlaySpring = {
+  type: "spring" as const,
+  damping: 60,
+  stiffness: 500,
+  mass: 1,
+};
+
+export const navLinkCloseSpring = {
+  type: "spring" as const,
+  damping: 30,
+  stiffness: 400,
+  mass: 1,
+};
+
+export const navLinkDelays = [0, 0.2, 0.4] as const;

@@ -1,7 +1,13 @@
 "use client";
 
-import { useReducedMotion } from "motion/react";
-import type { CSSProperties, ReactNode } from "react";
+import { useNavMenu } from "@/features/nav-menu/NavMenuContext";
+import {
+  navLinkCloseSpring,
+  navLinkDelays,
+  navOverlaySpring,
+} from "@/shared/lib/motion";
+import { motion, useReducedMotion } from "motion/react";
+import type { ReactNode } from "react";
 
 export interface NavMenuLinkProps {
   href: string;
@@ -9,38 +15,61 @@ export interface NavMenuLinkProps {
   index: number;
   className: string;
   "data-framer-name": string;
+  onMouseEnter?: () => void;
   children: ReactNode;
 }
 
-/** Staggered nav overlay link entrance. */
+/** Staggered nav overlay link entrance matching Framer spring timing. */
 export function NavMenuLink({
   href,
   open,
   index,
   className,
   "data-framer-name": dataFramerName,
+  onMouseEnter,
   children,
 }: NavMenuLinkProps) {
   const reduced = useReducedMotion();
+  const { setOpen } = useNavMenu();
+  const delay = navLinkDelays[index] ?? 0.4;
 
-  const style: CSSProperties = {
-    willChange: "transform",
-    opacity: open || reduced ? 1 : 0,
-    transform: open || reduced ? "none" : "translateY(20px)",
-    transition: reduced
-      ? undefined
-      : `opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1) ${open ? 0.08 * index : 0}s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) ${open ? 0.08 * index : 0}s`,
-  };
+  if (reduced) {
+    return (
+      <a
+        className={className}
+        data-framer-name={dataFramerName}
+        data-highlight={true}
+        href={href}
+        style={{
+          opacity: open ? 1 : 0,
+          pointerEvents: open ? undefined : "none",
+        }}
+        onMouseEnter={onMouseEnter}
+        onClick={() => setOpen(false)}
+      >
+        {children}
+      </a>
+    );
+  }
 
   return (
-    <a
+    <motion.a
       className={className}
       data-framer-name={dataFramerName}
       data-highlight={true}
       href={href}
-      style={style}
+      style={{ willChange: "transform", pointerEvents: open ? undefined : "none" }}
+      initial={false}
+      animate={open ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={
+        open
+          ? { ...navOverlaySpring, delay }
+          : navLinkCloseSpring
+      }
+      onMouseEnter={onMouseEnter}
+      onClick={() => setOpen(false)}
     >
       {children}
-    </a>
+    </motion.a>
   );
 }

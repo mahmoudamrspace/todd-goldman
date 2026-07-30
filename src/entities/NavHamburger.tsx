@@ -29,9 +29,14 @@ export function NavHamburger({
   };
 
   const bg = style.backgroundColor?.toString() ?? "";
-  const barColor =
-    bg.includes("rgba(15, 15, 15, 0)") || bg === "transparent"
-      ? "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))"
+  const cream =
+    "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))";
+  const ink =
+    "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))";
+  const barColor = open
+    ? cream
+    : bg.includes("rgba(15, 15, 15, 0)") || bg === "transparent"
+      ? ink
       : "rgb(251, 251, 251)";
 
   return (
@@ -63,18 +68,12 @@ export function NavHamburger({
       <div
         className="framer-1481d4x"
         data-framer-name="Bottom"
-        style={{
-          backgroundColor: barColor,
-          transform: open ? undefined : "none",
-        }}
+        style={{ backgroundColor: barColor }}
       />
       <div
         className="framer-d8fgy7"
         data-framer-name="Top"
-        style={{
-          backgroundColor: barColor,
-          transform: open ? undefined : "none",
-        }}
+        style={{ backgroundColor: barColor }}
       />
     </button>
   );

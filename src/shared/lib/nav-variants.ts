@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+
 /** Maps Framer nav closed variant classes to open variants. */
 export const NAV_VARIANTS = {
   desktop: {
@@ -39,4 +41,16 @@ export function navShellClass(
 export function navFramerName(breakpoint: NavBreakpoint, open: boolean): string {
   const variant = NAV_VARIANTS[breakpoint];
   return open ? variant.openName : variant.closedName;
+}
+
+/** Inline nav shell styles — open state must fill viewport, not the fixed header box. */
+export function navShellStyle(open: boolean, backgroundColor: string): CSSProperties {
+  return {
+    backgroundColor: open ? "var(--todd-ink)" : backgroundColor,
+    height: open ? "100dvh" : "100%",
+    width: "100%",
+    willChange: "transform",
+    opacity: 1,
+    transform: "none",
+  };
 }
