@@ -289,6 +289,9 @@ body[data-content-profile="default"] {
 
 .todd-chapter {
   position: relative;
+  width: 100%;
+  flex: none;
+  align-self: stretch;
 }
 
 .todd-chapter__line {
@@ -297,6 +300,11 @@ body[data-content-profile="default"] {
   margin: 0 auto 0;
   transform-origin: left center;
   border-radius: 999px;
+  pointer-events: none;
+}
+
+.todd-chapter__line.is-static {
+  transform: scaleX(1);
 }
 
 .todd-chapter__line--paper {

@@ -1,17 +1,20 @@
 "use client";
 
 import { ScrollChapter } from "@/features/ScrollChapter";
+import { StickySection } from "@/features/StickySection";
 import { About } from "@/widgets/sections/About";
 import { FaqSection } from "@/widgets/interactive/FaqSection";
 import { MarqueeSection } from "@/widgets/interactive/MarqueeSection";
 import { ServicesSection } from "@/widgets/interactive/ServicesSection";
 import { SneakPeak } from "@/widgets/sections/SneakPeak";
+import { Testimonial } from "@/widgets/sections/Testimonial";
 import { WorksGallery } from "@/widgets/sections/WorksGallery";
 import type {
   AboutContent,
   FaqContent,
   ServicesContent,
   SneakPeakContent,
+  TestimonialContent,
   WorksContent,
 } from "@/content/section-types";
 
@@ -19,6 +22,8 @@ export interface ToddHomeSectionsProps {
   worksContent: WorksContent;
   sneakPeakContent: SneakPeakContent;
   servicesContent: ServicesContent;
+  testimonialContent: TestimonialContent;
+  showTestimonials: boolean;
   aboutContent: AboutContent;
   faqContent: FaqContent;
 }
@@ -28,6 +33,8 @@ export function ToddHomeSections({
   worksContent,
   sneakPeakContent,
   servicesContent,
+  testimonialContent,
+  showTestimonials,
   aboutContent,
   faqContent,
 }: ToddHomeSectionsProps) {
@@ -44,6 +51,13 @@ export function ToddHomeSections({
       <ScrollChapter accent="dark">
         <ServicesSection content={servicesContent} />
       </ScrollChapter>
+      {showTestimonials ? (
+        <ScrollChapter accent="paper">
+          <StickySection>
+            <Testimonial content={testimonialContent} />
+          </StickySection>
+        </ScrollChapter>
+      ) : null}
       <ScrollChapter accent="paper">
         <About content={aboutContent} />
       </ScrollChapter>

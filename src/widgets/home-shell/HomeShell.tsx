@@ -67,6 +67,8 @@ export function HomeShell({
               worksContent={worksContent}
               sneakPeakContent={toSneakPeakContent(site)}
               servicesContent={toServicesContent(site)}
+              testimonialContent={testimonialContent}
+              showTestimonials={showTestimonials}
               aboutContent={toAboutContent(site)}
               faqContent={toFaqContent(site)}
             />

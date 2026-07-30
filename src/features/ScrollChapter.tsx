@@ -7,7 +7,6 @@ import {
   useTransform,
 } from "motion/react";
 import { useRef, type ReactNode } from "react";
-import { chapterScrollRange } from "@/shared/lib/motion";
 import { cn } from "@/shared/lib/cn";
 
 export interface ScrollChapterProps {
@@ -18,14 +17,17 @@ export interface ScrollChapterProps {
   accent?: "cream" | "dark" | "paper";
 }
 
-/** Subtle section entry/exit tied to scroll — Todd homepage acts only. */
+/**
+ * Todd homepage chapter marker — scroll-linked accent line only.
+ * Section content stays a direct layout participant (no wrapper transform/opacity).
+ */
 export function ScrollChapter({
   children,
   className,
   id,
   accent = "paper",
 }: ScrollChapterProps) {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
@@ -33,39 +35,23 @@ export function ScrollChapter({
     offset: ["start end", "end start"],
   });
 
-  const opacity = useTransform(
-    scrollYProgress,
-    [...chapterScrollRange.opacityInput],
-    [...chapterScrollRange.opacity],
-  );
-  const y = useTransform(
-    scrollYProgress,
-    [...chapterScrollRange.yInput],
-    [...chapterScrollRange.y],
-  );
   const lineScale = useTransform(scrollYProgress, [0.05, 0.2], [0, 1]);
 
-  if (reduced) {
-    return (
-      <section ref={ref} className={cn("todd-chapter", className)} id={id}>
-        {children}
-      </section>
-    );
-  }
-
   return (
-    <motion.section
-      ref={ref}
-      className={cn("todd-chapter", className)}
-      id={id}
-      style={{ opacity, y }}
-    >
-      <motion.div
-        className={cn("todd-chapter__line", `todd-chapter__line--${accent}`)}
-        aria-hidden="true"
-        style={{ scaleX: lineScale }}
-      />
+    <div ref={ref} className={cn("todd-chapter", className)} id={id}>
+      {reduced ? (
+        <div
+          className={cn("todd-chapter__line", `todd-chapter__line--${accent}`, "is-static")}
+          aria-hidden="true"
+        />
+      ) : (
+        <motion.div
+          className={cn("todd-chapter__line", `todd-chapter__line--${accent}`)}
+          aria-hidden="true"
+          style={{ scaleX: lineScale }}
+        />
+      )}
       {children}
-    </motion.section>
+    </div>
   );
 }

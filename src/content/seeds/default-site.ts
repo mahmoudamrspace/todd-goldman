@@ -46,7 +46,6 @@ export const defaultSiteSeed: SiteSettings = {
   ],
   worksTitleWords: ["Selected", "art"],
   sneakPeakTitleWords: ["Sketchbook", "wall"],
-  testimonialTitleWords: [],
   faqTitle: "FAQ",
   faqSubtitleLead: "Questions, ",
   faqSubtitleEmphasis: "answered",
@@ -58,7 +57,6 @@ export const defaultSiteSeed: SiteSettings = {
   workNavNextFull: "Next piece",
   workNavPrevShort: "Previous",
   workNavNextShort: "Next",
-  testimonials: [],
   faqs: [
     {
       question: "What kind of art do you make?",
