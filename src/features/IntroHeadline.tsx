@@ -2,12 +2,7 @@
 
 import { useHeroScroll } from "@/features/HeroScrollContext";
 import { LENIS_SCROLL_EVENT } from "@/features/SmoothScroll";
-import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
-
-const INTER_BOLD_STYLE: CSSProperties = {
-  "--font-selector": "SW50ZXItQm9sZA==",
-  "--framer-font-family": '"Inter", "Inter Placeholder", sans-serif',
-};
+import { useEffect, useMemo, useRef, type CSSProperties, type ReactNode } from "react";
 
 const HIGHLIGHT_STYLE: CSSProperties = {
   "--font-selector": "R0Y7QXZlcmlhIFNlcmlmIExpYnJlLTMwMGl0YWxpYw==",
@@ -16,31 +11,39 @@ const HIGHLIGHT_STYLE: CSSProperties = {
   "--framer-font-weight": "300",
 };
 
-type HeadlineToken =
-  | { kind: "word"; text: string }
-  | { kind: "empty" }
-  | { kind: "inter-spaces"; parts: [string, string] }
-  | { kind: "highlight"; words: string[] };
+/** Words rendered with Averia italic emphasis. */
+const HIGHLIGHT_WORDS = new Set([
+  "fifth",
+  "grader,",
+  "smart-ass,",
+  "laugh.",
+  "Illustrator",
+  "playful",
+  "years",
+  "artist",
+  "illustrator",
+  "bold,",
+  "brands,",
+  "collectors.",
+]);
 
-/** Reference export token stream for the desktop intro headline. */
-const HEADLINE_TOKENS: HeadlineToken[] = [
-  { kind: "word", text: "I" },
-  { kind: "word", text: "am" },
-  { kind: "word", text: "an" },
-  { kind: "word", text: "independent" },
-  { kind: "inter-spaces", parts: ["", " "] },
-  { kind: "highlight", words: ["Illustrator"] },
-  { kind: "inter-spaces", parts: ["", " "] },
-  { kind: "word", text: "and" },
-  { kind: "word", text: "brand" },
-  { kind: "word", text: "designer" },
-  { kind: "word", text: "with" },
-  { kind: "empty" },
-  { kind: "highlight", words: ["9", "years"] },
-  { kind: "empty" },
-  { kind: "word", text: "of" },
-  { kind: "word", text: "experience." },
-];
+type HeadlineToken =
+  | { kind: "word"; text: string; highlight?: boolean }
+  | { kind: "empty" };
+
+function isHighlightWord(text: string): boolean {
+  const normalized = text.replace(/[.,!?;:'"]/g, "");
+  return HIGHLIGHT_WORDS.has(text) || HIGHLIGHT_WORDS.has(normalized);
+}
+
+function buildHeadlineTokens(headline: string): HeadlineToken[] {
+  const words = headline.trim().split(/\s+/).filter(Boolean);
+  return words.map((text) => ({
+    kind: "word" as const,
+    text,
+    highlight: isHighlightWord(text),
+  }));
+}
 
 export const INTRO_WORD_STYLE: CSSProperties = {
   display: "inline-block",
@@ -70,10 +73,17 @@ function IntroWordSpan({
   );
 }
 
-/** Intro headline with reference `framer-text` highlight spans. */
-export function IntroHeadline({ fontSize }: { fontSize: string }) {
+/** Intro headline driven by site content seed. */
+export function IntroHeadline({
+  fontSize,
+  headline,
+}: {
+  fontSize: string;
+  headline: string;
+}) {
   const heroScroll = useHeroScroll();
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const tokens = useMemo(() => buildHeadlineTokens(headline), [headline]);
 
   useEffect(() => {
     const heading = headingRef.current;
@@ -117,51 +127,26 @@ export function IntroHeadline({ fontSize }: { fontSize: string }) {
   const nodes: ReactNode[] = [];
   let wordIndex = 0;
 
-  HEADLINE_TOKENS.forEach((token, index) => {
+  tokens.forEach((token, index) => {
     if (index > 0) nodes.push(" ");
 
-    switch (token.kind) {
-      case "word":
-        nodes.push(
-          <IntroWordSpan key={`intro-hl-word-${index}`} wordIndex={wordIndex}>
-            {token.text}
-          </IntroWordSpan>,
-        );
-        wordIndex += 1;
-        break;
-      case "empty":
-        nodes.push(
-          <IntroWordSpan key={`intro-hl-empty-${index}`} wordIndex={wordIndex}>
-            {""}
-          </IntroWordSpan>,
-        );
-        wordIndex += 1;
-        break;
-      case "inter-spaces":
-        nodes.push(
-          <span key={`intro-hl-inter-${index}`} className="framer-text" style={INTER_BOLD_STYLE}>
-            {token.parts.map((part, partIndex) => (
-              <IntroWordSpan key={`intro-hl-inter-${index}-${partIndex}`} wordIndex={wordIndex}>
-                {part}
-              </IntroWordSpan>
-            ))}
-          </span>,
-        );
-        wordIndex += token.parts.length;
-        break;
-      case "highlight":
+    if (token.kind === "word") {
+      const wordNode = (
+        <IntroWordSpan key={`intro-hl-word-${index}`} wordIndex={wordIndex}>
+          {token.text}
+        </IntroWordSpan>
+      );
+      wordIndex += 1;
+
+      if (token.highlight) {
         nodes.push(
           <span key={`intro-hl-hi-${index}`} className="framer-text" style={HIGHLIGHT_STYLE}>
-            {token.words.map((word, partIndex) => (
-              <IntroWordSpan key={`intro-hl-hi-${index}-${partIndex}`} wordIndex={wordIndex + partIndex}>
-                {partIndex > 0 ? " " : ""}
-                {word}
-              </IntroWordSpan>
-            ))}
+            {wordNode}
           </span>,
         );
-        wordIndex += token.words.length;
-        break;
+      } else {
+        nodes.push(wordNode);
+      }
     }
   });
 

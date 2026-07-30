@@ -1,8 +1,6 @@
 import { Fragment } from "react";
 import { AnimatedSpan } from "@/features/HiddenReveal";
 
-const BOLD_CLIENT_NAMES = new Set(["Monocle Magazine", "The Guardian", "Airbnb"]);
-
 const BODY_BOLD_STYLE = {
   "--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=",
   "--framer-font-weight": "700",
@@ -19,34 +17,39 @@ const SEPARATOR_STYLE = {
   "--framer-text-color": "var(--token-ae5d2ed2-395e-4ac7-9825-f57ad4d7ddc7, rgb(240, 205, 62))",
 } as const;
 
-/** Reference About-me bio with highlight spans matching Framer export. */
-export function AboutBodyRichText() {
+const BOLD_CLIENT_NAMES = new Set([
+  "Books & publishing",
+  "David & Goliath apparel",
+  "Gallery exhibitions",
+  "Brand collaborations",
+]);
+
+/** About bio from site content seed. */
+export function AboutBodyRichText({ body }: { body: string }) {
+  const sentences = body.split(/(?<=[.!?])\s+/).filter(Boolean);
+  const lead = sentences[0] ?? body;
+  const rest = sentences.slice(1).join(" ");
+
   return (
     <>
       <span className={"framer-text"} style={BODY_BOLD_STYLE}>
-        {"         An illustrator and visual storyteller"}
+        {"         "}
+        {lead}
       </span>
-      {" based in Copenhagen. His work explores playful shapes, bold color, and "}
-      <span className={"framer-text"} style={BODY_BOLD_STYLE}>
-        narrative composition.{" "}
-      </span>
-      After studying design at{" "}
-      <span className={"framer-text"} style={{"--framer-text-color": "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))"}}>
-        the Royal{" "}
-      </span>
-      <span className={"framer-text"} style={BODY_BOLD_STYLE}>
-        Danish Academy of Design,
-      </span>
-      {" he began working with studios and publishers."}
+      {rest ? <> {" "}{rest}</> : null}
     </>
   );
 }
 
-/** About-me h3 with reference italic/bold span split. */
-export function AboutMeHeading() {
+/** About-me h3 — uses heading from content when provided. */
+export function AboutMeHeading({ heading = "About me" }: { heading?: string }) {
+  const words = heading.trim().split(/\s+/).filter(Boolean);
+  const lead = words.slice(0, -1).join(" ") || words[0] || "About";
+  const tail = words.length > 1 ? words[words.length - 1] : "me";
+
   return (
     <>
-      About
+      {lead}
       <span
         className={"framer-text"}
         style={{
@@ -66,7 +69,7 @@ export function AboutMeHeading() {
           "--framer-font-weight": "400",
         }}
       >
-        me
+        {tail}
       </span>
     </>
   );

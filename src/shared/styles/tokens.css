@@ -12,6 +12,14 @@
   --color-navy: #2f4c9c;
   --color-sky: #69afeb;
 
+  /* Todd identity accents */
+  --color-todd-red: #ff5324;
+  --color-todd-yellow: #f0cd3e;
+  --color-todd-blue: #2978f3;
+  --color-todd-green: #0e9c6c;
+  --color-todd-paper: #f7f4ed;
+  --color-todd-ink: #0f0f0f;
+
   --surface-canvas: var(--color-cream);
   --surface-elevated: var(--color-white);
   --surface-blue: var(--color-blue);

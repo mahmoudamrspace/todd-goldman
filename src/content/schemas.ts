@@ -5,6 +5,8 @@ export const workImageSchema = z.object({
   alt: z.string(),
 });
 
+export const workAccentToneSchema = z.enum(["red", "yellow", "blue", "green"]);
+
 export const workSchema = z.object({
   id: z.string(),
   slug: z.string().min(1),
@@ -20,6 +22,14 @@ export const workSchema = z.object({
   prevSlug: z.string().nullable(),
   nextSlug: z.string().nullable(),
   relatedTitle: z.string(),
+  /** Todd profile: creative world grouping */
+  category: z.string().optional(),
+  /** Todd profile: short punchline shown on cards */
+  hook: z.string().optional(),
+  /** Todd profile: card accent color */
+  accentTone: workAccentToneSchema.optional(),
+  /** Todd profile: large gallery tile */
+  featured: z.boolean().optional(),
 });
 
 export const siteSettingsSchema = z.object({

@@ -1,4 +1,4 @@
-import { getSite, getWork, getWorks } from "@/content";
+import { getContentProfile, getSite, getWork, getWorks } from "@/content";
 import { WorkShell } from "@/widgets/work-shell/WorkShell";
 
 export async function generateStaticParams() {
@@ -29,5 +29,13 @@ export default async function WorkPage({
     getWork(slug),
   ]);
   if (!work) return null;
-  return <WorkShell site={site} work={work} works={works} />;
+  const contentProfile = getContentProfile();
+  return (
+    <WorkShell
+      site={site}
+      work={work}
+      works={works}
+      contentProfile={contentProfile}
+    />
+  );
 }

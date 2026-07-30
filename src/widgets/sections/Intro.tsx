@@ -35,12 +35,12 @@ export function Intro({ content }: { content: IntroContent }) {
           </div>
           <div className={"ssr-variant hidden-g5y12p"}>
             <div className={"framer-1thn94h"} data-framer-component-type={"RichTextContainer"} style={{"transform": "none"}}>
-              <IntroHeadline fontSize="72px" />
+              <IntroHeadline fontSize="72px" headline={content.headline} />
             </div>
           </div>
           <div className={"ssr-variant hidden-r4q9g hidden-72rtr7"}>
             <div className={"framer-1thn94h"} data-framer-component-type={"RichTextContainer"} style={{"transform": "none"}}>
-              <IntroHeadline fontSize="48px" />
+              <IntroHeadline fontSize="48px" headline={content.headline} />
             </div>
           </div>
           <HiddenReveal variant="intro-character" className={"framer-1vmc01k"} data-framer-name={"Character"} style={{"willChange": "transform", "opacity": "0", "transform": "translateY(50px) scale(0.5)"}}>
