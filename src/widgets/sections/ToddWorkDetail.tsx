@@ -1,15 +1,140 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { useRef, type ReactNode } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "motion/react";
 import { AnimatedWords, HiddenReveal } from "@/features/HiddenReveal";
 import type { WorkDetailNavLabels } from "@/content/section-types";
 import type { Work } from "@/content/types";
 import { cn } from "@/shared/lib/cn";
-import { fadeUpCard, workDetailEnter } from "@/shared/lib/motion";
+import {
+  editorialClipReveal,
+  editorialDominantParallax,
+  editorialSpring,
+  workDetailEnter,
+} from "@/shared/lib/motion";
 
 function gallerySrcSet(src: string, width: number, height: number) {
   return `${src}?scale-down-to=512&width=${width}&height=${height} 512w,${src}?scale-down-to=1024&width=${width}&height=${height} 1024w,${src}?width=${width}&height=${height} ${width}w`;
+}
+
+function DetailHero({ work }: { work: Work }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 92%", "end 35%"],
+  });
+  const smooth = useSpring(scrollYProgress, editorialSpring);
+  const heroY = useTransform(
+    smooth,
+    [...editorialDominantParallax.yInput],
+    [...editorialDominantParallax.y],
+  );
+  const heroClip = useTransform(
+    smooth,
+    [...editorialClipReveal.dominantInput],
+    [...editorialClipReveal.dominant],
+  );
+
+  const image = (
+    <img
+      className="todd-detail__hero"
+      src={`${work.detailHero.src}?width=1400&height=875`}
+      srcSet={gallerySrcSet(work.detailHero.src, 1400, 875)}
+      sizes="(min-width: 1200px) 1128px, 100vw"
+      alt={work.detailHero.alt}
+      width={1400}
+      height={875}
+    />
+  );
+
+  if (reduced) {
+    return (
+      <div ref={ref} className="todd-detail__hero-wrap">
+        {image}
+      </div>
+    );
+  }
+
+  return (
+    <motion.div
+      ref={ref}
+      className="todd-detail__hero-wrap"
+      style={{ y: heroY, clipPath: heroClip }}
+    >
+      {image}
+    </motion.div>
+  );
+}
+
+function DetailGalleryItem({
+  image,
+  index,
+}: {
+  image: Work["gallery"][number];
+  index: number;
+}) {
+  const ref = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  const reversed = index % 2 === 1;
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 92%", "end 40%"],
+  });
+  const smooth = useSpring(scrollYProgress, editorialSpring);
+  const itemClip = useTransform(
+    smooth,
+    reversed
+      ? [...editorialClipReveal.supportInput]
+      : [...editorialClipReveal.dominantInput],
+    reversed
+      ? [...editorialClipReveal.support]
+      : [...editorialClipReveal.dominant],
+  );
+  const itemY = useTransform(
+    smooth,
+    reversed ? [0, 0.5, 1] : [...editorialDominantParallax.yInput],
+    reversed ? [40, 0, -20] : [...editorialDominantParallax.y],
+  );
+
+  const img = (
+    <img
+      src={`${image.src}?width=900&height=675`}
+      srcSet={gallerySrcSet(image.src, 900, 675)}
+      sizes="(min-width: 810px) 50vw, 100vw"
+      alt={image.alt}
+      loading="lazy"
+      decoding="async"
+      width={900}
+      height={675}
+    />
+  );
+
+  if (reduced) {
+    return (
+      <figure ref={ref} className="todd-detail__gallery-item">
+        {img}
+      </figure>
+    );
+  }
+
+  return (
+    <motion.figure
+      ref={ref}
+      className="todd-detail__gallery-item"
+      style={{ y: itemY, clipPath: itemClip }}
+    >
+      {img}
+    </motion.figure>
+  );
 }
 
 export interface ToddWorkDetailProps {
@@ -23,7 +148,7 @@ export function ToddWorkDetail({ work, navLabels }: ToddWorkDetailProps) {
   const prevHref = work.prevSlug ? `/works/${work.prevSlug}` : "#";
   const nextHref = work.nextSlug ? `/works/${work.nextSlug}` : "#";
 
-  const galleryBlock = (children: ReactNode, key: string, delay = 0) => {
+  const headerBlock = (children: ReactNode, key: string, delay = 0) => {
     if (reduced) return <div key={key}>{children}</div>;
     return (
       <motion.div
@@ -44,7 +169,7 @@ export function ToddWorkDetail({ work, navLabels }: ToddWorkDetailProps) {
       <div className="todd-detail__inner">
         <header className="todd-detail__header">
           {work.category
-            ? galleryBlock(
+            ? headerBlock(
                 <span
                   className={cn(
                     "todd-detail__category",
@@ -62,7 +187,7 @@ export function ToddWorkDetail({ work, navLabels }: ToddWorkDetailProps) {
           </h1>
 
           {work.hook
-            ? galleryBlock(
+            ? headerBlock(
                 <p className="todd-detail__hook">{work.hook}</p>,
                 "hook",
                 0.08,
@@ -82,61 +207,17 @@ export function ToddWorkDetail({ work, navLabels }: ToddWorkDetailProps) {
           </HiddenReveal>
         </header>
 
-        {galleryBlock(
-          <div className="todd-detail__hero-wrap">
-            <img
-              className="todd-detail__hero"
-              src={`${work.detailHero.src}?width=1400&height=875`}
-              srcSet={gallerySrcSet(work.detailHero.src, 1400, 875)}
-              sizes="(min-width: 1200px) 1128px, 100vw"
-              alt={work.detailHero.alt}
-              width={1400}
-              height={875}
-            />
-          </div>,
-          "hero",
-          0.12,
-        )}
+        <DetailHero work={work} />
 
         {work.gallery.length > 0 ? (
           <div className="todd-detail__gallery">
-            {work.gallery.map((image, index) =>
-              reduced ? (
-                <figure key={`${image.src}-${index}`} className="todd-detail__gallery-item">
-                  <img
-                    src={`${image.src}?width=900&height=675`}
-                    srcSet={gallerySrcSet(image.src, 900, 675)}
-                    sizes="(min-width: 810px) 50vw, 100vw"
-                    alt={image.alt}
-                    loading="lazy"
-                    decoding="async"
-                    width={900}
-                    height={675}
-                  />
-                </figure>
-              ) : (
-                <motion.figure
-                  key={`${image.src}-${index}`}
-                  className="todd-detail__gallery-item"
-                  variants={fadeUpCard}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.12 }}
-                  transition={{ delay: index * 0.06 }}
-                >
-                  <img
-                    src={`${image.src}?width=900&height=675`}
-                    srcSet={gallerySrcSet(image.src, 900, 675)}
-                    sizes="(min-width: 810px) 50vw, 100vw"
-                    alt={image.alt}
-                    loading="lazy"
-                    decoding="async"
-                    width={900}
-                    height={675}
-                  />
-                </motion.figure>
-              ),
-            )}
+            {work.gallery.map((image, index) => (
+              <DetailGalleryItem
+                key={`${image.src}-${index}`}
+                image={image}
+                index={index}
+              />
+            ))}
           </div>
         ) : null}
 

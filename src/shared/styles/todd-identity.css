@@ -98,66 +98,116 @@ body[data-content-profile="default"] {
   color: var(--todd-paper);
 }
 
-.todd-works__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
+.todd-works__scenes {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 3vh, 36px);
 }
 
-.todd-work-card {
+.todd-works__empty {
+  text-align: center;
+  padding: 32px;
+  font-size: 1rem;
+  color: var(--todd-muted);
+}
+
+/* ── Editorial two-work scenes ── */
+
+.todd-scene {
+  min-height: min(62vh, 640px);
+  display: flex;
+  align-items: center;
+}
+
+.todd-scene__stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
+  grid-template-rows: auto auto;
+  gap: 14px 18px;
+  width: 100%;
+  align-items: end;
   position: relative;
+}
+
+.todd-scene--reversed .todd-scene__stage {
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.35fr);
+}
+
+.todd-scene__panel {
   text-decoration: none;
   color: inherit;
   display: block;
+  will-change: transform;
 }
 
-.todd-work-card__frame {
+.todd-scene__panel--dominant {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+.todd-scene__panel--supporting {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: end;
+}
+
+.todd-scene--reversed .todd-scene__panel--dominant {
+  grid-column: 2;
+}
+
+.todd-scene--reversed .todd-scene__panel--supporting {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.todd-scene__frame {
+  position: relative;
   border: 2px solid var(--todd-ink);
-  border-radius: var(--todd-radius-sm);
+  border-radius: var(--todd-radius);
   overflow: hidden;
   background: #fff;
   box-shadow: var(--todd-shadow);
   transition: box-shadow 0.25s ease, transform 0.25s ease;
-  height: 100%;
 }
 
-.todd-work-card:hover .todd-work-card__frame,
-.todd-work-card:focus-visible .todd-work-card__frame {
-  box-shadow: var(--todd-shadow-hover);
-  transform: translate(-2px, -2px);
+.todd-scene__panel--dominant .todd-scene__frame {
+  aspect-ratio: 4 / 3;
 }
 
-.todd-work-card__media {
-  aspect-ratio: 3 / 2;
-  overflow: hidden;
-  background: var(--todd-paper);
-  position: relative;
+.todd-scene__panel--supporting .todd-scene__frame {
+  aspect-ratio: 5 / 4;
+  max-width: 92%;
 }
 
-.todd-work-card__media img {
+.todd-scene--reversed .todd-scene__panel--supporting .todd-scene__frame {
+  margin-left: auto;
+}
+
+.todd-scene__frame img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.35s ease;
 }
 
-.todd-work-card:hover .todd-work-card__media img {
-  transform: scale(1.02);
+.todd-scene__panel:hover .todd-scene__frame,
+.todd-scene__panel:focus-visible .todd-scene__frame {
+  box-shadow: var(--todd-shadow-hover);
+  transform: translate(-2px, -2px);
 }
 
-.todd-work-card__number {
+.todd-scene__number {
   position: absolute;
-  top: 8px;
-  left: 8px;
+  top: 10px;
+  left: 10px;
   font-family: var(--font-script, "Grape Nuts", cursive);
   font-size: 1.125rem;
   color: var(--todd-ink);
   background: var(--todd-yellow);
   border: 2px solid var(--todd-ink);
   border-radius: 999px;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -165,12 +215,11 @@ body[data-content-profile="default"] {
   z-index: 1;
 }
 
-.todd-work-card__body {
-  padding: 10px 12px 12px;
-  border-top: 2px solid var(--todd-ink);
+.todd-scene__copy {
+  padding: 10px 2px 0;
 }
 
-.todd-work-card__category {
+.todd-scene__category {
   display: inline-block;
   font-family: var(--font-display, "Inter Display", sans-serif);
   font-size: 0.625rem;
@@ -183,21 +232,25 @@ body[data-content-profile="default"] {
   margin-bottom: 6px;
 }
 
-.todd-work-card__category--red { background: var(--todd-red); color: #fff; border-color: var(--todd-ink); }
-.todd-work-card__category--yellow { background: var(--todd-yellow); color: var(--todd-ink); }
-.todd-work-card__category--blue { background: var(--todd-blue); color: #fff; border-color: var(--todd-ink); }
-.todd-work-card__category--green { background: var(--todd-green); color: #fff; border-color: var(--todd-ink); }
+.todd-scene__category--red { background: var(--todd-red); color: #fff; border-color: var(--todd-ink); }
+.todd-scene__category--yellow { background: var(--todd-yellow); color: var(--todd-ink); }
+.todd-scene__category--blue { background: var(--todd-blue); color: #fff; border-color: var(--todd-ink); }
+.todd-scene__category--green { background: var(--todd-green); color: #fff; border-color: var(--todd-ink); }
 
-.todd-work-card__title {
+.todd-scene__title {
   font-family: var(--font-display, "Inter Display", sans-serif);
-  font-size: 1rem;
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
   font-weight: 700;
   letter-spacing: -0.03em;
   margin: 0 0 4px;
   line-height: 1.15;
 }
 
-.todd-work-card__hook {
+.todd-scene__panel--supporting .todd-scene__title {
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+}
+
+.todd-scene__hook {
   font-family: var(--font-display, "Inter Display", sans-serif);
   font-size: 0.8125rem;
   font-weight: 500;
@@ -211,37 +264,51 @@ body[data-content-profile="default"] {
   overflow: hidden;
 }
 
-.todd-work-card__meta {
+.todd-scene__meta-rail {
+  position: absolute;
+  top: 0;
+  right: 0;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 8px;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: var(--todd-muted);
+  flex-direction: column;
+  gap: 4px;
   font-family: var(--font-serif, "Averia Serif Libre", serif);
   font-style: italic;
-}
-
-.todd-works__empty {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 32px;
-  font-size: 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
   color: var(--todd-muted);
+  pointer-events: none;
 }
 
-/* Services → About breathing room (replaces testimonial scroll runway) */
-.todd-section-bridge {
-  height: 64px;
-  background: linear-gradient(
-    to bottom,
-    rgb(15, 15, 15) 0%,
-    rgb(15, 15, 15) 12px,
-    var(--todd-paper) 12px,
-    var(--todd-paper) 100%
-  );
-  border-bottom: 2px dashed rgba(15, 15, 15, 0.12);
+.todd-scene--reversed .todd-scene__meta-rail {
+  right: auto;
+  left: 0;
+  align-items: flex-start;
+}
+
+/* ── Homepage scroll chapters ── */
+
+.todd-chapter {
+  position: relative;
+}
+
+.todd-chapter__line {
+  height: 2px;
+  width: min(120px, 18vw);
+  margin: 0 auto 0;
+  transform-origin: left center;
+  border-radius: 999px;
+}
+
+.todd-chapter__line--paper {
+  background: var(--todd-ink);
+}
+
+.todd-chapter__line--cream {
+  background: var(--todd-yellow);
+}
+
+.todd-chapter__line--dark {
+  background: var(--todd-red);
 }
 
 /* ── Work detail ── */
@@ -263,6 +330,7 @@ body[data-content-profile="default"] {
   box-shadow: var(--todd-shadow);
   margin-bottom: 24px;
   background: #fff;
+  will-change: transform, clip-path;
 }
 
 .todd-detail__hero {
@@ -347,6 +415,7 @@ body[data-content-profile="default"] {
   border-radius: var(--todd-radius-sm);
   overflow: hidden;
   box-shadow: 3px 3px 0 var(--todd-ink);
+  will-change: transform, clip-path;
 }
 
 .todd-detail__gallery-item img {
@@ -409,8 +478,8 @@ body[data-content-profile="default"] .framer-1ezlif8 {
 }
 
 @media (max-width: 1199.98px) {
-  .todd-works__grid {
-    grid-template-columns: repeat(2, 1fr);
+  .todd-scene__panel--supporting .todd-scene__frame {
+    max-width: 100%;
   }
 }
 
@@ -419,12 +488,31 @@ body[data-content-profile="default"] .framer-1ezlif8 {
     padding: 40px 0 48px;
   }
 
-  .todd-works__grid {
-    grid-template-columns: 1fr;
+  .todd-scene {
+    min-height: auto;
   }
 
-  .todd-section-bridge {
-    height: 48px;
+  .todd-scene__stage {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 16px;
+  }
+
+  .todd-scene__panel--dominant,
+  .todd-scene__panel--supporting,
+  .todd-scene--reversed .todd-scene__panel--dominant,
+  .todd-scene--reversed .todd-scene__panel--supporting {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .todd-scene__panel--supporting .todd-scene__frame {
+    max-width: 100%;
+    margin-left: 0;
+  }
+
+  .todd-scene__meta-rail {
+    display: none;
   }
 
   .todd-detail__gallery {
@@ -437,14 +525,13 @@ body[data-content-profile="default"] .framer-1ezlif8 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .todd-work-card__frame,
-  .todd-work-card__media img,
+  .todd-scene__frame,
   .todd-detail__nav-link {
     transition: none;
   }
 
-  .todd-work-card:hover .todd-work-card__frame,
-  .todd-work-card:focus-visible .todd-work-card__frame {
+  .todd-scene__panel:hover .todd-scene__frame,
+  .todd-scene__panel:focus-visible .todd-scene__frame {
     transform: none;
   }
 }

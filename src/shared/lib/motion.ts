@@ -12,6 +12,39 @@ export const springHover = {
   damping: 55,
 };
 
+/** Editorial scroll-linked scenes — synced with Lenis via Motion frame loop. */
+export const editorialSpring = {
+  stiffness: 90,
+  damping: 28,
+  mass: 0.35,
+};
+
+export const editorialSceneHeight = "min(62vh, 640px)";
+
+export const chapterScrollRange = {
+  opacity: [0.88, 1, 1, 0.9] as const,
+  opacityInput: [0, 0.06, 0.94, 1] as const,
+  y: [20, 0, 0, -12] as const,
+  yInput: [0, 0.1, 0.9, 1] as const,
+};
+
+export const editorialDominantParallax = {
+  y: [48, 0, -24] as const,
+  yInput: [0, 0.5, 1] as const,
+};
+
+export const editorialSupportParallax = {
+  y: [64, 0, -36] as const,
+  yInput: [0, 0.5, 1] as const,
+};
+
+export const editorialClipReveal = {
+  dominant: ["inset(10% 6% 10% 6%)", "inset(0% 0% 0% 0%)", "inset(0% 0% 0% 0%)"] as const,
+  dominantInput: [0, 0.4, 1] as const,
+  support: ["inset(16% 10% 16% 10%)", "inset(0% 0% 0% 0%)", "inset(0% 0% 0% 0%)"] as const,
+  supportInput: [0.08, 0.45, 1] as const,
+};
+
 export const fadeOpacity = {
   hidden: { opacity: 0.001 },
   visible: {
@@ -59,4 +92,9 @@ export const workDetailEnter = {
 export const staggerFast = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.06, delayChildren: 0.05 } },
+};
+
+export const editorialFilterTransition = {
+  layout: { type: "spring" as const, stiffness: 120, damping: 22 },
+  opacity: { duration: 0.25 },
 };

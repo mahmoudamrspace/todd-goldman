@@ -1,6 +1,7 @@
 "use client";
 
 import Lenis from "lenis";
+import { cancelFrame, frame } from "motion/react";
 import { useEffect, type ReactNode } from "react";
 
 export const LENIS_SCROLL_EVENT = "lenis-scroll";
@@ -12,7 +13,7 @@ function hashFromHref(href: string) {
   return hash.length > 1 ? hash : null;
 }
 
-/** Lenis smooth scroll — adds `lenis` class to html during init. */
+/** Lenis smooth scroll driven by Motion's frame loop for scroll-synced animations. */
 export function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
     const instance = new Lenis({ duration: 1.0 });
@@ -64,15 +65,14 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       requestAnimationFrame(() => scrollToHash(initialHash));
     }
 
-    let frame = 0;
-    const raf = (time: number) => {
-      instance.raf(time);
-      frame = requestAnimationFrame(raf);
-    };
-    frame = requestAnimationFrame(raf);
+    function update(data: { timestamp: number }) {
+      instance.raf(data.timestamp);
+    }
+
+    frame.update(update, true);
 
     return () => {
-      cancelAnimationFrame(frame);
+      cancelFrame(update);
       document.removeEventListener("click", onDocumentClick);
       instance.off("scroll", onScroll);
       root.classList.remove("lenis");

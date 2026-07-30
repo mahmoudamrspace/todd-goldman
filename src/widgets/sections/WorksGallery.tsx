@@ -2,91 +2,22 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useCallback, useMemo, useState } from "react";
+import {
+  EditorialWorkScene,
+  pairWorksForScenes,
+} from "@/features/EditorialWorkScene";
 import { AnimatedSpan, HiddenReveal } from "@/features/HiddenReveal";
 import type { WorksContent } from "@/content/section-types";
-import type { Work } from "@/content/types";
 import { cn } from "@/shared/lib/cn";
-import { fadeUpCard, staggerFast } from "@/shared/lib/motion";
+import { editorialFilterTransition } from "@/shared/lib/motion";
 
 const ALL_FILTER = "All";
-const MAX_STAGGER_INDEX = 7;
-
-function GalleryCard({
-  work,
-  displayIndex,
-}: {
-  work: Work;
-  displayIndex: number;
-}) {
-  const reduced = useReducedMotion();
-  const staggerDelay = Math.min(displayIndex, MAX_STAGGER_INDEX) * 0.06;
-
-  const cardInner = (
-    <article className="todd-work-card__frame">
-      <div className="todd-work-card__media">
-        <span className="todd-work-card__number" aria-hidden="true">
-          {String(displayIndex + 1).padStart(2, "0")}
-        </span>
-        <motion.img
-          src={work.gridThumbnail.src}
-          alt={work.gridThumbnail.alt}
-          loading={displayIndex < 4 ? "eager" : "lazy"}
-          decoding="async"
-          initial={reduced ? false : { scale: 1.04 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.5, delay: staggerDelay + 0.1, ease: [0.22, 1, 0.36, 1] }}
-        />
-      </div>
-      <div className="todd-work-card__body">
-        {work.category ? (
-          <span
-            className={cn(
-              "todd-work-card__category",
-              work.accentTone && `todd-work-card__category--${work.accentTone}`,
-            )}
-          >
-            {work.category}
-          </span>
-        ) : null}
-        <h3 className="todd-work-card__title">{work.title}</h3>
-        {work.hook ? <p className="todd-work-card__hook">{work.hook}</p> : null}
-        <div className="todd-work-card__meta">
-          <span>{work.client}</span>
-          <span>{work.date}</span>
-        </div>
-      </div>
-    </article>
-  );
-
-  if (reduced) {
-    return (
-      <a href={`/works/${work.slug}`} className="todd-work-card">
-        {cardInner}
-      </a>
-    );
-  }
-
-  return (
-    <motion.a
-      layout
-      href={`/works/${work.slug}`}
-      className="todd-work-card"
-      variants={fadeUpCard}
-      initial="hidden"
-      animate="visible"
-      exit={{ opacity: 0, y: 12, scale: 0.97, transition: { duration: 0.22 } }}
-      transition={{ delay: staggerDelay }}
-    >
-      {cardInner}
-    </motion.a>
-  );
-}
 
 export interface WorksGalleryProps {
   content: WorksContent;
 }
 
-/** Art-first gallery wall for the Todd production profile. */
+/** Editorial two-work scenes for the Todd production profile. */
 export function WorksGallery({ content }: WorksGalleryProps) {
   const reduced = useReducedMotion();
   const categories = useMemo(() => {
@@ -104,41 +35,17 @@ export function WorksGallery({ content }: WorksGalleryProps) {
     return content.works.filter((work) => work.category === activeFilter);
   }, [activeFilter, content.works]);
 
+  const scenes = useMemo(
+    () => pairWorksForScenes(filteredWorks),
+    [filteredWorks],
+  );
+
   const onFilter = useCallback((category: string) => {
     setActiveFilter(category);
   }, []);
 
   const titleLead = content.titleWords[0] ?? "Selected";
   const titleTail = content.titleWords.slice(1).join(" ") || "art";
-
-  const grid = (
-    <motion.div
-      className="todd-works__grid"
-      id="selected-projects"
-      variants={reduced ? undefined : staggerFast}
-      initial={reduced ? undefined : "hidden"}
-      whileInView={reduced ? undefined : "visible"}
-      viewport={{ once: true, amount: 0.08 }}
-    >
-      <AnimatePresence mode="popLayout">
-        {filteredWorks.length === 0 ? (
-          <motion.p
-            key="empty"
-            className="todd-works__empty"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            No pieces in this category yet.
-          </motion.p>
-        ) : (
-          filteredWorks.map((work, index) => (
-            <GalleryCard key={work.slug} work={work} displayIndex={index} />
-          ))
-        )}
-      </AnimatePresence>
-    </motion.div>
-  );
 
   return (
     <section className="todd-works" id="works" aria-labelledby="todd-works-title">
@@ -156,8 +63,8 @@ export function WorksGallery({ content }: WorksGalleryProps) {
             style={{ opacity: 0.001, transform: "translateY(16px)" }}
           >
             <p className="todd-works__subtitle">
-              Bold illustration, dry humor, and pop-art worlds — grouped by how
-              the work lives in the wild.
+              Bold illustration, dry humor, and pop-art worlds — scroll through
+              paired editorial scenes.
             </p>
           </HiddenReveal>
           {categories.length > 2 ? (
@@ -188,7 +95,48 @@ export function WorksGallery({ content }: WorksGalleryProps) {
           ) : null}
         </header>
 
-        {grid}
+        <motion.div
+          className="todd-works__scenes"
+          id="selected-projects"
+          layout={!reduced}
+        >
+          <AnimatePresence mode="popLayout">
+            {scenes.length === 0 ? (
+              <motion.p
+                key="empty"
+                className="todd-works__empty"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={editorialFilterTransition.opacity}
+              >
+                No pieces in this category yet.
+              </motion.p>
+            ) : (
+              scenes.map(([dominant, supporting], sceneIndex) => {
+                const startIndex = sceneIndex * 2;
+                const sceneKey = `${dominant.slug}-${supporting?.slug ?? "solo"}-${activeFilter}`;
+                return (
+                  <motion.div
+                    key={sceneKey}
+                    layout={!reduced}
+                    initial={reduced ? false : { opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -12 }}
+                    transition={editorialFilterTransition.layout}
+                  >
+                    <EditorialWorkScene
+                      dominant={dominant}
+                      supporting={supporting}
+                      sceneIndex={sceneIndex}
+                      startIndex={startIndex}
+                    />
+                  </motion.div>
+                );
+              })
+            )}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   );

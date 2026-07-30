@@ -13,7 +13,7 @@ import { FooterSection } from "@/widgets/interactive/FooterSection";
 import { MarqueeSection } from "@/widgets/interactive/MarqueeSection";
 import { NavMenu } from "@/widgets/interactive/NavMenu";
 import { WorksSection } from "@/widgets/interactive/WorksSection";
-import { WorksGallery } from "@/widgets/sections/WorksGallery";
+import { ToddHomeSections } from "@/widgets/home-shell/ToddHomeSections";
 import { StickySection } from "@/features/StickySection";
 import {
   toAboutContent,
@@ -63,23 +63,29 @@ export function HomeShell({
             <Intro content={toIntroContent(site)} />
           </HeroIntroRegion>
           {isToddProfile ? (
-            <WorksGallery content={worksContent} />
+            <ToddHomeSections
+              worksContent={worksContent}
+              sneakPeakContent={toSneakPeakContent(site)}
+              servicesContent={toServicesContent(site)}
+              aboutContent={toAboutContent(site)}
+              faqContent={toFaqContent(site)}
+            />
           ) : (
-            <WorksSection content={worksContent} />
+            <>
+              <WorksSection content={worksContent} />
+              <MarqueeSection>
+                <SneakPeak content={toSneakPeakContent(site)} />
+              </MarqueeSection>
+              <ServicesSection content={toServicesContent(site)} />
+              {showTestimonials ? (
+                <StickySection>
+                  <Testimonial content={testimonialContent} />
+                </StickySection>
+              ) : null}
+              <About content={toAboutContent(site)} />
+              <FaqSection content={toFaqContent(site)} />
+            </>
           )}
-          <MarqueeSection>
-            <SneakPeak content={toSneakPeakContent(site)} />
-          </MarqueeSection>
-          <ServicesSection content={toServicesContent(site)} />
-          {showTestimonials ? (
-            <StickySection>
-              <Testimonial content={testimonialContent} />
-            </StickySection>
-          ) : isToddProfile ? (
-            <div className="todd-section-bridge" aria-hidden="true" />
-          ) : null}
-          <About content={toAboutContent(site)} />
-          <FaqSection content={toFaqContent(site)} />
           <div className={"framer-vwz6y7"} data-framer-name={"Footer-For scroll only"} id={"contact"} />
           <div className={"framer-17h3w0h-container"}>
             <div />
