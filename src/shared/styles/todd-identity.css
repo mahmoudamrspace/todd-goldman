@@ -23,7 +23,7 @@ body[data-content-profile="default"] {
 /* ── Selected Projects gallery ── */
 
 .todd-works {
-  padding: 80px 0 100px;
+  padding: 48px 0 56px;
   position: relative;
 }
 
@@ -34,17 +34,17 @@ body[data-content-profile="default"] {
 }
 
 .todd-works__header {
-  margin-bottom: 48px;
+  margin-bottom: 28px;
   position: relative;
 }
 
 .todd-works__title {
   font-family: var(--font-display, "Inter Display", sans-serif);
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
   font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 0.95;
-  margin: 0 0 12px;
+  margin: 0 0 10px;
   color: var(--todd-ink);
 }
 
@@ -57,7 +57,7 @@ body[data-content-profile="default"] {
 
 .todd-works__subtitle {
   font-family: var(--font-display, "Inter Display", sans-serif);
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--todd-muted);
   max-width: 42ch;
@@ -69,16 +69,16 @@ body[data-content-profile="default"] {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 28px;
+  margin-top: 18px;
 }
 
 .todd-works__filter {
   font-family: var(--font-display, "Inter Display", sans-serif);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 8px 16px;
+  padding: 6px 14px;
   border: 2px solid var(--todd-ink);
   border-radius: 999px;
   background: transparent;
@@ -100,33 +100,25 @@ body[data-content-profile="default"] {
 
 .todd-works__grid {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
 }
 
 .todd-work-card {
-  grid-column: span 6;
   position: relative;
   text-decoration: none;
   color: inherit;
   display: block;
 }
 
-.todd-work-card--featured {
-  grid-column: span 8;
-}
-
-.todd-work-card--compact {
-  grid-column: span 4;
-}
-
 .todd-work-card__frame {
   border: 2px solid var(--todd-ink);
-  border-radius: var(--todd-radius);
+  border-radius: var(--todd-radius-sm);
   overflow: hidden;
   background: #fff;
   box-shadow: var(--todd-shadow);
   transition: box-shadow 0.25s ease, transform 0.25s ease;
+  height: 100%;
 }
 
 .todd-work-card:hover .todd-work-card__frame,
@@ -136,7 +128,7 @@ body[data-content-profile="default"] {
 }
 
 .todd-work-card__media {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 2;
   overflow: hidden;
   background: var(--todd-paper);
   position: relative;
@@ -147,25 +139,25 @@ body[data-content-profile="default"] {
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.4s ease;
+  transition: transform 0.35s ease;
 }
 
 .todd-work-card:hover .todd-work-card__media img {
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
 .todd-work-card__number {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 8px;
+  left: 8px;
   font-family: var(--font-script, "Grape Nuts", cursive);
-  font-size: 1.5rem;
+  font-size: 1.125rem;
   color: var(--todd-ink);
   background: var(--todd-yellow);
   border: 2px solid var(--todd-ink);
   border-radius: 999px;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -174,21 +166,21 @@ body[data-content-profile="default"] {
 }
 
 .todd-work-card__body {
-  padding: 16px 18px 20px;
+  padding: 10px 12px 12px;
   border-top: 2px solid var(--todd-ink);
 }
 
 .todd-work-card__category {
   display: inline-block;
   font-family: var(--font-display, "Inter Display", sans-serif);
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  padding: 4px 10px;
+  padding: 3px 8px;
   border-radius: 999px;
   border: 1.5px solid var(--todd-ink);
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .todd-work-card__category--red { background: var(--todd-red); color: #fff; border-color: var(--todd-ink); }
@@ -198,29 +190,33 @@ body[data-content-profile="default"] {
 
 .todd-work-card__title {
   font-family: var(--font-display, "Inter Display", sans-serif);
-  font-size: 1.375rem;
+  font-size: 1rem;
   font-weight: 700;
   letter-spacing: -0.03em;
-  margin: 0 0 6px;
+  margin: 0 0 4px;
   line-height: 1.15;
 }
 
 .todd-work-card__hook {
   font-family: var(--font-display, "Inter Display", sans-serif);
-  font-size: 0.9375rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   color: var(--todd-muted);
   margin: 0;
-  line-height: 1.35;
+  line-height: 1.3;
   letter-spacing: -0.01em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .todd-work-card__meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 12px;
-  font-size: 0.8125rem;
+  margin-top: 8px;
+  font-size: 0.6875rem;
   font-weight: 600;
   color: var(--todd-muted);
   font-family: var(--font-serif, "Averia Serif Libre", serif);
@@ -230,15 +226,28 @@ body[data-content-profile="default"] {
 .todd-works__empty {
   grid-column: 1 / -1;
   text-align: center;
-  padding: 48px;
-  font-size: 1.125rem;
+  padding: 32px;
+  font-size: 1rem;
   color: var(--todd-muted);
+}
+
+/* Services → About breathing room (replaces testimonial scroll runway) */
+.todd-section-bridge {
+  height: 64px;
+  background: linear-gradient(
+    to bottom,
+    rgb(15, 15, 15) 0%,
+    rgb(15, 15, 15) 12px,
+    var(--todd-paper) 12px,
+    var(--todd-paper) 100%
+  );
+  border-bottom: 2px dashed rgba(15, 15, 15, 0.12);
 }
 
 /* ── Work detail ── */
 
 .todd-detail {
-  padding: 40px 0 80px;
+  padding: 32px 0 56px;
 }
 
 .todd-detail__inner {
@@ -249,16 +258,16 @@ body[data-content-profile="default"] {
 
 .todd-detail__hero-wrap {
   border: 2px solid var(--todd-ink);
-  border-radius: var(--todd-radius);
+  border-radius: var(--todd-radius-sm);
   overflow: hidden;
   box-shadow: var(--todd-shadow);
-  margin-bottom: 40px;
+  margin-bottom: 24px;
   background: #fff;
 }
 
 .todd-detail__hero {
   width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   object-fit: contain;
   display: block;
   background: var(--todd-paper);
@@ -329,8 +338,8 @@ body[data-content-profile="default"] {
 .todd-detail__gallery {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin-bottom: 48px;
+  gap: 12px;
+  margin-bottom: 28px;
 }
 
 .todd-detail__gallery-item {
@@ -338,10 +347,6 @@ body[data-content-profile="default"] {
   border-radius: var(--todd-radius-sm);
   overflow: hidden;
   box-shadow: 3px 3px 0 var(--todd-ink);
-}
-
-.todd-detail__gallery-item:first-child {
-  grid-column: 1 / -1;
 }
 
 .todd-detail__gallery-item img {
@@ -403,15 +408,23 @@ body[data-content-profile="default"] .framer-1ezlif8 {
   display: none;
 }
 
+@media (max-width: 1199.98px) {
+  .todd-works__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 809.98px) {
   .todd-works {
-    padding: 56px 0 72px;
+    padding: 40px 0 48px;
   }
 
-  .todd-work-card,
-  .todd-work-card--featured,
-  .todd-work-card--compact {
-    grid-column: span 12;
+  .todd-works__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .todd-section-bridge {
+    height: 48px;
   }
 
   .todd-detail__gallery {

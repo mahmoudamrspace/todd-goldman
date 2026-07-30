@@ -75,6 +75,8 @@ export function HomeShell({
             <StickySection>
               <Testimonial content={testimonialContent} />
             </StickySection>
+          ) : isToddProfile ? (
+            <div className="todd-section-bridge" aria-hidden="true" />
           ) : null}
           <About content={toAboutContent(site)} />
           <FaqSection content={toFaqContent(site)} />
