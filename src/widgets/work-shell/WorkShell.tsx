@@ -29,7 +29,9 @@ export function WorkShell({ site, work, works }: WorkShellProps) {
           className="framer-KPXZq framer-bi9rI framer-Rk1Eg framer-r9bvin"
           style={{ minHeight: "100vh", width: "auto", display: "contents" }}
         >
-          <ToddWorkDetail work={work} navLabels={navLabels} />
+          <div className="site-page-content site-page-content--work">
+            <ToddWorkDetail work={work} navLabels={navLabels} />
+          </div>
           <div className="framer-1pymhjr-container">
             <div />
           </div>

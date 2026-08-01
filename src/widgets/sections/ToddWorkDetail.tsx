@@ -145,8 +145,11 @@ export interface ToddWorkDetailProps {
 /** Artwork-first project detail for the Todd production profile. */
 export function ToddWorkDetail({ work, navLabels }: ToddWorkDetailProps) {
   const reduced = useReducedMotion();
-  const prevHref = work.prevSlug ? `/works/${work.prevSlug}` : "#";
-  const nextHref = work.nextSlug ? `/works/${work.nextSlug}` : "#";
+  const hasPrev = Boolean(work.prevSlug);
+  const hasNext = Boolean(work.nextSlug);
+  const prevHref = hasPrev ? `/works/${work.prevSlug}` : undefined;
+  const nextHref = hasNext ? `/works/${work.nextSlug}` : undefined;
+  const ctaExternal = work.ctaHref?.startsWith("http");
 
   const headerBlock = (children: ReactNode, key: string, delay = 0) => {
     if (reduced) return <div key={key}>{children}</div>;
@@ -221,28 +224,48 @@ export function ToddWorkDetail({ work, navLabels }: ToddWorkDetailProps) {
           </div>
         ) : null}
 
-        <HiddenReveal variant="work-block" style={{ opacity: 0.001, transform: "translateY(10px)" }}>
-          <p className="todd-detail__placeholder-note">
-            Placeholder artwork — final Todd Goldman assets will replace these images
-          </p>
-        </HiddenReveal>
+        {work.ctaHref && work.ctaLabel ? (
+          <HiddenReveal variant="work-block" style={{ opacity: 0.001, transform: "translateY(10px)" }}>
+            <div className="todd-detail__cta-wrap">
+              <a
+                className="todd-detail__cta"
+                href={work.ctaHref}
+                {...(ctaExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                data-highlight
+              >
+                {work.ctaLabel} →
+              </a>
+            </div>
+          </HiddenReveal>
+        ) : null}
 
         <HiddenReveal variant="work-block" style={{ opacity: 0.001, transform: "translateY(10px)" }}>
           <nav className="todd-detail__nav" aria-label="Project navigation">
-            <a
-              className="todd-detail__nav-link"
-              href={prevHref}
-              aria-disabled={!work.prevSlug}
-            >
-              ← {navLabels.prevFull}
-            </a>
-            <a
-              className={cn("todd-detail__nav-link", "todd-detail__nav-link--next")}
-              href={nextHref}
-              aria-disabled={!work.nextSlug}
-            >
-              {navLabels.nextFull} →
-            </a>
+            {hasPrev ? (
+              <a className="todd-detail__nav-link" href={prevHref}>
+                ← {navLabels.prevFull}
+              </a>
+            ) : (
+              <span className="todd-detail__nav-link todd-detail__nav-link--disabled" aria-disabled="true">
+                ← {navLabels.prevFull}
+              </span>
+            )}
+            {hasNext ? (
+              <a className={cn("todd-detail__nav-link", "todd-detail__nav-link--next")} href={nextHref}>
+                {navLabels.nextFull} →
+              </a>
+            ) : (
+              <span
+                className={cn(
+                  "todd-detail__nav-link",
+                  "todd-detail__nav-link--next",
+                  "todd-detail__nav-link--disabled",
+                )}
+                aria-disabled="true"
+              >
+                {navLabels.nextFull} →
+              </span>
+            )}
           </nav>
         </HiddenReveal>
       </div>

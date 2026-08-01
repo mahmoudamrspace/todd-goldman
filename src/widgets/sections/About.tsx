@@ -360,7 +360,7 @@ export function About({ content }: { content: AboutContent }) {
                               <div className={"framer-14p3me6"}>
                                 <div className={"framer-i1klgo"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                   <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-size": "18px", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15)))"}}>
-                                    {content.talks[0]?.city?.split(/\s+/).filter(Boolean).map((word, wi) => (<AnimatedSpan key={`talk-0-city-${wi}`} y={10}>{word}{wi < (content.talks[0]?.city?.split(/\s+/).filter(Boolean).length ?? 0) - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
+                                    {content.talks[0]?.year?.split(/\s+/).filter(Boolean).map((word, wi) => (<AnimatedSpan key={`talk-0-city-${wi}`} y={10}>{word}{wi < (content.talks[0]?.year?.split(/\s+/).filter(Boolean).length ?? 0) - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
                                   </p>
                                 </div>
                                 <div className={"framer-103fef5"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-ae5d2ed2-395e-4ac7-9825-f57ad4d7ddc7, rgb(240, 205, 62))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
@@ -374,7 +374,7 @@ export function About({ content }: { content: AboutContent }) {
                                 </div>
                                 <div className={"framer-1ic6ub0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(94, 93, 83))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                   <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LU1lZGl1bQ==", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-size": "18px", "--framer-font-weight": "500", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(94, 93, 83)))"}}>
-                                    {content.talks[0]?.event?.split(/\s+/).filter(Boolean).map((w, wi, words) => (<AnimatedSpan key={`talk-0-event-${wi}`} y={10}>{w}{wi < words.length - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
+                                    {content.talks[0]?.milestone?.split(/\s+/).filter(Boolean).map((w, wi, words) => (<AnimatedSpan key={`talk-0-event-${wi}`} y={10}>{w}{wi < words.length - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
                                   </p>
                                 </div>
                                 <div className={"framer-1famhjy"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-ae5d2ed2-395e-4ac7-9825-f57ad4d7ddc7, rgb(240, 205, 62))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
@@ -389,7 +389,7 @@ export function About({ content }: { content: AboutContent }) {
                               </div>
                               <div className={"framer-10mewzj"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(66, 66, 58))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                 <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LU1lZGl1bQ==", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-size": "18px", "--framer-font-weight": "500", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(66, 66, 58)))"}}>
-                                  <AnimatedSpan y={10}>{content.talks[0]?.year ?? ""}</AnimatedSpan>
+                                  <AnimatedSpan y={10}>{content.talks[0]?.location ?? ""}</AnimatedSpan>
                                 </p>
                               </div>
                             </div>
@@ -401,7 +401,7 @@ export function About({ content }: { content: AboutContent }) {
                               <div className={"framer-14p3me6"}>
                                 <div className={"framer-i1klgo"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                   <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-size": "18px", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15)))"}}>
-                                    {content.talks[1]?.city?.split(/\s+/).filter(Boolean).map((word, wi) => (<AnimatedSpan key={`talk-1-city-${wi}`} y={10}>{word}{wi < (content.talks[1]?.city?.split(/\s+/).filter(Boolean).length ?? 0) - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
+                                    {content.talks[1]?.year?.split(/\s+/).filter(Boolean).map((word, wi) => (<AnimatedSpan key={`talk-1-city-${wi}`} y={10}>{word}{wi < (content.talks[1]?.year?.split(/\s+/).filter(Boolean).length ?? 0) - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
                                   </p>
                                 </div>
                                 <div className={"framer-103fef5"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-ae5d2ed2-395e-4ac7-9825-f57ad4d7ddc7, rgb(240, 205, 62))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
@@ -415,7 +415,7 @@ export function About({ content }: { content: AboutContent }) {
                                 </div>
                                 <div className={"framer-1ic6ub0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(94, 93, 83))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                   <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LU1lZGl1bQ==", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-size": "18px", "--framer-font-weight": "500", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(94, 93, 83)))"}}>
-                                    {content.talks[1]?.event?.split(/\s+/).filter(Boolean).map((w, wi, words) => (<AnimatedSpan key={`talk-1-event-${wi}`} y={10}>{w}{wi < words.length - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
+                                    {content.talks[1]?.milestone?.split(/\s+/).filter(Boolean).map((w, wi, words) => (<AnimatedSpan key={`talk-1-event-${wi}`} y={10}>{w}{wi < words.length - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
                                   </p>
                                 </div>
                                 <div className={"framer-1famhjy"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-ae5d2ed2-395e-4ac7-9825-f57ad4d7ddc7, rgb(240, 205, 62))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
@@ -430,7 +430,7 @@ export function About({ content }: { content: AboutContent }) {
                               </div>
                               <div className={"framer-10mewzj"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(66, 66, 58))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                 <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LU1lZGl1bQ==", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-size": "18px", "--framer-font-weight": "500", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(66, 66, 58)))"}}>
-                                  <AnimatedSpan y={10}>{content.talks[1]?.year ?? ""}</AnimatedSpan>
+                                  <AnimatedSpan y={10}>{content.talks[1]?.location ?? ""}</AnimatedSpan>
                                 </p>
                               </div>
                             </div>
@@ -442,7 +442,7 @@ export function About({ content }: { content: AboutContent }) {
                               <div className={"framer-14p3me6"}>
                                 <div className={"framer-i1klgo"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                   <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-size": "18px", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15)))"}}>
-                                    {content.talks[2]?.city?.split(/\s+/).filter(Boolean).map((word, wi) => (<AnimatedSpan key={`talk-2-city-${wi}`} y={10}>{word}{wi < (content.talks[2]?.city?.split(/\s+/).filter(Boolean).length ?? 0) - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
+                                    {content.talks[2]?.year?.split(/\s+/).filter(Boolean).map((word, wi) => (<AnimatedSpan key={`talk-2-city-${wi}`} y={10}>{word}{wi < (content.talks[2]?.year?.split(/\s+/).filter(Boolean).length ?? 0) - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
                                   </p>
                                 </div>
                                 <div className={"framer-103fef5"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-ae5d2ed2-395e-4ac7-9825-f57ad4d7ddc7, rgb(240, 205, 62))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
@@ -456,7 +456,7 @@ export function About({ content }: { content: AboutContent }) {
                                 </div>
                                 <div className={"framer-1ic6ub0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(94, 93, 83))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                   <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LU1lZGl1bQ==", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-size": "18px", "--framer-font-weight": "500", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(94, 93, 83)))"}}>
-                                    {content.talks[2]?.event?.split(/\s+/).filter(Boolean).map((w, wi, words) => (<AnimatedSpan key={`talk-2-event-${wi}`} y={10}>{w}{wi < words.length - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
+                                    {content.talks[2]?.milestone?.split(/\s+/).filter(Boolean).map((w, wi, words) => (<AnimatedSpan key={`talk-2-event-${wi}`} y={10}>{w}{wi < words.length - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
                                   </p>
                                 </div>
                                 <div className={"framer-1famhjy"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-ae5d2ed2-395e-4ac7-9825-f57ad4d7ddc7, rgb(240, 205, 62))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
@@ -471,7 +471,7 @@ export function About({ content }: { content: AboutContent }) {
                               </div>
                               <div className={"framer-10mewzj"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(66, 66, 58))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                 <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LU1lZGl1bQ==", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-size": "18px", "--framer-font-weight": "500", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(66, 66, 58)))"}}>
-                                  <AnimatedSpan y={10}>{content.talks[2]?.year ?? ""}</AnimatedSpan>
+                                  <AnimatedSpan y={10}>{content.talks[2]?.location ?? ""}</AnimatedSpan>
                                 </p>
                               </div>
                             </div>
@@ -483,7 +483,7 @@ export function About({ content }: { content: AboutContent }) {
                               <div className={"framer-14p3me6"}>
                                 <div className={"framer-i1klgo"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                   <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-size": "18px", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15)))"}}>
-                                    {content.talks[3]?.city?.split(/\s+/).filter(Boolean).map((word, wi) => (<AnimatedSpan key={`talk-3-city-${wi}`} y={10}>{word}{wi < (content.talks[3]?.city?.split(/\s+/).filter(Boolean).length ?? 0) - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
+                                    {content.talks[3]?.year?.split(/\s+/).filter(Boolean).map((word, wi) => (<AnimatedSpan key={`talk-3-city-${wi}`} y={10}>{word}{wi < (content.talks[3]?.year?.split(/\s+/).filter(Boolean).length ?? 0) - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
                                   </p>
                                 </div>
                                 <div className={"framer-103fef5"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-ae5d2ed2-395e-4ac7-9825-f57ad4d7ddc7, rgb(240, 205, 62))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
@@ -497,7 +497,7 @@ export function About({ content }: { content: AboutContent }) {
                                 </div>
                                 <div className={"framer-1ic6ub0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(94, 93, 83))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                   <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LU1lZGl1bQ==", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-size": "18px", "--framer-font-weight": "500", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(94, 93, 83)))"}}>
-                                    {content.talks[3]?.event?.split(/\s+/).filter(Boolean).map((w, wi, words) => (<AnimatedSpan key={`talk-3-event-${wi}`} y={10}>{w}{wi < words.length - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
+                                    {content.talks[3]?.milestone?.split(/\s+/).filter(Boolean).map((w, wi, words) => (<AnimatedSpan key={`talk-3-event-${wi}`} y={10}>{w}{wi < words.length - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
                                   </p>
                                 </div>
                                 <div className={"framer-1famhjy"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-ae5d2ed2-395e-4ac7-9825-f57ad4d7ddc7, rgb(240, 205, 62))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
@@ -512,7 +512,7 @@ export function About({ content }: { content: AboutContent }) {
                               </div>
                               <div className={"framer-10mewzj"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(66, 66, 58))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                 <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LU1lZGl1bQ==", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-size": "18px", "--framer-font-weight": "500", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(66, 66, 58)))"}}>
-                                  <AnimatedSpan y={10}>{content.talks[3]?.year ?? ""}</AnimatedSpan>
+                                  <AnimatedSpan y={10}>{content.talks[3]?.location ?? ""}</AnimatedSpan>
                                 </p>
                               </div>
                             </div>
@@ -798,7 +798,7 @@ export function About({ content }: { content: AboutContent }) {
                             <div className={"framer-14p3me6"}>
                               <div className={"framer-i1klgo"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                 <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15)))"}}>
-                                  {content.talks[0]?.city?.split(/\s+/).filter(Boolean).map((word, wi) => (<AnimatedSpan key={`talk-0-city-${wi}`} y={10}>{word}{wi < (content.talks[0]?.city?.split(/\s+/).filter(Boolean).length ?? 0) - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
+                                  {content.talks[0]?.year?.split(/\s+/).filter(Boolean).map((word, wi) => (<AnimatedSpan key={`talk-0-city-${wi}`} y={10}>{word}{wi < (content.talks[0]?.year?.split(/\s+/).filter(Boolean).length ?? 0) - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
                                 </p>
                               </div>
                               <div className={"framer-103fef5"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-ae5d2ed2-395e-4ac7-9825-f57ad4d7ddc7, rgb(240, 205, 62))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
@@ -812,7 +812,7 @@ export function About({ content }: { content: AboutContent }) {
                               </div>
                               <div className={"framer-1ic6ub0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(94, 93, 83))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                 <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LU1lZGl1bQ==", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-weight": "500", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(94, 93, 83)))"}}>
-                                    {content.talks[0]?.event?.split(/\s+/).filter(Boolean).map((w, wi, words) => (<AnimatedSpan key={`talk-0-event-${wi}`} y={10}>{w}{wi < words.length - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
+                                    {content.talks[0]?.milestone?.split(/\s+/).filter(Boolean).map((w, wi, words) => (<AnimatedSpan key={`talk-0-event-${wi}`} y={10}>{w}{wi < words.length - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
                                   </p>
                               </div>
                             </div>
@@ -823,7 +823,7 @@ export function About({ content }: { content: AboutContent }) {
                             <div className={"framer-14p3me6"}>
                               <div className={"framer-i1klgo"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                 <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15)))"}}>
-                                  {content.talks[1]?.city?.split(/\s+/).filter(Boolean).map((word, wi) => (<AnimatedSpan key={`talk-1-city-${wi}`} y={10}>{word}{wi < (content.talks[1]?.city?.split(/\s+/).filter(Boolean).length ?? 0) - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
+                                  {content.talks[1]?.year?.split(/\s+/).filter(Boolean).map((word, wi) => (<AnimatedSpan key={`talk-1-city-${wi}`} y={10}>{word}{wi < (content.talks[1]?.year?.split(/\s+/).filter(Boolean).length ?? 0) - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
                                 </p>
                               </div>
                               <div className={"framer-103fef5"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-ae5d2ed2-395e-4ac7-9825-f57ad4d7ddc7, rgb(240, 205, 62))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
@@ -837,7 +837,7 @@ export function About({ content }: { content: AboutContent }) {
                               </div>
                               <div className={"framer-1ic6ub0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(94, 93, 83))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                 <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LU1lZGl1bQ==", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-weight": "500", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(94, 93, 83)))"}}>
-                                    {content.talks[1]?.event?.split(/\s+/).filter(Boolean).map((w, wi, words) => (<AnimatedSpan key={`talk-1-event-${wi}`} y={10}>{w}{wi < words.length - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
+                                    {content.talks[1]?.milestone?.split(/\s+/).filter(Boolean).map((w, wi, words) => (<AnimatedSpan key={`talk-1-event-${wi}`} y={10}>{w}{wi < words.length - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
                                   </p>
                               </div>
                             </div>
@@ -848,7 +848,7 @@ export function About({ content }: { content: AboutContent }) {
                             <div className={"framer-14p3me6"}>
                               <div className={"framer-i1klgo"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                 <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15)))"}}>
-                                  {content.talks[2]?.city?.split(/\s+/).filter(Boolean).map((word, wi) => (<AnimatedSpan key={`talk-2-city-${wi}`} y={10}>{word}{wi < (content.talks[2]?.city?.split(/\s+/).filter(Boolean).length ?? 0) - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
+                                  {content.talks[2]?.year?.split(/\s+/).filter(Boolean).map((word, wi) => (<AnimatedSpan key={`talk-2-city-${wi}`} y={10}>{word}{wi < (content.talks[2]?.year?.split(/\s+/).filter(Boolean).length ?? 0) - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
                                 </p>
                               </div>
                               <div className={"framer-103fef5"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-ae5d2ed2-395e-4ac7-9825-f57ad4d7ddc7, rgb(240, 205, 62))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
@@ -862,7 +862,7 @@ export function About({ content }: { content: AboutContent }) {
                               </div>
                               <div className={"framer-1ic6ub0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(94, 93, 83))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                 <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LU1lZGl1bQ==", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-weight": "500", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(94, 93, 83)))"}}>
-                                    {content.talks[2]?.event?.split(/\s+/).filter(Boolean).map((w, wi, words) => (<AnimatedSpan key={`talk-2-event-${wi}`} y={10}>{w}{wi < words.length - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
+                                    {content.talks[2]?.milestone?.split(/\s+/).filter(Boolean).map((w, wi, words) => (<AnimatedSpan key={`talk-2-event-${wi}`} y={10}>{w}{wi < words.length - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
                                   </p>
                               </div>
                             </div>
@@ -873,7 +873,7 @@ export function About({ content }: { content: AboutContent }) {
                             <div className={"framer-14p3me6"}>
                               <div className={"framer-i1klgo"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                 <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15)))"}}>
-                                  {content.talks[3]?.city?.split(/\s+/).filter(Boolean).map((word, wi) => (<AnimatedSpan key={`talk-3-city-${wi}`} y={10}>{word}{wi < (content.talks[3]?.city?.split(/\s+/).filter(Boolean).length ?? 0) - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
+                                  {content.talks[3]?.year?.split(/\s+/).filter(Boolean).map((word, wi) => (<AnimatedSpan key={`talk-3-city-${wi}`} y={10}>{word}{wi < (content.talks[3]?.year?.split(/\s+/).filter(Boolean).length ?? 0) - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
                                 </p>
                               </div>
                               <div className={"framer-103fef5"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-ae5d2ed2-395e-4ac7-9825-f57ad4d7ddc7, rgb(240, 205, 62))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
@@ -887,7 +887,7 @@ export function About({ content }: { content: AboutContent }) {
                               </div>
                               <div className={"framer-1ic6ub0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-r6o4lv": "var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(94, 93, 83))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                                 <p dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LU1lZGl1bQ==", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-open-type-features": "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on", "--framer-font-weight": "500", "--framer-letter-spacing": "-0.02em", "--framer-line-height": "1.4em", "--framer-text-alignment": "center", "--framer-text-color": "var(--extracted-r6o4lv, var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(94, 93, 83)))"}}>
-                                    {content.talks[3]?.event?.split(/\s+/).filter(Boolean).map((w, wi, words) => (<AnimatedSpan key={`talk-3-event-${wi}`} y={10}>{w}{wi < words.length - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
+                                    {content.talks[3]?.milestone?.split(/\s+/).filter(Boolean).map((w, wi, words) => (<AnimatedSpan key={`talk-3-event-${wi}`} y={10}>{w}{wi < words.length - 1 ? " " : ""}</AnimatedSpan>)) ?? null}
                                   </p>
                               </div>
                             </div>

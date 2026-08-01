@@ -16,6 +16,9 @@ function hashFromHref(href: string) {
 /** Lenis smooth scroll driven by Motion's frame loop for scroll-synced animations. */
 export function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) return;
+
     const instance = new Lenis({ duration: 1.0 });
     const root = window.document.documentElement;
     root.classList.add("lenis");

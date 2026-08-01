@@ -6,7 +6,7 @@ import type { FooterContent } from "@/content/section-types";
 
 export function Footer({ content }: { content: FooterContent }) {
   return (
-    <footer className={"framer-1f12llc"} data-framer-name={"Footer"}>
+    <footer className={"framer-1f12llc"} data-framer-name={"Footer"} id="contact">
       <div className={"framer-7u9l2"} data-framer-name={"Title"}>
         <div className={"framer-1tznwtw"}>
           <div className={"ssr-variant hidden-qk48ah hidden-14eie82"}>

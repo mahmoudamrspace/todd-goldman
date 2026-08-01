@@ -22,6 +22,7 @@ export const defaultSiteSeed: SiteSettings = {
   nav: [
     { label: "Art", href: "/#works" },
     { label: "About", href: "/#about" },
+    { label: "Shop", href: "https://www.toddart.com/" },
     { label: "Contact", href: "/#contact" },
   ],
   social: [
@@ -49,6 +50,12 @@ export const defaultSiteSeed: SiteSettings = {
     "APPAREL & LICENSING",
     "COLLABORATIONS",
   ],
+  serviceLinks: [
+    { href: "/#works" },
+    { href: "/works/monochrome-journal" },
+    { href: "https://www.toddart.com/" },
+    { href: "mailto:studio@toddgoldman.com?subject=Collaboration%20inquiry" },
+  ],
   worksTitleWords: ["Selected", "art"],
   sneakPeakTitleWords: ["Sketchbook", "wall"],
   testimonialTitleWords: ["What", "nice", "People say"],
@@ -65,60 +72,32 @@ export const defaultSiteSeed: SiteSettings = {
   workNavNextShort: "Next",
   testimonials: [
     {
-      author: "Leo Bennett",
-      role: "creative lead, form & co",
+      author: "Retail partner",
+      role: "licensing & merchandise",
       quote:
-        "They brought structure and personality to our brand in a way that immediately made everything feel more confident, polished, and cohesive.",
+        "Todd's characters travel everywhere — from gallery walls to mugs on kitchen counters. The humor lands instantly and keeps selling season after season.",
       tone: "white",
     },
     {
-      author: "Nina Carter",
-      role: "founder, north studio",
+      author: "Gallery director",
+      role: "exhibitions & originals",
       quote:
-        "Working together felt effortless from start to finish. They translated a rough idea into a visual identity that felt clear, expressive, and genuinely memorable.",
-      tone: "white",
-    },
-    {
-      author: "Ethan Brooks",
-      role: "co founder, fieldwave",
-      quote:
-        "They have a rare ability to make complex ideas feel simple and beautiful. The final result was thoughtful, strategic, and full of character.",
+        "There's a fearless honesty in the work. Childlike on the surface, razor-sharp underneath — collectors respond to that balance immediately.",
       tone: "blue",
     },
     {
-      author: "Maya Flores",
-      role: "marketing manager, lune labs",
+      author: "Publishing editor",
+      role: "books & media",
       quote:
-        "The new visuals gave our launch a completely different energy. Everything felt intentional, distinctive, and much more aligned with the audience we wanted to reach.",
+        "Fifty-plus titles and counting. Todd turns blunt one-liners into worlds people want to live inside — on the page, on a shirt, everywhere.",
       tone: "white",
     },
     {
-      author: "Miles Rivera",
-      role: "product marketing lead, orbit supply",
+      author: "Brand collaborator",
+      role: "custom projects",
       quote:
-        "The illustrations added warmth and personality without losing professionalism. It made the whole brand feel more human, modern, and engaging.",
-      tone: "white",
-    },
-    {
-      author: "Sofia Grant",
-      role: "brand manager, kinfolk agency",
-      quote:
-        "From the first concepts to the final files, every detail was handled with care. The work felt refined, playful, and incredibly easy to build a brand around.",
+        "He shows up with the doodle energy of a kid and the discipline of a studio that has shipped millions of units. Rare combination.",
       tone: "green",
-    },
-    {
-      author: "Gillian Anderson",
-      role: "art director, north avenue",
-      quote:
-        "What stood out most was the balance between creativity and clarity. The system felt original, but it also worked beautifully across every touchpoint.",
-      tone: "blue",
-    },
-    {
-      author: "Tom Turner",
-      role: "founder, ember house",
-      quote:
-        "They helped us move from scattered inspiration to a brand that finally felt unified. The result looked distinctive and instantly more mature.",
-      tone: "white",
     },
   ],
   faqs: [
@@ -130,7 +109,7 @@ export const defaultSiteSeed: SiteSettings = {
     {
       question: "Can I license your work?",
       answer:
-        "Yes. Reach out through the contact form with your project details and we'll talk about licensing, collaborations, and custom work.",
+        "Yes. Email studio@toddgoldman.com with your project details and we'll talk about licensing, collaborations, and custom work.",
     },
     {
       question: "Do you take commissions?",
@@ -145,7 +124,7 @@ export const defaultSiteSeed: SiteSettings = {
     {
       question: "Is this the official portfolio?",
       answer:
-        "This site showcases Todd's creative worlds. Placeholder artwork is used in development until final assets are loaded.",
+        "Yes — this site showcases Todd's creative worlds across originals, books, apparel, and collaborations.",
     },
     {
       question: "How do I get in touch?",
@@ -164,10 +143,10 @@ export const defaultSiteSeed: SiteSettings = {
     "Custom commissions",
   ],
   talks: [
-    { city: "2000", event: "David & Goliath founded", year: "Clearwater, FL" },
-    { city: "2005", event: "First book published", year: "Boys Are Stupid…" },
-    { city: "2010s", event: "Gallery & retail expansion", year: "Los Angeles" },
-    { city: "Today", event: "Todd Art™ continues", year: "Never Grow Up" },
+    { year: "2000", milestone: "David & Goliath founded", location: "Clearwater, FL" },
+    { year: "2005", milestone: "First book published", location: "Boys Are Stupid…" },
+    { year: "2010s", milestone: "Gallery & retail expansion", location: "Los Angeles" },
+    { year: "Today", milestone: "Todd Art™ continues", location: "Never Grow Up" },
   ],
   awards: [
     { name: "Paintings sold", result: "4,000+", year: "Originals" },
@@ -190,10 +169,24 @@ export const defaultSiteSeed: SiteSettings = {
     "/assets/images/image-b6e2ba92.png",
     "/assets/images/image-3a1db525.png",
   ],
+  sneakPeakImageAlts: [
+    "Sketchbook drawing — character study",
+    "Sketchbook drawing — humorous scene",
+    "Sketchbook drawing — bold line work",
+    "Sketchbook drawing — pop-art doodle",
+    "Sketchbook drawing — expressive face",
+    "Sketchbook drawing — playful composition",
+    "Sketchbook drawing — ink illustration",
+    "Sketchbook drawing — witty character",
+    "Sketchbook drawing — colorful sketch",
+    "Sketchbook drawing — editorial doodle",
+    "Sketchbook drawing — comic moment",
+    "Sketchbook drawing — studio wall piece",
+  ],
   footerMadeBy: "LAX ART STUDIO",
   footerCopyright: "Copyright © 2026, Todd Goldman",
-  footerPromo: "",
-  footerPromoHref: "",
+  footerPromo: "Visit the Todd Art shop",
+  footerPromoHref: "https://www.toddart.com/",
   footerMark: "/assets/images/image-3a2fc861.png",
   metaTitle: "Todd Goldman — Never Grow Up",
   metaDescription:

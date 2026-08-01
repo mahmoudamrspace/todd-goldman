@@ -26,14 +26,14 @@ const ZERO_PROGRESS = motionValue(0);
 
 /** Desktop testimonial card parallax (start → end px from Framer onScrollTarget). */
 export const CARD_PARALLAX = [
-  { x: [-20, 0] as [number, number], y: [0, -50] as [number, number] },
-  { x: [20, 0], y: [0, -80] },
-  { x: [-10, 0], y: [0, -100] },
-  { x: [10, 0], y: [0, -150] },
-  { x: [10, 0], y: [0, -150] },
-  { x: [10, 0], y: [0, -150] },
-  { x: [20, 0], y: [0, -80] },
-  { x: [10, 0], y: [0, -150] },
+  { x: [-10, 0] as [number, number], y: [0, -50] as [number, number] },
+  { x: [10, 0], y: [0, -80] },
+  { x: [-6, 0], y: [0, -100] },
+  { x: [6, 0], y: [0, -150] },
+  { x: [6, 0], y: [0, -150] },
+  { x: [6, 0], y: [0, -150] },
+  { x: [10, 0], y: [0, -80] },
+  { x: [6, 0], y: [0, -150] },
 ] as const;
 
 type TestimonialScrollContextValue = {

@@ -32,7 +32,7 @@ export function HomeShell({ site, works }: HomeShellProps) {
   const showTestimonials = testimonialContent.items.length > 0;
 
   return (
-    <div id="main" data-framer-hydrate-v2="" data-framer-generated-page="">
+    <main id="main" data-framer-hydrate-v2="" data-framer-generated-page="">
       <div
         className="framer-XP9RI framer-16i3gsx"
         data-layout-template="true"
@@ -43,22 +43,20 @@ export function HomeShell({ site, works }: HomeShellProps) {
           className="framer-v1Omn framer-Q4hZR framer-72rtr7"
           style={{ minHeight: "100vh", width: "auto", display: "contents" }}
         >
-          <HeroIntroRegion>
-            <Hero content={toHeroContent(site)} />
-            <Intro content={toIntroContent(site)} />
-          </HeroIntroRegion>
-          <ToddHomeSections
-            worksContent={worksContent}
-            sneakPeakContent={toSneakPeakContent(site)}
-            servicesContent={toServicesContent(site)}
-            testimonialContent={testimonialContent}
-            showTestimonials={showTestimonials}
-            aboutContent={toAboutContent(site)}
-            faqContent={toFaqContent(site)}
-          />
-          <div className={"framer-vwz6y7"} data-framer-name={"Footer-For scroll only"} id={"contact"} />
-          <div className={"framer-17h3w0h-container"}>
-            <div />
+          <div className="site-page-content">
+            <HeroIntroRegion>
+              <Hero content={toHeroContent(site)} />
+              <Intro content={toIntroContent(site)} />
+            </HeroIntroRegion>
+            <ToddHomeSections
+              worksContent={worksContent}
+              sneakPeakContent={toSneakPeakContent(site)}
+              servicesContent={toServicesContent(site)}
+              testimonialContent={testimonialContent}
+              showTestimonials={showTestimonials}
+              aboutContent={toAboutContent(site)}
+              faqContent={toFaqContent(site)}
+            />
           </div>
         </div>
         <NavMenu>
@@ -69,6 +67,6 @@ export function HomeShell({ site, works }: HomeShellProps) {
         </FooterSection>
         <SvgTemplates />
       </div>
-    </div>
+    </main>
   );
 }

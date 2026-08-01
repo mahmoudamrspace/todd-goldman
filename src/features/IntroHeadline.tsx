@@ -1,8 +1,16 @@
 "use client";
 
 import { useHeroScroll } from "@/features/HeroScrollContext";
-import { LENIS_SCROLL_EVENT } from "@/features/SmoothScroll";
-import { useEffect, useMemo, useRef, type CSSProperties, type ReactNode } from "react";
+import {
+  motion,
+  motionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+  type MotionValue,
+} from "motion/react";
+import { useMemo, type CSSProperties, type ReactNode } from "react";
+import { editorialSpring } from "@/shared/lib/motion";
 
 const HIGHLIGHT_STYLE: CSSProperties = {
   "--font-selector": "R0Y7QXZlcmlhIFNlcmlmIExpYnJlLTMwMGl0YWxpYw==",
@@ -51,23 +59,64 @@ export const INTRO_WORD_STYLE: CSSProperties = {
   transform: "translateX(0px) translateY(10px) scale(1) rotate(0deg) skewX(0deg) skewY(0deg)",
 };
 
-const WORD_STYLE = INTRO_WORD_STYLE;
+const INTRO_WORD_WINDOW = 0.1;
+const INTRO_WORD_OFFSET = 10;
 
-function snapProgress(value: number, steps = 12) {
-  return Math.round(value * steps) / steps;
+function clamp01(value: number) {
+  return Math.min(1, Math.max(0, value));
 }
 
-function IntroWordSpan({
+function useSmoothedHeroProgress(): MotionValue<number> | null {
+  const heroScroll = useHeroScroll();
+  const reduced = useReducedMotion();
+  const rawProgress = heroScroll?.scrollYProgress ?? motionValue(1);
+  const smoothProgress = useSpring(rawProgress, editorialSpring);
+
+  if (reduced || !heroScroll) return null;
+  return smoothProgress;
+}
+
+function IntroScrollWord({
+  progress,
   wordIndex,
+  startProgress,
+  step,
   children,
   className,
 }: {
+  progress: MotionValue<number>;
   wordIndex: number;
+  startProgress: number;
+  step: number;
+  children: ReactNode;
+  className?: string;
+}) {
+  const threshold = startProgress + wordIndex * step;
+
+  const opacity = useTransform(progress, (value) =>
+    clamp01((value - threshold) / INTRO_WORD_WINDOW),
+  );
+  const y = useTransform(progress, (value) => {
+    const t = clamp01((value - threshold) / INTRO_WORD_WINDOW);
+    return INTRO_WORD_OFFSET * (1 - t);
+  });
+
+  return (
+    <motion.span className={className} style={{ display: "inline-block", opacity, y }}>
+      {children}
+    </motion.span>
+  );
+}
+
+function IntroStaticWord({
+  children,
+  className,
+}: {
   children: ReactNode;
   className?: string;
 }) {
   return (
-    <span data-intro-word={wordIndex} className={className} style={WORD_STYLE}>
+    <span className={className} style={{ display: "inline-block" }}>
       {children}
     </span>
   );
@@ -81,37 +130,9 @@ export function IntroHeadline({
   fontSize: string;
   headline: string;
 }) {
-  const heroScroll = useHeroScroll();
-  const headingRef = useRef<HTMLHeadingElement>(null);
   const tokens = useMemo(() => buildHeadlineTokens(headline), [headline]);
-
-  useEffect(() => {
-    const heading = headingRef.current;
-    if (!heading || !heroScroll) return;
-
-    const words = [...heading.querySelectorAll("[data-intro-word]")];
-    const sync = () => {
-      const progress = snapProgress(heroScroll.scrollYProgress.get());
-      words.forEach((node, index) => {
-        if (!(node instanceof HTMLElement)) return;
-        if (progress >= 0.12 + index * 0.04) {
-          node.style.opacity = "1";
-          node.style.transform = "none";
-        }
-      });
-    };
-
-    const unsubscribe = heroScroll.scrollYProgress.on("change", sync);
-    window.addEventListener(LENIS_SCROLL_EVENT, sync, { passive: true });
-    window.addEventListener("scroll", sync, { passive: true });
-    sync();
-
-    return () => {
-      unsubscribe();
-      window.removeEventListener(LENIS_SCROLL_EVENT, sync);
-      window.removeEventListener("scroll", sync);
-    };
-  }, [heroScroll]);
+  const smoothProgress = useSmoothedHeroProgress();
+  const useMotion = smoothProgress !== null;
 
   const style: CSSProperties = {
     "--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=",
@@ -131,10 +152,18 @@ export function IntroHeadline({
     if (index > 0) nodes.push(" ");
 
     if (token.kind === "word") {
-      const wordNode = (
-        <IntroWordSpan key={`intro-hl-word-${index}`} wordIndex={wordIndex}>
+      const wordNode = useMotion ? (
+        <IntroScrollWord
+          key={`intro-hl-word-${index}`}
+          progress={smoothProgress}
+          wordIndex={wordIndex}
+          startProgress={0.12}
+          step={0.04}
+        >
           {token.text}
-        </IntroWordSpan>
+        </IntroScrollWord>
+      ) : (
+        <IntroStaticWord key={`intro-hl-word-${index}`}>{token.text}</IntroStaticWord>
       );
       wordIndex += 1;
 
@@ -151,56 +180,43 @@ export function IntroHeadline({
   });
 
   return (
-    <h1 ref={headingRef} dir={"auto"} style={style} className={"framer-text"}>
+    <h1 dir={"auto"} style={style} className={"framer-text"}>
       {nodes}
     </h1>
   );
 }
 
-/** Greeting line with static word spans matching Framer export. */
+/** Greeting line with scroll-linked word motion. */
 export function IntroGreeting({ text }: { text: string }) {
-  const heroScroll = useHeroScroll();
-  const containerRef = useRef<HTMLHeadingElement>(null);
   const words = text.trim().split(/\s+/).filter(Boolean);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container || !heroScroll) return;
-    const nodes = [...container.querySelectorAll("[data-intro-greeting]")];
-    const sync = () => {
-      const progress = snapProgress(heroScroll.scrollYProgress.get());
-      nodes.forEach((node, index) => {
-        if (!(node instanceof HTMLElement)) return;
-        if (progress >= 0.08 + index * 0.04) {
-          node.style.opacity = "1";
-          node.style.transform = "none";
-        }
-      });
-    };
-    const unsubscribe = heroScroll.scrollYProgress.on("change", sync);
-    window.addEventListener(LENIS_SCROLL_EVENT, sync, { passive: true });
-    window.addEventListener("scroll", sync, { passive: true });
-    sync();
-    return () => {
-      unsubscribe();
-      window.removeEventListener(LENIS_SCROLL_EVENT, sync);
-      window.removeEventListener("scroll", sync);
-    };
-  }, [heroScroll, words.length]);
+  const smoothProgress = useSmoothedHeroProgress();
+  const useMotion = smoothProgress !== null;
 
   return (
     <h2
-      ref={containerRef}
       className={"framer-text framer-styles-preset-1ir8ahu"}
       data-styles-preset={"RGebQr53Z"}
       dir={"auto"}
     >
-      {words.map((word, index) => (
-        <span key={`intro-greeting-${word}-${index}`} data-intro-greeting={index} style={INTRO_WORD_STYLE}>
-          {index > 0 ? " " : ""}
-          {word}
-        </span>
-      ))}
+      {words.map((word, index) =>
+        useMotion ? (
+          <IntroScrollWord
+            key={`intro-greeting-${word}-${index}`}
+            progress={smoothProgress}
+            wordIndex={index}
+            startProgress={0.08}
+            step={0.04}
+          >
+            {index > 0 ? " " : ""}
+            {word}
+          </IntroScrollWord>
+        ) : (
+          <IntroStaticWord key={`intro-greeting-${word}-${index}`}>
+            {index > 0 ? " " : ""}
+            {word}
+          </IntroStaticWord>
+        ),
+      )}
     </h2>
   );
 }

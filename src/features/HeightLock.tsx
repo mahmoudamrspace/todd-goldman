@@ -1,9 +1,15 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+
+export interface HeightLockProps {
+  children: ReactNode;
+  /** Optional CSS transition for height changes (e.g. FAQ accordion resize). */
+  transition?: string;
+}
 
 /** Locks parent height to measured child height to prevent accordion layout jump. */
-export function HeightLock({ children }: { children: ReactNode }) {
+export function HeightLock({ children, transition }: HeightLockProps) {
   const innerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState<number | undefined>();
 
@@ -19,14 +25,15 @@ export function HeightLock({ children }: { children: ReactNode }) {
     return () => observer.disconnect();
   }, [children]);
 
+  const shellStyle: CSSProperties = {
+    width: "100%",
+    height: height !== undefined ? `${height}px` : "auto",
+    overflow: "visible",
+    ...(transition ? { transition: `height ${transition}` } : {}),
+  };
+
   return (
-    <div
-      style={{
-        width: "100%",
-        height: height !== undefined ? `${height}px` : "auto",
-        overflow: "visible",
-      }}
-    >
+    <div style={shellStyle}>
       <div ref={innerRef} style={{ width: "100%" }}>
         {children}
       </div>

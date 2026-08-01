@@ -13,6 +13,7 @@ import { Scribble } from "@/entities/Scribble";
 import { Appear } from "@/features/Appear";
 import { AnimatedSpan, AnimatedWords, HiddenReveal } from "@/features/HiddenReveal";
 import { LENIS_SCROLL_EVENT } from "@/features/SmoothScroll";
+import { easeOut, editorialSpring } from "@/shared/lib/motion";
 
 const SERVICES_CONTAINER_REVEAL_MS = 2200;
 const SERVICES_CONTAINER_STYLE = {
@@ -102,7 +103,11 @@ function ServicesContainer({ children }: { children: ReactNode }) {
       style={{ willChange: "transform" }}
       initial={{ opacity: 0, scale: 1, y: 20 }}
       animate={visible ? { opacity: 1, scale: 0.91, y: 0 } : { opacity: 0, scale: 1, y: 20 }}
-      transition={{ type: "spring", bounce: 0.3, duration: 1.1 }}
+      transition={{
+        opacity: { duration: 0.9, ease: easeOut },
+        scale: editorialSpring,
+        y: editorialSpring,
+      }}
     >
       {children}
     </motion.div>
@@ -112,18 +117,64 @@ function ServicesContainer({ children }: { children: ReactNode }) {
 const SERVICE_ROW_REVEAL_STYLE = {
   willChange: "transform",
   opacity: "0",
-  transform: "translateY(20px)",
+  transform: "translateY(16px)",
 } as const;
+
+const SERVICE_ROW_STAGGER = 0.12;
+const SERVICE_TEXT_AFTER_ICON = 0.08;
+
+function ServiceRowIcon({ children }: { children: ReactNode }) {
+  const reduced = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, amount: 0.15 });
+
+  if (reduced) {
+    return (
+      <div
+        ref={ref}
+        className={"framer-1v49j1s"}
+        data-framer-name={"Icon"}
+        style={{ willChange: "transform", opacity: 1, transform: "none" }}
+      >
+        {children}
+      </div>
+    );
+  }
+
+  return (
+    <motion.div
+      ref={ref}
+      className={"framer-1v49j1s"}
+      data-framer-name={"Icon"}
+      style={{ willChange: "transform" }}
+      initial={{ opacity: 0, x: -30, y: 20 }}
+      animate={isInView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: -30, y: 20 }}
+      transition={{
+        duration: 0.85,
+        ease: easeOut,
+      }}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 function ServiceRowReveal({
   className,
   children,
+  rowIndex = 0,
 }: {
   className: string;
   children: ReactNode;
+  rowIndex?: number;
 }) {
   return (
-    <HiddenReveal className={className} style={SERVICE_ROW_REVEAL_STYLE}>
+    <HiddenReveal
+      className={className}
+      variant="services-row"
+      delay={rowIndex * SERVICE_ROW_STAGGER}
+      style={SERVICE_ROW_REVEAL_STYLE}
+    >
       {children}
     </HiddenReveal>
   );
@@ -132,6 +183,41 @@ function ServiceRowReveal({
 function desktopRowClass(activeIndex: number | null | undefined, index: number) {
   const base = "framer-psO7m framer-11wtfxh framer-v-11wtfxh";
   return activeIndex === index ? `${base} hover` : base;
+}
+
+function serviceHref(content: ServicesContent, index: number) {
+  return content.links[index]?.href ?? "#";
+}
+
+function ServiceRowLink({
+  href,
+  className,
+  framerName,
+  onMouseEnter,
+  onMouseLeave,
+  children,
+}: {
+  href: string;
+  className: string;
+  framerName: string;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  children: ReactNode;
+}) {
+  const external = href.startsWith("http") || href.startsWith("mailto:");
+  return (
+    <a
+      className={className}
+      data-framer-name={framerName}
+      href={href}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      data-highlight
+    >
+      {children}
+    </a>
+  );
 }
 
 export function Services({
@@ -152,7 +238,7 @@ export function Services({
           <div className={"framer-1bmkgkc"} data-framer-name={"Title"}>
             <div className={"framer-17amzni"} data-framer-component-type={"RichTextContainer"} style={{"transform": "none"}}>
               <h2 className={"framer-text framer-styles-preset-1ir8ahu"} data-styles-preset={"RGebQr53Z"} dir={"auto"} style={{"--framer-text-color": "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))"}}>
-                <AnimatedSpan y={10}>{content.title}</AnimatedSpan>
+                <AnimatedSpan variant="services" y={10}>{content.title}</AnimatedSpan>
               </h2>
             </div>
             <div className={"ssr-variant hidden-g5y12p"}>
@@ -172,7 +258,7 @@ export function Services({
                 <div className={"framer-5ftgev"} data-framer-name={"Icon and Title"}>
                   <div className={"framer-wjxcw0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-gdpscs": "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                     <h1 dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-size": "80px", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.04em", "--framer-line-height": "90%", "--framer-text-alignment": "left", "--framer-text-color": "var(--extracted-gdpscs, var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237)))"}}>
-                      <AnimatedWords text={content.headlines[0] ?? content.items[0] ?? ""} />
+                      <AnimatedWords variant="services" text={content.headlines[0] ?? content.items[0] ?? ""} />
                     </h1>
                   </div>
                 </div>
@@ -185,54 +271,66 @@ export function Services({
                 <div className={"framer-5ftgev"} data-framer-name={"Icon and Title"}>
                   <div className={"framer-wjxcw0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-gdpscs": "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "--extracted-a0htzi": "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))", "transform": "none"}}>
                     <h3 dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-size": "32px", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.04em", "--framer-line-height": "140%", "--framer-text-alignment": "left", "--framer-text-color": "var(--extracted-a0htzi, var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237)))"}}>
-                      <AnimatedWords text={content.items[0] ?? ""} />
+                      <AnimatedWords variant="services" text={content.items[0] ?? ""} />
                     </h3>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <ServiceRowReveal className={"framer-1be5xs1-container hidden-r4q9g hidden-g5y12p"}>
-            <div className={desktopRowClass(activeIndex, 0)} data-framer-name={"Desktop"} onMouseEnter={() => onRowEnter?.(0)} onMouseLeave={() => onRowLeave?.()}>
+          <ServiceRowReveal rowIndex={0} className={"framer-1be5xs1-container hidden-r4q9g hidden-g5y12p"}>
+            <ServiceRowLink
+              href={serviceHref(content, 0)}
+              className={desktopRowClass(activeIndex, 0)}
+              framerName="Desktop"
+              onMouseEnter={() => onRowEnter?.(0)}
+              onMouseLeave={() => onRowLeave?.()}
+            >
               <div className={"framer-5ftgev"} data-framer-name={"Icon and Title"}>
-                <Appear id="1v49j1s" className={"framer-1v49j1s"} data-framer-name={"Icon"} style={{"willChange": "transform", "opacity": "0", "transform": "translateX(-30px) translateY(20px)"}}>
+                <ServiceRowIcon>
                     <div style={{"position": "absolute", "borderRadius": "inherit", "cornerShape": "inherit", "top": "0", "right": "0", "bottom": "0", "left": "0"}} data-framer-background-image-wrapper={true}>
                       <img decoding={"async"} loading={"lazy"} width={172} height={106} src={`${content.decor}?width=172&height=106`} alt="" style={{"display": "block", "width": "100%", "height": "100%", "borderRadius": "inherit", "cornerShape": "inherit", "objectPosition": "center", "objectFit": "cover"}} />
                     </div>
-                </Appear>
+                </ServiceRowIcon>
                 <div className={"framer-wjxcw0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-gdpscs": "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                   <h1 dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-size": "72px", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.04em", "--framer-line-height": "90%", "--framer-text-alignment": "left", "--framer-text-color": "var(--extracted-gdpscs, var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237)))"}}>
-                    <AnimatedWords text={content.headlines[0] ?? content.items[0] ?? ""} />
+                    <AnimatedWords variant="services" startDelay={SERVICE_TEXT_AFTER_ICON} text={content.headlines[0] ?? content.items[0] ?? ""} />
                   </h1>
                 </div>
               </div>
-            </div>
+            </ServiceRowLink>
           </ServiceRowReveal>
           <div className={"ssr-variant hidden-g5y12p hidden-r4q9g"}>
-            <ServiceRowReveal className={"framer-1289ev8-container"}>
-              <div className={desktopRowClass(activeIndex, 1)} data-framer-name={"Desktop"} onMouseEnter={() => onRowEnter?.(1)} onMouseLeave={() => onRowLeave?.()}>
+            <ServiceRowReveal rowIndex={1} className={"framer-1289ev8-container"}>
+              <ServiceRowLink
+                href={serviceHref(content, 1)}
+                className={desktopRowClass(activeIndex, 1)}
+                framerName="Desktop"
+                onMouseEnter={() => onRowEnter?.(1)}
+                onMouseLeave={() => onRowLeave?.()}
+              >
                 <div className={"framer-5ftgev"} data-framer-name={"Icon and Title"}>
-                  <Appear id="1v49j1s" className={"framer-1v49j1s"} data-framer-name={"Icon"} style={{"willChange": "transform", "opacity": "0", "transform": "translateX(-30px) translateY(20px)"}}>
+                  <ServiceRowIcon>
                       <div style={{"position": "absolute", "borderRadius": "inherit", "cornerShape": "inherit", "top": "0", "right": "0", "bottom": "0", "left": "0"}} data-framer-background-image-wrapper={true}>
                         <img decoding={"async"} loading={"lazy"} width={172} height={106} src={`${content.decor}?width=172&height=106`} alt="" style={{"display": "block", "width": "100%", "height": "100%", "borderRadius": "inherit", "cornerShape": "inherit", "objectPosition": "center", "objectFit": "cover"}} />
                       </div>
-                  </Appear>
+                  </ServiceRowIcon>
                   <div className={"framer-wjxcw0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-gdpscs": "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                     <h1 dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-size": "72px", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.04em", "--framer-line-height": "90%", "--framer-text-alignment": "left", "--framer-text-color": "var(--extracted-gdpscs, var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237)))"}}>
-                      <AnimatedWords text={content.items[1] ?? ""} />
+                      <AnimatedWords variant="services" startDelay={SERVICE_TEXT_AFTER_ICON} text={content.items[1] ?? ""} />
                     </h1>
                   </div>
                 </div>
-              </div>
+              </ServiceRowLink>
             </ServiceRowReveal>
           </div>
           <div className={"ssr-variant hidden-r4q9g hidden-72rtr7"}>
-            <ServiceRowReveal className={"framer-1289ev8-container"}>
+            <ServiceRowReveal rowIndex={1} className={"framer-1289ev8-container"}>
               <div className={"framer-psO7m framer-11wtfxh framer-v-1m94y22"} data-framer-name={"Mobile"}>
                 <div className={"framer-5ftgev"} data-framer-name={"Icon and Title"}>
                   <div className={"framer-wjxcw0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-gdpscs": "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "--extracted-a0htzi": "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))", "transform": "none"}}>
                     <h3 dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-size": "32px", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.04em", "--framer-line-height": "140%", "--framer-text-alignment": "left", "--framer-text-color": "var(--extracted-a0htzi, var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237)))"}}>
-                      <AnimatedWords text={content.items[1] ?? ""} />
+                      <AnimatedWords variant="services" text={content.items[1] ?? ""} />
                     </h3>
                   </div>
                 </div>
@@ -240,12 +338,12 @@ export function Services({
             </ServiceRowReveal>
           </div>
           <div className={"ssr-variant hidden-g5y12p hidden-72rtr7"}>
-            <ServiceRowReveal className={"framer-1289ev8-container"}>
+            <ServiceRowReveal rowIndex={1} className={"framer-1289ev8-container"}>
               <div className={"framer-psO7m framer-11wtfxh framer-v-1l5esg8"} data-framer-name={"Tablet"}>
                 <div className={"framer-5ftgev"} data-framer-name={"Icon and Title"}>
                   <div className={"framer-wjxcw0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-gdpscs": "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                     <h1 dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-size": "80px", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.04em", "--framer-line-height": "90%", "--framer-text-alignment": "left", "--framer-text-color": "var(--extracted-gdpscs, var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237)))"}}>
-                      <AnimatedWords text={content.items[1] ?? ""} />
+                      <AnimatedWords variant="services" text={content.items[1] ?? ""} />
                     </h1>
                   </div>
                 </div>
@@ -253,30 +351,36 @@ export function Services({
             </ServiceRowReveal>
           </div>
           <div className={"ssr-variant hidden-g5y12p hidden-r4q9g"}>
-            <ServiceRowReveal className={"framer-9ohqu1-container"}>
-              <div className={desktopRowClass(activeIndex, 2)} data-framer-name={"Desktop"} onMouseEnter={() => onRowEnter?.(2)} onMouseLeave={() => onRowLeave?.()}>
+            <ServiceRowReveal rowIndex={2} className={"framer-9ohqu1-container"}>
+              <ServiceRowLink
+                href={serviceHref(content, 2)}
+                className={desktopRowClass(activeIndex, 2)}
+                framerName="Desktop"
+                onMouseEnter={() => onRowEnter?.(2)}
+                onMouseLeave={() => onRowLeave?.()}
+              >
                 <div className={"framer-5ftgev"} data-framer-name={"Icon and Title"}>
-                  <Appear id="1v49j1s" className={"framer-1v49j1s"} data-framer-name={"Icon"} style={{"willChange": "transform", "opacity": "0", "transform": "translateX(-30px) translateY(20px)"}}>
+                  <ServiceRowIcon>
                       <div style={{"position": "absolute", "borderRadius": "inherit", "cornerShape": "inherit", "top": "0", "right": "0", "bottom": "0", "left": "0"}} data-framer-background-image-wrapper={true}>
                         <img decoding={"async"} loading={"lazy"} width={172} height={106} src={`${content.decor}?width=172&height=106`} alt="" style={{"display": "block", "width": "100%", "height": "100%", "borderRadius": "inherit", "cornerShape": "inherit", "objectPosition": "center", "objectFit": "cover"}} />
                       </div>
-                  </Appear>
+                  </ServiceRowIcon>
                   <div className={"framer-wjxcw0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-gdpscs": "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                     <h1 dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-size": "72px", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.04em", "--framer-line-height": "90%", "--framer-text-alignment": "left", "--framer-text-color": "var(--extracted-gdpscs, var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237)))"}}>
-                      <AnimatedWords text={content.items[2] ?? ""} />
+                      <AnimatedWords variant="services" startDelay={SERVICE_TEXT_AFTER_ICON} text={content.items[2] ?? ""} />
                     </h1>
                   </div>
                 </div>
-              </div>
+              </ServiceRowLink>
             </ServiceRowReveal>
           </div>
           <div className={"ssr-variant hidden-r4q9g hidden-72rtr7"}>
-            <ServiceRowReveal className={"framer-9ohqu1-container"}>
+            <ServiceRowReveal rowIndex={2} className={"framer-9ohqu1-container"}>
               <div className={"framer-psO7m framer-11wtfxh framer-v-1m94y22"} data-framer-name={"Mobile"}>
                 <div className={"framer-5ftgev"} data-framer-name={"Icon and Title"}>
                   <div className={"framer-wjxcw0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-gdpscs": "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "--extracted-a0htzi": "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))", "transform": "none"}}>
                     <h3 dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-size": "32px", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.04em", "--framer-line-height": "140%", "--framer-text-alignment": "left", "--framer-text-color": "var(--extracted-a0htzi, var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237)))"}}>
-                      <AnimatedWords text={content.items[2] ?? ""} />
+                      <AnimatedWords variant="services" text={content.items[2] ?? ""} />
                     </h3>
                   </div>
                 </div>
@@ -284,12 +388,12 @@ export function Services({
             </ServiceRowReveal>
           </div>
           <div className={"ssr-variant hidden-g5y12p hidden-72rtr7"}>
-            <ServiceRowReveal className={"framer-9ohqu1-container"}>
+            <ServiceRowReveal rowIndex={2} className={"framer-9ohqu1-container"}>
               <div className={"framer-psO7m framer-11wtfxh framer-v-1l5esg8"} data-framer-name={"Tablet"}>
                 <div className={"framer-5ftgev"} data-framer-name={"Icon and Title"}>
                   <div className={"framer-wjxcw0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-gdpscs": "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                     <h1 dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-size": "80px", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.04em", "--framer-line-height": "90%", "--framer-text-alignment": "left", "--framer-text-color": "var(--extracted-gdpscs, var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237)))"}}>
-                      <AnimatedWords text={content.items[2] ?? ""} />
+                      <AnimatedWords variant="services" text={content.items[2] ?? ""} />
                     </h1>
                   </div>
                 </div>
@@ -297,30 +401,36 @@ export function Services({
             </ServiceRowReveal>
           </div>
           <div className={"ssr-variant hidden-g5y12p hidden-r4q9g"}>
-            <ServiceRowReveal className={"framer-6ugkl0-container"}>
-              <div className={desktopRowClass(activeIndex, 3)} data-framer-name={"Desktop"} onMouseEnter={() => onRowEnter?.(3)} onMouseLeave={() => onRowLeave?.()}>
+            <ServiceRowReveal rowIndex={3} className={"framer-6ugkl0-container"}>
+              <ServiceRowLink
+                href={serviceHref(content, 3)}
+                className={desktopRowClass(activeIndex, 3)}
+                framerName="Desktop"
+                onMouseEnter={() => onRowEnter?.(3)}
+                onMouseLeave={() => onRowLeave?.()}
+              >
                 <div className={"framer-5ftgev"} data-framer-name={"Icon and Title"}>
-                  <Appear id="1v49j1s" className={"framer-1v49j1s"} data-framer-name={"Icon"} style={{"willChange": "transform", "opacity": "0", "transform": "translateX(-30px) translateY(20px)"}}>
+                  <ServiceRowIcon>
                       <div style={{"position": "absolute", "borderRadius": "inherit", "cornerShape": "inherit", "top": "0", "right": "0", "bottom": "0", "left": "0"}} data-framer-background-image-wrapper={true}>
                         <img decoding={"async"} loading={"lazy"} width={172} height={106} src={`${content.decor}?width=172&height=106`} alt="" style={{"display": "block", "width": "100%", "height": "100%", "borderRadius": "inherit", "cornerShape": "inherit", "objectPosition": "center", "objectFit": "cover"}} />
                       </div>
-                  </Appear>
+                  </ServiceRowIcon>
                   <div className={"framer-wjxcw0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-gdpscs": "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                     <h1 dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-size": "72px", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.04em", "--framer-line-height": "90%", "--framer-text-alignment": "left", "--framer-text-color": "var(--extracted-gdpscs, var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237)))"}}>
-                      <AnimatedWords text={content.items[3] ?? ""} />
+                      <AnimatedWords variant="services" startDelay={SERVICE_TEXT_AFTER_ICON} text={content.items[3] ?? ""} />
                     </h1>
                   </div>
                 </div>
-              </div>
+              </ServiceRowLink>
             </ServiceRowReveal>
           </div>
           <div className={"ssr-variant hidden-r4q9g hidden-72rtr7"}>
-            <ServiceRowReveal className={"framer-6ugkl0-container"}>
+            <ServiceRowReveal rowIndex={3} className={"framer-6ugkl0-container"}>
               <div className={"framer-psO7m framer-11wtfxh framer-v-1m94y22"} data-framer-name={"Mobile"}>
                 <div className={"framer-5ftgev"} data-framer-name={"Icon and Title"}>
                   <div className={"framer-wjxcw0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-gdpscs": "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "--extracted-a0htzi": "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))", "transform": "none"}}>
                     <h3 dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-size": "32px", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.04em", "--framer-line-height": "140%", "--framer-text-alignment": "left", "--framer-text-color": "var(--extracted-a0htzi, var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237)))"}}>
-                      <AnimatedWords text={content.items[3] ?? ""} />
+                      <AnimatedWords variant="services" text={content.items[3] ?? ""} />
                     </h3>
                   </div>
                 </div>
@@ -328,12 +438,12 @@ export function Services({
             </ServiceRowReveal>
           </div>
           <div className={"ssr-variant hidden-g5y12p hidden-72rtr7"}>
-            <ServiceRowReveal className={"framer-6ugkl0-container"}>
+            <ServiceRowReveal rowIndex={3} className={"framer-6ugkl0-container"}>
               <div className={"framer-psO7m framer-11wtfxh framer-v-1l5esg8"} data-framer-name={"Tablet"}>
                 <div className={"framer-5ftgev"} data-framer-name={"Icon and Title"}>
                   <div className={"framer-wjxcw0"} data-framer-component-type={"RichTextContainer"} style={{"--extracted-gdpscs": "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))", "--framer-link-text-color": "rgb(0, 153, 255)", "--framer-link-text-decoration": "underline", "transform": "none"}}>
                     <h1 dir={"auto"} className={"framer-text"} style={{"--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=", "--framer-font-family": "\"Inter Display\", \"Inter Display Placeholder\", sans-serif", "--framer-font-size": "80px", "--framer-font-weight": "700", "--framer-letter-spacing": "-0.04em", "--framer-line-height": "90%", "--framer-text-alignment": "left", "--framer-text-color": "var(--extracted-gdpscs, var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237)))"}}>
-                      <AnimatedWords text={content.items[3] ?? ""} />
+                      <AnimatedWords variant="services" text={content.items[3] ?? ""} />
                     </h1>
                   </div>
                 </div>

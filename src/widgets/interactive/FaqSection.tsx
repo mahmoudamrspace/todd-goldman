@@ -17,7 +17,7 @@ export function FaqSection({ content }: FaqSectionProps) {
   }, []);
 
   return (
-    <HeightLock>
+    <HeightLock transition="0.55s var(--ease-faq)">
       <Faq content={content} openIndex={openIndex} onToggle={onToggle} />
     </HeightLock>
   );

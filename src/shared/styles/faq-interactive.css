@@ -1,10 +1,40 @@
-/* FAQ accordion open variant — matches Framer E5ePz runtime state */
-.framer-E5ePz.framer-v-wlit4m {
+/* FAQ accordion — smooth collapse, white answers on green surface */
+
+.framer-E5ePz .faq-accordion__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  transition: grid-template-rows 0.55s var(--ease-faq);
+}
+
+.framer-E5ePz .faq-accordion__panel.is-open {
+  grid-template-rows: 1fr;
+  padding: 0 0 16px;
+}
+
+.framer-E5ePz.framer-v-wlit4m,
+.framer-E5ePz[data-framer-name="Open"] {
   overflow: visible;
 }
 
-.framer-E5ePz.framer-v-wlit4m .framer-1ue276m {
-  padding: 0 0 16px;
+.faq-accordion__panel-inner {
+  overflow: hidden;
+  min-height: 0;
+  opacity: 0;
+  transition: opacity 0.55s var(--ease-faq);
+}
+
+.faq-accordion__panel.is-open .faq-accordion__panel-inner {
+  opacity: 1;
+}
+
+.faq-accordion__answer,
+.faq-accordion__answer.framer-text {
+  color: var(--color-cream) !important;
+  --framer-text-color: var(--color-cream);
 }
 
 .framer-E5ePz .framer-ohg0r path {
@@ -13,4 +43,14 @@
 
 .framer-E5ePz[data-framer-name="Closed"]:hover {
   --border-color: rgb(251, 251, 251);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .framer-E5ePz .faq-accordion__panel {
+    transition: none;
+  }
+
+  .faq-accordion__panel-inner {
+    transition: none !important;
+  }
 }

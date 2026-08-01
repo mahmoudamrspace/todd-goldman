@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { getSite, getWork, getWorks } from "@/content";
 import { WorkShell } from "@/widgets/work-shell/WorkShell";
 
@@ -28,6 +29,6 @@ export default async function WorkPage({
     getWorks(),
     getWork(slug),
   ]);
-  if (!work) return null;
+  if (!work) notFound();
   return <WorkShell site={site} work={work} works={works} />;
 }

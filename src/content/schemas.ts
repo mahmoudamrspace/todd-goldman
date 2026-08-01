@@ -30,6 +30,9 @@ export const workSchema = z.object({
   accentTone: workAccentToneSchema.optional(),
   /** Todd profile: large gallery tile */
   featured: z.boolean().optional(),
+  /** Optional outbound CTA (e.g. shop link) */
+  ctaHref: z.string().optional(),
+  ctaLabel: z.string().optional(),
 });
 
 export const siteSettingsSchema = z.object({
@@ -51,6 +54,7 @@ export const siteSettingsSchema = z.object({
   servicesTitle: z.string(),
   servicesSubtitles: z.array(z.string()),
   servicesHeadlines: z.array(z.string()),
+  serviceLinks: z.array(z.object({ href: z.string() })),
   worksTitleWords: z.array(z.string()),
   sneakPeakTitleWords: z.array(z.string()),
   testimonialTitleWords: z.array(z.string()),
@@ -76,8 +80,9 @@ export const siteSettingsSchema = z.object({
   faqs: z.array(z.object({ question: z.string(), answer: z.string() })),
   clients: z.array(z.string()),
   talks: z.array(
-    z.object({ city: z.string(), event: z.string(), year: z.string() }),
+    z.object({ year: z.string(), milestone: z.string(), location: z.string() }),
   ),
+  sneakPeakImageAlts: z.array(z.string()),
   awards: z.array(
     z.object({ name: z.string(), result: z.string(), year: z.string() }),
   ),

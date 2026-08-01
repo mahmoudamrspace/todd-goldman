@@ -5,6 +5,7 @@ import "@framer/styles/framer-site.css";
 import "@/shared/styles/globals.css";
 import "@/shared/styles/todd-identity.css";
 import "@/shared/styles/faq-interactive.css";
+import "@/shared/styles/testimonial-interactive.css";
 import { getSite } from "@/content";
 import { siteConfig } from "@/shared/config/site";
 import { CustomCursor } from "@/features/CustomCursor";
@@ -28,6 +29,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body style={{ margin: 0 }} data-content-profile="default">
+        <a className="skip-link" href="#main">
+          Skip to main content
+        </a>
         <SmoothScroll>
           <CustomCursor />
           {children}

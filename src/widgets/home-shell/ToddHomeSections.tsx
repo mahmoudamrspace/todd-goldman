@@ -39,8 +39,8 @@ export function ToddHomeSections({
   faqContent,
 }: ToddHomeSectionsProps) {
   return (
-    <>
-      <ScrollChapter id="works-chapter" accent="paper">
+    <div className="site-page-sections">
+      <ScrollChapter id="works-chapter" accent="paper" spacing="first">
         <WorksGallery content={worksContent} />
       </ScrollChapter>
       <ScrollChapter accent="cream">
@@ -61,9 +61,9 @@ export function ToddHomeSections({
       <ScrollChapter accent="paper">
         <About content={aboutContent} />
       </ScrollChapter>
-      <ScrollChapter accent="cream">
+      <ScrollChapter accent="cream" spacing="last">
         <FaqSection content={faqContent} />
       </ScrollChapter>
-    </>
+    </div>
   );
 }

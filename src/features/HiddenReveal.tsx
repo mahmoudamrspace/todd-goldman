@@ -39,7 +39,8 @@ export type HiddenRevealVariant =
   | "testimonial-title"
   | "intro-decor"
   | "intro-character"
-  | "work-block";
+  | "work-block"
+  | "services-row";
 
 const TESTIMONIAL_IMAGE_REVEAL_SCALE = 1.08084;
 
@@ -158,6 +159,17 @@ function variantConfig(variant: HiddenRevealVariant): VariantConfig {
         noSafety: true,
         sectionGatedSafety: true,
         sectionSelector: 'main[data-framer-name="Main"]',
+        revealedTransform: "none",
+      };
+    case "services-row":
+      return {
+        amount: 0.2,
+        once: true,
+        baseDelay: 0,
+        transition:
+          "opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1)",
+        sectionGatedSafety: true,
+        sectionSelector: 'section[data-framer-name="Services"]',
         revealedTransform: "none",
       };
     default:
@@ -605,8 +617,8 @@ function HiddenRevealDefault({
   );
 }
 
-const SNEAK_TITLE_TRANSITION =
-  "opacity 0.8s cubic-bezier(0.34, 1, 0.64, 1), transform 0.8s cubic-bezier(0.34, 1, 0.64, 1)";
+
+const SITE_EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
 export interface AnimatedSpanProps {
   children: ReactNode;
@@ -614,7 +626,7 @@ export interface AnimatedSpanProps {
   className?: string;
   framerText?: boolean;
   y?: number;
-  variant?: "default" | "sneak-title" | "work-detail";
+  variant?: "default" | "sneak-title" | "work-detail" | "services";
   inlineDisplay?: boolean;
 }
 
@@ -631,20 +643,22 @@ export function AnimatedSpan({
   const reduced = useReducedMotion();
   const heroScroll = useHeroScroll();
   const ref = useRef<HTMLSpanElement>(null);
-  const amount = variant === "sneak-title" ? 0.5 : 0.2;
+  const amount =
+    variant === "sneak-title" ? 0.5 : variant === "services" ? 0.15 : 0.2;
   const isInView = useInView(ref, { once: true, amount });
   const [safetyRevealed, setSafetyRevealed] = useState(false);
   const [sectionRevealed, setSectionRevealed] = useState(false);
   const [heroRevealed, setHeroRevealed] = useState(false);
 
   useEffect(() => {
-    if (reduced || variant === "sneak-title" || variant === "work-detail") return;
+    if (reduced || variant === "sneak-title" || variant === "work-detail" || variant === "services")
+      return;
     const node = ref.current;
     if (!node?.closest("#text_intro") || !heroScroll) return;
 
     const sync = () => {
       const progress = heroScroll.scrollYProgress.get();
-      if (snapProgress(progress, 12) >= 0.12 + delay * 0.04) setHeroRevealed(true);
+      if (progress >= 0.12 + delay * 0.04) setHeroRevealed(true);
     };
 
     const unsubscribe = heroScroll.scrollYProgress.on("change", sync);
@@ -677,13 +691,16 @@ export function AnimatedSpan({
     const introSection = node?.closest("#text_intro") as HTMLElement | null;
     const aboutSection = node?.closest('section[data-framer-name="About"]') as HTMLElement | null;
     const sneakSection = node?.closest('section[data-framer-name="Sneak peak"]') as HTMLElement | null;
+    const servicesSection = node?.closest('section[data-framer-name="Services"]') as HTMLElement | null;
     const workMain = node?.closest('main[data-framer-name="Main"]') as HTMLElement | null;
     const gateSection =
       variant === "sneak-title"
         ? sneakSection
         : variant === "work-detail"
           ? workMain
-          : introSection ?? aboutSection;
+          : variant === "services"
+            ? servicesSection
+            : introSection ?? aboutSection;
     if (!gateSection) return;
 
     const sync = () => {
@@ -704,7 +721,8 @@ export function AnimatedSpan({
   }, [reduced, variant]);
 
   useEffect(() => {
-    if (reduced || variant === "sneak-title" || variant === "work-detail") return;
+    if (reduced || variant === "sneak-title" || variant === "work-detail" || variant === "services")
+      return;
     const node = ref.current;
     if (!node || node.closest("#text_intro")) return;
 
@@ -734,33 +752,26 @@ export function AnimatedSpan({
   const spanClass = [framerText ? "framer-text" : "", className].filter(Boolean).join(" ");
   const transition =
     variant === "sneak-title"
-      ? `${SNEAK_TITLE_TRANSITION} ${delay}s`
-      : `opacity 1.4s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s, transform 1.4s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s`;
-
-  if (visible) {
-    return (
-      <span
-        className={spanClass || undefined}
-        style={{ display: inlineDisplay ? "inline" : "inline-block", opacity: 1, transform: "none" }}
-      >
-        {children}
-      </span>
-    );
-  }
+      ? { duration: 0.8, ease: [0.34, 1, 0.64, 1] as const, delay }
+      : variant === "services"
+        ? { duration: 0.85, ease: SITE_EASE_OUT, delay }
+        : { duration: 1.4, ease: SITE_EASE_OUT, delay };
 
   return (
-    <span
+    <motion.span
       ref={ref}
       className={spanClass || undefined}
-      style={{
-        display: "inline-block",
-        opacity: 0.001,
-        transform: `translateY(${y}px)`,
-        transition,
-      }}
+      initial={false}
+      animate={
+        visible
+          ? { opacity: 1, y: 0 }
+          : { opacity: 0.001, y: reduced ? 0 : y }
+      }
+      transition={reduced ? { duration: 0 } : transition}
+      style={{ display: inlineDisplay ? "inline" : "inline-block" }}
     >
       {children}
-    </span>
+    </motion.span>
   );
 }
 
@@ -776,13 +787,14 @@ export function AnimatedWords({
   startDelay?: number;
   y?: number;
   stagger?: number;
-  variant?: "default" | "sneak-title" | "work-detail";
+  variant?: "default" | "sneak-title" | "work-detail" | "services";
 }) {
   const words = text.trim().split(/\s+/).filter(Boolean);
+  const wordStagger = variant === "services" ? 0.04 : stagger;
   return words.map((word, index) => (
     <AnimatedSpan
       key={`${word}-${index}`}
-      delay={startDelay + index * stagger}
+      delay={startDelay + index * wordStagger}
       y={y}
       variant={variant}
     >

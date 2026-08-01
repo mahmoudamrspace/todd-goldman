@@ -114,4 +114,15 @@ export const navLinkCloseSpring = {
   mass: 1,
 };
 
-export const navLinkDelays = [0, 0.2, 0.4] as const;
+export const navLinkDelays = [0, 0.15, 0.3, 0.45] as const;
+
+/** Reverse stagger for coordinated menu exit — last link leaves first. */
+export const navLinkCloseDelays = [0.18, 0.12, 0.06, 0] as const;
+
+/** Overlay remains mounted until exit motion settles (ms). */
+export const navMenuExitDuration = 520;
+
+export const navOverlayExitTransition = {
+  duration: 0.32,
+  ease: easeOut,
+} as const;

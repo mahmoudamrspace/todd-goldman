@@ -2,6 +2,7 @@
 
 import { useNavMenu } from "@/features/nav-menu/NavMenuContext";
 import {
+  navLinkCloseDelays,
   navLinkCloseSpring,
   navLinkDelays,
   navOverlaySpring,
@@ -31,7 +32,9 @@ export function NavMenuLink({
 }: NavMenuLinkProps) {
   const reduced = useReducedMotion();
   const { setOpen } = useNavMenu();
-  const delay = navLinkDelays[index] ?? 0.4;
+  const enterDelay = navLinkDelays[index] ?? 0.45;
+  const exitDelay = navLinkCloseDelays[index] ?? 0;
+  const external = href.startsWith("http");
 
   if (reduced) {
     return (
@@ -46,6 +49,7 @@ export function NavMenuLink({
         }}
         onMouseEnter={onMouseEnter}
         onClick={() => setOpen(false)}
+        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       >
         {children}
       </a>
@@ -60,14 +64,15 @@ export function NavMenuLink({
       href={href}
       style={{ willChange: "transform", pointerEvents: open ? undefined : "none" }}
       initial={false}
-      animate={open ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      animate={open ? { opacity: 1, y: 0 } : { opacity: 0, y: -16 }}
       transition={
         open
-          ? { ...navOverlaySpring, delay }
-          : navLinkCloseSpring
+          ? { ...navOverlaySpring, delay: enterDelay }
+          : { ...navLinkCloseSpring, delay: exitDelay }
       }
       onMouseEnter={onMouseEnter}
       onClick={() => setOpen(false)}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
     >
       {children}
     </motion.a>

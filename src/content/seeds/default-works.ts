@@ -1,15 +1,12 @@
 import type { Work } from "@/content/types";
 
-const PLACEHOLDER_NOTE =
-  "Placeholder artwork for layout development. Final Todd Goldman pieces will replace these images.";
-
-/** Production works — Todd creative worlds with placeholder media. */
+/** Production works — Todd creative worlds. */
 export const defaultWorksSeed: Work[] = [
   {
     id: `08`,
     slug: `the-northern-times`,
     title: `Never Grow Up`,
-    describe: `${PLACEHOLDER_NOTE} A flagship canvas series celebrating childlike humor, blunt punchlines, and the belief that growing up is optional.`,
+    describe: `A flagship canvas series celebrating childlike humor, blunt punchlines, and the belief that growing up is optional.`,
     client: `Original Art`,
     date: `2024`,
     services: `Illustrations`,
@@ -33,7 +30,7 @@ export const defaultWorksSeed: Work[] = [
     id: `07`,
     slug: `nitty-craft-co`,
     title: `Stupid Factory Characters`,
-    describe: `${PLACEHOLDER_NOTE} Recurring doodled characters with schoolyard wit — the visual language behind David & Goliath and Todd's pop-art universe.`,
+    describe: `Recurring doodled characters with schoolyard wit — the visual language behind David & Goliath and Todd's pop-art universe.`,
     client: `Characters & Humor`,
     date: `2023`,
     services: `Character design`,
@@ -57,7 +54,7 @@ export const defaultWorksSeed: Work[] = [
     id: `06`,
     slug: `oxbridge-press`,
     title: `Boys Are Stupid (Book Series)`,
-    describe: `${PLACEHOLDER_NOTE} Publishing venture that turned irreverent slogans into bestsellers — proof that humor on a page hits as hard as humor on a shirt.`,
+    describe: `Publishing venture that turned irreverent slogans into bestsellers — proof that humor on a page hits as hard as humor on a shirt.`,
     client: `Books & Publishing`,
     date: `2022`,
     services: `Illustrated books`,
@@ -81,7 +78,7 @@ export const defaultWorksSeed: Work[] = [
     id: `05`,
     slug: `barcelona-civic-office`,
     title: `David & Goliath Apparel`,
-    describe: `${PLACEHOLDER_NOTE} The global pop-art brand that started on T-shirts — bold graphics, sarcastic slogans, and smart-aleck optimism worn by millions.`,
+    describe: `The global pop-art brand that started on T-shirts — bold graphics, sarcastic slogans, and smart-aleck optimism worn by millions.`,
     client: `Apparel & Licensing`,
     date: `2021`,
     services: `Merchandise & licensing`,
@@ -105,7 +102,7 @@ export const defaultWorksSeed: Work[] = [
     id: `04`,
     slug: `südstadt-zeitung`,
     title: `Gallery Pop Art`,
-    describe: `${PLACEHOLDER_NOTE} Fine-art canvases with Day-Glo palettes and acrylic energy — art you can enjoy seven days a week and it still makes you happy.`,
+    describe: `Fine-art canvases with Day-Glo palettes and acrylic energy — art you can enjoy seven days a week and it still makes you happy.`,
     client: `Original Art`,
     date: `2021`,
     services: `Gallery paintings`,
@@ -129,7 +126,7 @@ export const defaultWorksSeed: Work[] = [
     id: `03`,
     slug: `monochrome-journal`,
     title: `Animal Soup & Kids Books`,
-    describe: `${PLACEHOLDER_NOTE} Children's titles that keep the doodle spirit alive for younger readers — playful, witty, and emotionally honest.`,
+    describe: `Children's titles that keep the doodle spirit alive for younger readers — playful, witty, and emotionally honest.`,
     client: `Books & Publishing`,
     date: `2020`,
     services: `Children's books`,
@@ -153,7 +150,7 @@ export const defaultWorksSeed: Work[] = [
     id: `02`,
     slug: `the-economic-review`,
     title: `Licensed Collaborations`,
-    describe: `${PLACEHOLDER_NOTE} Brand partnerships and licensed products that extend Todd's visual world into retail, gifts, and custom collections.`,
+    describe: `Brand partnerships and licensed products that extend Todd's visual world into retail, gifts, and custom collections.`,
     client: `Collaborations`,
     date: `2019`,
     services: `Brand licensing`,
@@ -177,7 +174,7 @@ export const defaultWorksSeed: Work[] = [
     id: `01`,
     slug: `the-chronicle`,
     title: `Todd Art™ Shop`,
-    describe: `${PLACEHOLDER_NOTE} The current retail home for prints, mugs, and collectibles — playful, witty artwork that feels familiar the moment you see it.`,
+    describe: `The current retail home for prints, mugs, and collectibles — playful, witty artwork that feels familiar the moment you see it.`,
     client: `Apparel & Licensing`,
     date: `2019`,
     services: `Retail & e-commerce`,
@@ -185,6 +182,8 @@ export const defaultWorksSeed: Work[] = [
     hook: `Art you forgot you loved.`,
     accentTone: `green`,
     featured: false,
+    ctaHref: "https://www.toddart.com/",
+    ctaLabel: "Visit Shop",
     relatedTitle: `Paramount Comedy Ident`,
     gridThumbnail: { src: `/assets/images/image-f00bacf4.png`, alt: `Todd Art™ Shop — placeholder artwork` },
     hoverPreview: { src: `/assets/images/image-f00bacf4.png`, alt: `Todd Art™ Shop preview` },

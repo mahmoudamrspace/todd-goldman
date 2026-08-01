@@ -43,11 +43,11 @@ export function navFramerName(breakpoint: NavBreakpoint, open: boolean): string 
   return open ? variant.openName : variant.closedName;
 }
 
-/** Inline nav shell styles — open state must fill viewport, not the fixed header box. */
-export function navShellStyle(open: boolean, backgroundColor: string): CSSProperties {
+/** Inline nav shell styles — present state fills viewport, not the fixed header box. */
+export function navShellStyle(present: boolean, backgroundColor: string): CSSProperties {
   return {
-    backgroundColor: open ? "var(--todd-ink)" : backgroundColor,
-    height: open ? "100dvh" : "100%",
+    backgroundColor: present ? "var(--todd-ink)" : backgroundColor,
+    height: present ? "100dvh" : "100%",
     width: "100%",
     willChange: "transform",
     opacity: 1,

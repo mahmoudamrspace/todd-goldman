@@ -43,6 +43,7 @@ export interface ServicesContent {
   title: string;
   subtitles: string[];
   headlines: string[];
+  links: { href: string }[];
 }
 
 export interface TestimonialContent {
@@ -72,6 +73,7 @@ export interface FooterContent {
 
 export interface SneakPeakContent {
   images: string[];
+  imageAlts: string[];
   titleWords: string[];
 }
 
@@ -123,6 +125,7 @@ export function toServicesContent(site: SiteSettings): ServicesContent {
     title: site.servicesTitle,
     subtitles: site.servicesSubtitles,
     headlines: site.servicesHeadlines,
+    links: site.serviceLinks,
   };
 }
 
@@ -155,7 +158,11 @@ export function toFooterContent(site: SiteSettings): FooterContent {
 }
 
 export function toSneakPeakContent(site: SiteSettings): SneakPeakContent {
-  return { images: site.sneakPeakImages, titleWords: site.sneakPeakTitleWords };
+  return {
+    images: site.sneakPeakImages,
+    imageAlts: site.sneakPeakImageAlts,
+    titleWords: site.sneakPeakTitleWords,
+  };
 }
 
 export function toWorksContent(works: Work[], site: SiteSettings): WorksContent {

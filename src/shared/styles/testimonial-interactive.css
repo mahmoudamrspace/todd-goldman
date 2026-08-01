@@ -1,0 +1,25 @@
+#testimonial-section {
+  overflow-x: clip;
+}
+
+#testimonial-section blockquote {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+#testimonial-section .framer-1rv0nxo p {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+#testimonial-section .framer-1of63no > * {
+  min-width: 0;
+}
+
+#testimonial-section .framer-mxbDt {
+  max-width: 100%;
+  box-sizing: border-box;
+}

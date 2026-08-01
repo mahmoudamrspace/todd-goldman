@@ -83,6 +83,7 @@ function StaticWorkPanel({
     <a
       href={href}
       className={cn("todd-scene__panel", `todd-scene__panel--${role}`)}
+      data-highlight
     >
       <div className="todd-scene__frame">
         <span className="todd-scene__number" aria-hidden="true">
@@ -119,6 +120,7 @@ export function MobileWorkCard({ work, index }: { work: Work; index: number }) {
     <a
       href={`/works/${work.slug}`}
       className="todd-scene__panel todd-scene__panel--uniform"
+      data-highlight
     >
       <div className="todd-scene__frame">
         <span className="todd-scene__number" aria-hidden="true">

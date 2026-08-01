@@ -9,6 +9,10 @@ function imageBase(content: SneakPeakContent, index: number) {
   return content.images[index] ?? "/assets/images/image-placeholder.png";
 }
 
+function imageAlt(content: SneakPeakContent, index: number) {
+  return content.imageAlts[index] ?? `Sketchbook drawing ${index + 1}`;
+}
+
 const SNEAK_PEAK_SLOTS = [
   { className: "framer-1adc7vo", width: 1696, height: 2258, sizes: "(min-width: 1200px) 259px, (min-width: 810px) and (max-width: 1199.98px) 259px, (max-width: 809.98px) 259px", srcSet: [{ scale: 1024, w: 769 }, { scale: 2048, w: 1538 }, { w: 1696 }] },
   { className: "framer-1t3i81d", width: 1687, height: 1232, sizes: "(min-width: 1200px) 431px, (min-width: 810px) and (max-width: 1199.98px) 431px, (max-width: 809.98px) 431px", srcSet: [{ scale: 512, w: 512 }, { scale: 1024, w: 1024 }, { w: 1687 }] },
@@ -110,6 +114,7 @@ export function SneakPeak({ content }: { content: SneakPeakContent }) {
                           className={slot.className}
                           data-framer-name={"Image"}
                           data-sneak-peak-index={index}
+                          aria-label={`View sketch ${index + 1}: ${imageAlt(content, index)}`}
                           onClick={(event) => {
                             event.stopPropagation();
                             setOpenIndex(index);
@@ -133,7 +138,7 @@ export function SneakPeak({ content }: { content: SneakPeakContent }) {
                               sizes={slot.sizes}
                               srcSet={srcSet}
                               src={src}
-                              alt=""
+                              alt={imageAlt(content, index)}
                               style={{ display: "block", width: "100%", height: "100%", borderRadius: "inherit", cornerShape: "inherit", objectPosition: "center", objectFit: "cover" }}
                             />
                           </div>

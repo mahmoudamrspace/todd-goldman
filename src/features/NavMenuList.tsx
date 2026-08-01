@@ -13,23 +13,30 @@ const GRAY =
 
 const NAV_ITEMS = [
   {
-    className: "framer-p33yb2 framer-rqn908",
+    className: "framer-p33yb2 framer-rqn908 nav-menu-link-row",
     textClassName: "framer-1gfizoq",
     hoverVariant: "framer-v-1t8jhiu",
-    defaultLabel: "Works",
+    defaultLabel: "Art",
     defaultHref: "/#works",
   },
   {
-    className: "framer-2bu14n framer-rqn908",
+    className: "framer-2bu14n framer-rqn908 nav-menu-link-row",
     textClassName: "framer-170psbw",
     hoverVariant: "framer-v-13jtyaq",
     defaultLabel: "About",
     defaultHref: "/#about",
   },
   {
-    className: "framer-18y0jlw framer-rqn908",
+    className: "framer-18y0jlw framer-rqn908 nav-menu-link-row",
     textClassName: "framer-15tz0mu",
     hoverVariant: "framer-v-eormac",
+    defaultLabel: "Shop",
+    defaultHref: "https://www.toddart.com/",
+  },
+  {
+    className: "framer-p33yb2 framer-rqn908 nav-menu-link-row",
+    textClassName: "framer-1gfizoq",
+    hoverVariant: "framer-v-1t8jhiu",
     defaultLabel: "Contact",
     defaultHref: "/#contact",
   },
@@ -40,10 +47,8 @@ const TEXT_STYLE = {
   "--framer-font-family": '"Averia Serif Libre", sans-serif',
   "--framer-font-open-type-features":
     "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on",
-  "--framer-font-size": "90px",
   "--framer-font-weight": "300",
   "--framer-letter-spacing": "-0.03em",
-  "--framer-line-height": "1.1em",
 } as const;
 
 export interface NavMenuListProps {
@@ -74,7 +79,7 @@ function NavMenuLinkText({
         data-framer-component-type={"RichTextContainer"}
         style={{ ...colorVars, transform: "none" }}
       >
-        <div dir={"auto"} className={"framer-text"} style={{ ...TEXT_STYLE, ...colorVars }}>
+        <div dir={"auto"} className={"framer-text nav-menu-link-text"} style={{ ...TEXT_STYLE, ...colorVars }}>
           {label}
         </div>
       </div>
@@ -92,7 +97,7 @@ function NavMenuLinkText({
     >
       <motion.div
         dir={"auto"}
-        className={"framer-text"}
+        className={"framer-text nav-menu-link-text"}
         style={TEXT_STYLE}
         initial={false}
         animate={colorVars}
@@ -107,18 +112,21 @@ function NavMenuLinkText({
 /** Nav menu links with Framer hover-dim sibling behavior. */
 export function NavMenuList({ content, open }: NavMenuListProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const navEntries = content.nav.slice(0, NAV_ITEMS.length);
 
   const hoveredItem = hoveredIndex === null ? null : NAV_ITEMS[hoveredIndex];
   const parentVariant = hoveredItem?.hoverVariant ?? "framer-v-1gc058m";
   const parentName =
     hoveredIndex === null
       ? "Default"
-      : (content.nav[hoveredIndex]?.label ?? hoveredItem?.defaultLabel ?? "Default");
+      : (navEntries[hoveredIndex]?.label ??
+        NAV_ITEMS[hoveredIndex]?.defaultLabel ??
+        "Default");
 
   return (
-    <div className={"framer-bnx3m7-container"} data-framer-name={"Menu Items"}>
+    <div className={"framer-bnx3m7-container nav-menu-list"} data-framer-name={"Menu Items"}>
       <div
-        className={`framer-WwdNp framer-1gc058m ${parentVariant}`}
+        className={`framer-WwdNp framer-1gc058m nav-menu-list__stack ${parentVariant}`}
         data-framer-name={parentName}
         data-highlight={true}
         tabIndex={0}
@@ -126,15 +134,17 @@ export function NavMenuList({ content, open }: NavMenuListProps) {
         onMouseLeave={() => setHoveredIndex(null)}
       >
         {NAV_ITEMS.map((item, index) => {
-          const label = content.nav[index]?.label ?? item.defaultLabel;
+          const entry = navEntries[index];
+          const label = entry?.label ?? item.defaultLabel;
+          const href = entry?.href ?? item.defaultHref;
           const dimmed = hoveredIndex !== null && hoveredIndex !== index;
 
           return (
             <NavMenuLink
-              key={item.defaultHref}
+              key={`${item.defaultHref}-${index}`}
               className={item.className}
               data-framer-name={label}
-              href={content.nav[index]?.href ?? item.defaultHref}
+              href={href}
               open={open}
               index={index}
               onMouseEnter={() => setHoveredIndex(index)}

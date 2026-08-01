@@ -102,7 +102,7 @@ export function MarqueeSection({ children }: { children: ReactNode }) {
     row.__marqueeAnimation = animation;
 
     const onEnter = () => {
-      animation.playbackRate = HOVER_FACTOR;
+      animation.playbackRate = 0;
     };
     const onLeave = () => {
       animation.playbackRate = 1;
@@ -110,12 +110,16 @@ export function MarqueeSection({ children }: { children: ReactNode }) {
 
     viewport.addEventListener("pointerenter", onEnter);
     viewport.addEventListener("pointerleave", onLeave);
+    viewport.addEventListener("focusin", onEnter);
+    viewport.addEventListener("focusout", onLeave);
 
     return () => {
       animation.cancel();
       row.__marqueeAnimation = undefined;
       viewport.removeEventListener("pointerenter", onEnter);
       viewport.removeEventListener("pointerleave", onLeave);
+      viewport.removeEventListener("focusin", onEnter);
+      viewport.removeEventListener("focusout", onLeave);
     };
   }, []);
 

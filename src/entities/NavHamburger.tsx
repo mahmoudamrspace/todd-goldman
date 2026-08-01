@@ -1,5 +1,7 @@
 "use client";
 
+import { easeOut } from "@/shared/lib/motion";
+import { motion, useReducedMotion } from "motion/react";
 import type { CSSProperties, KeyboardEvent, MouseEvent } from "react";
 
 export interface NavHamburgerProps {
@@ -9,13 +11,22 @@ export interface NavHamburgerProps {
   dark?: boolean;
 }
 
-/** Accessible nav menu trigger matching Framer hamburger markup. */
+const TOP_STROKE = "M3.5 8.5 C7.5 7, 16.5 10, 20.5 8.5";
+const BOTTOM_STROKE = "M3.5 15.5 C7.5 17, 16.5 14, 20.5 15.5";
+const ACCENT_CLOSED = "M6 18.5 C10 19.5, 14 17.5, 18 18.5";
+
+const ICON_TRANSITION = { duration: 0.28, ease: easeOut };
+const STROKE_ORIGIN = "12px 12px";
+
+/** Hand-drawn cartoon menu trigger with accessible open/close states. */
 export function NavHamburger({
   open,
   onToggle,
   style,
   dark: _dark = false,
 }: NavHamburgerProps) {
+  const reduced = useReducedMotion();
+
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     onToggle();
@@ -28,25 +39,14 @@ export function NavHamburger({
     }
   };
 
-  const bg = style.backgroundColor?.toString() ?? "";
-  const cream =
-    "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))";
-  const ink =
-    "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))";
-  const barColor = open
-    ? cream
-    : bg.includes("rgba(15, 15, 15, 0)") || bg === "transparent"
-      ? ink
-      : "rgb(251, 251, 251)";
+  const transition = reduced ? { duration: 0 } : ICON_TRANSITION;
 
   return (
     <button
       type="button"
-      className={
-        open
-          ? "framer-S33l9 framer-1rev26v framer-v-16bdydi"
-          : "framer-S33l9 framer-1rev26v framer-v-1rev26v"
-      }
+      className={`cartoon-burger framer-S33l9 framer-1rev26v ${
+        open ? "framer-v-16bdydi cartoon-burger--open" : "framer-v-1rev26v"
+      }`}
       data-framer-name={open ? "Disabled" : "Enabled"}
       data-highlight={true}
       aria-expanded={open}
@@ -62,19 +62,65 @@ export function NavHamburger({
         WebkitAppearance: "none",
         cursor: "pointer",
         font: "inherit",
-        color: "inherit",
       }}
     >
-      <div
-        className="framer-1481d4x"
-        data-framer-name="Bottom"
-        style={{ backgroundColor: barColor }}
-      />
-      <div
-        className="framer-d8fgy7"
-        data-framer-name="Top"
-        style={{ backgroundColor: barColor }}
-      />
+      <motion.svg
+        className="cartoon-burger__icon"
+        viewBox="0 0 24 24"
+        aria-hidden={true}
+        initial={false}
+      >
+        <motion.g
+          style={{ transformOrigin: STROKE_ORIGIN, transformBox: "fill-box" }}
+          animate={{
+            rotate: open ? 45 : 0,
+            y: open ? 3.5 : 0,
+          }}
+          transition={transition}
+        >
+          <path
+            className="cartoon-burger__stroke cartoon-burger__stroke--top"
+            d={TOP_STROKE}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </motion.g>
+        <motion.g
+          style={{ transformOrigin: STROKE_ORIGIN, transformBox: "fill-box" }}
+          animate={{
+            rotate: open ? -45 : 0,
+            y: open ? -3.5 : 0,
+          }}
+          transition={transition}
+        >
+          <path
+            className="cartoon-burger__stroke cartoon-burger__stroke--bottom"
+            d={BOTTOM_STROKE}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </motion.g>
+        <motion.path
+          className="cartoon-burger__accent"
+          fill="none"
+          stroke="var(--todd-yellow)"
+          strokeWidth={2}
+          strokeLinecap="round"
+          d={ACCENT_CLOSED}
+          initial={false}
+          animate={{
+            opacity: open ? 0 : 0.9,
+            pathLength: open ? 0 : 1,
+          }}
+          transition={transition}
+        />
+      </motion.svg>
     </button>
   );
 }
