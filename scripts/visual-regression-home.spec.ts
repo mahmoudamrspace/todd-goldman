@@ -1292,34 +1292,108 @@ test.describe("homepage semantics and accessibility", () => {
 });
 
 test.describe("homepage polish affordances", () => {
-  test("uses a wider desktop FAQ composition", async ({ page }) => {
+  test("keeps FAQ stacked in one column at 1024px", async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 900 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(`${BASE_URL}/#faq`);
+    await page.waitForLoadState("networkidle");
+
+    const layout = await page.evaluate(() => {
+      const card = document.querySelector(".todd-faq-section__container");
+      const list = document.querySelector(".todd-faq__list.todd-faq__list-layout");
+      const col1 = document.querySelector(".todd-faq__rich-text-container-7");
+      const col2 = document.querySelector(".todd-faq__rich-text-container-2");
+      const illustration = document.querySelector(".todd-faq__list .todd-intro__wrapper-16");
+      const triggers = [...document.querySelectorAll(".faq-accordion__trigger")];
+
+      if (!card || !list || !col1 || !col2 || !illustration) {
+        return null;
+      }
+
+      const cardRect = card.getBoundingClientRect();
+      const listRect = list.getBoundingClientRect();
+      const col1Rect = col1.getBoundingClientRect();
+      const col2Rect = col2.getBoundingClientRect();
+      const illustrationRect = illustration.getBoundingClientRect();
+      const listStyle = getComputedStyle(list);
+      const listLeftInset = listRect.left - cardRect.left;
+      const listRightInset = cardRect.right - listRect.right;
+
+      return {
+        display: listStyle.display,
+        flexDirection: listStyle.flexDirection,
+        stackedColumns: col2Rect.top >= col1Rect.bottom - 2,
+        listCentered: Math.abs(listLeftInset - listRightInset) <= 80,
+        illustrationBelowQuestions: illustrationRect.top >= col2Rect.bottom - 2,
+        visibleQuestions: triggers.filter((trigger) => {
+          const rect = trigger.getBoundingClientRect();
+          return rect.width > 200 && rect.height > 20;
+        }).length,
+        col1Width: col1Rect.width,
+        col2Width: col2Rect.width,
+      };
+    });
+
+    expect(layout).not.toBeNull();
+    expect(layout!.display).toBe("flex");
+    expect(layout!.flexDirection).toBe("column");
+    expect(layout!.stackedColumns).toBe(true);
+    expect(layout!.listCentered).toBe(true);
+    expect(layout!.illustrationBelowQuestions).toBe(true);
+    expect(layout!.visibleQuestions).toBe(6);
+    expect(layout!.col1Width).toBeGreaterThan(200);
+    expect(layout!.col2Width).toBeGreaterThan(200);
+  });
+
+  test("keeps FAQ stacked in one column at 1440px", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto(`${BASE_URL}/#faq`);
     await page.waitForLoadState("networkidle");
 
     const layout = await page.evaluate(() => {
+      const card = document.querySelector(".todd-faq-section__container");
       const list = document.querySelector(".todd-faq__list.todd-faq__list-layout");
+      const col1 = document.querySelector(".todd-faq__rich-text-container-7");
+      const col2 = document.querySelector(".todd-faq__rich-text-container-2");
       const illustration = document.querySelector(
         ".todd-faq__list .todd-intro__wrapper-16",
       );
-      if (!list || !illustration) return null;
+      const triggers = [...document.querySelectorAll(".faq-accordion__trigger")];
 
-      const listStyle = getComputedStyle(list);
+      if (!card || !list || !col1 || !col2 || !illustration) return null;
+
+      const cardRect = card.getBoundingClientRect();
       const listRect = list.getBoundingClientRect();
+      const col1Rect = col1.getBoundingClientRect();
+      const col2Rect = col2.getBoundingClientRect();
       const illustrationRect = illustration.getBoundingClientRect();
+      const listStyle = getComputedStyle(list);
+      const listLeftInset = listRect.left - cardRect.left;
+      const listRightInset = cardRect.right - listRect.right;
+
       return {
-        columns: listStyle.gridTemplateColumns,
-        listWidth: listRect.width,
-        sideBySide:
-          illustrationRect.left > listRect.left + listRect.width * 0.45,
+        display: listStyle.display,
+        flexDirection: listStyle.flexDirection,
+        maxWidth: Number.parseFloat(listStyle.maxWidth),
+        stackedColumns: col2Rect.top >= col1Rect.bottom - 2,
+        listCentered: Math.abs(listLeftInset - listRightInset) <= 80,
+        illustrationBelowQuestions: illustrationRect.top >= col2Rect.bottom - 2,
+        visibleQuestions: triggers.filter((trigger) => {
+          const rect = trigger.getBoundingClientRect();
+          return rect.width > 200 && rect.height > 20;
+        }).length,
       };
     });
 
     expect(layout).not.toBeNull();
-    expect(layout!.listWidth).toBeGreaterThan(700);
-    expect(layout!.columns.split(" ").filter(Boolean).length).toBeGreaterThanOrEqual(3);
-    expect(layout!.sideBySide).toBe(true);
+    expect(layout!.display).toBe("flex");
+    expect(layout!.flexDirection).toBe("column");
+    expect(layout!.maxWidth).toBeLessThanOrEqual(640);
+    expect(layout!.stackedColumns).toBe(true);
+    expect(layout!.listCentered).toBe(true);
+    expect(layout!.illustrationBelowQuestions).toBe(true);
+    expect(layout!.visibleQuestions).toBe(6);
   });
 
   test("keeps the testimonial title to two lines on desktop", async ({ page }) => {
