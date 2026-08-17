@@ -715,7 +715,7 @@ for (const viewport of VIEWPORTS) {
 
 const WORKS_LAYOUT_VIEWPORTS = [
   { width: 390, height: 900, label: "mobile", maxHeight: 7600 },
-  { width: 768, height: 900, label: "wide mobile", maxHeight: 4300, expectTwoColumn: true },
+  { width: 768, height: 900, label: "wide mobile", maxHeight: 6000 },
   { width: 1024, height: 900, label: "tablet", maxHeight: 5200 },
   { width: 1440, height: 900, label: "desktop", maxHeight: 4200 },
 ] as const;
@@ -735,51 +735,40 @@ for (const viewport of WORKS_LAYOUT_VIEWPORTS) {
 
     test("keeps section height and card geometry within guardrails", async ({ page }) => {
       const result = await page.evaluate(
-        ({ maxHeight, expectTwoColumn, viewportWidth }) => {
+        ({ maxHeight, viewportWidth }) => {
           const works = document.querySelector("#works");
-          const mobileList = document.querySelector(".todd-works__mobile-list");
+          const grid = document.querySelector(".todd-art-grid");
           if (!works) return { ok: false, reason: "missing works section" };
+          if (!grid) return { ok: false, reason: "missing art preview grid" };
 
           const worksHeight = works.getBoundingClientRect().height;
           if (worksHeight > maxHeight) {
             return { ok: false, reason: "works section too tall", worksHeight, maxHeight };
           }
 
-          if (expectTwoColumn && mobileList) {
-            const listStyle = getComputedStyle(mobileList);
-            const columnCount = listStyle.gridTemplateColumns
-              .split(" ")
-              .filter(Boolean).length;
-            if (columnCount !== 2) {
-              return {
-                ok: false,
-                reason: "expected compact two-column works grid",
-                columns: listStyle.gridTemplateColumns,
-                columnCount,
-              };
-            }
+          const columnCount = getComputedStyle(grid).gridTemplateColumns
+            .split(" ")
+            .filter(Boolean).length;
+          const expectedColumns = viewportWidth <= 809 ? 1 : 2;
+          if (columnCount !== expectedColumns) {
+            return {
+              ok: false,
+              reason: "unexpected art preview column count",
+              columns: getComputedStyle(grid).gridTemplateColumns,
+              columnCount,
+              expectedColumns,
+            };
           }
 
-          if (viewportWidth <= 809) {
-            const cards = Array.from(
-              document.querySelectorAll(".todd-scene__panel--uniform"),
-            );
-            if (cards.length < 2) {
-              return { ok: false, reason: "expected mobile work cards", count: cards.length };
-            }
-
-            const first = cards[0]!.getBoundingClientRect();
-            const second = cards[1]!.getBoundingClientRect();
-            if (viewportWidth >= 600 && second.left <= first.left) {
-              return { ok: false, reason: "expected side-by-side compact cards" };
-            }
+          const cards = Array.from(document.querySelectorAll("#works .todd-art-card"));
+          if (cards.length !== 4) {
+            return { ok: false, reason: "expected four featured art cards", count: cards.length };
           }
 
           return { ok: true };
         },
         {
           maxHeight: viewport.maxHeight,
-          expectTwoColumn: "expectTwoColumn" in viewport ? viewport.expectTwoColumn : false,
           viewportWidth: viewport.width,
         },
       );
@@ -926,23 +915,15 @@ test.describe("homepage semantics and accessibility", () => {
     expect(inView).toBe(true);
   });
 
-  test("announces works filter result counts", async ({ page }) => {
+  test("shows featured art preview and links to the archive", async ({ page }) => {
     await page.goto(`${BASE_URL}/#works`);
     await page.waitForLoadState("networkidle");
 
-    const filters = page.locator(".todd-works__filter");
-    const filterCount = await filters.count();
-    if (filterCount < 2) return;
-
-    const target = filters.nth(1);
-    const label = (await target.textContent())?.trim() ?? "";
-    await target.click();
-
-    const liveText = await page.locator(".todd-works .visually-hidden[aria-live='polite']").textContent();
-    expect(liveText).toMatch(/Showing \d+ works/);
-    if (label !== "All") {
-      expect(liveText).toContain(label);
-    }
+    await expect(page.locator("#works .todd-art-grid__item")).toHaveCount(4);
+    await expect(page.getByRole("link", { name: /See all art/ })).toHaveAttribute(
+      "href",
+      "/art/",
+    );
   });
 
   test("keeps verified text contrast on key surfaces", async ({ page }) => {
@@ -972,9 +953,9 @@ test.describe("homepage semantics and accessibility", () => {
       const paper = getComputedStyle(document.body).backgroundColor;
       const checks = [
         {
-          selector: ".todd-scene__category--red",
+          selector: ".todd-art-card__title",
           min: 4.5,
-          background: "rgb(255, 255, 255)",
+          background: paper,
         },
         {
           selector: ".desktop-nav-links__link--services .desktop-nav-links__label",

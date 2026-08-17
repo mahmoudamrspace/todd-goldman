@@ -6,19 +6,19 @@ import { BooksSection } from "@/widgets/sections/BooksSection";
 import { FaqSection } from "@/widgets/interactive/FaqSection";
 import { ServicesSection } from "@/widgets/interactive/ServicesSection";
 import { Testimonial } from "@/widgets/sections/Testimonial";
-import { WorksGallery } from "@/widgets/sections/WorksGallery";
+import { ArtArchive } from "@/widgets/sections/ArtArchive";
+import type { ArtCatalog } from "@/content/types";
 import type {
   AboutContent,
   BooksContent,
   FaqContent,
   ServicesContent,
   TestimonialContent,
-  WorksContent,
 } from "@/content/section-types";
 import { TODD } from "@/shared/lib/todd-semantic-classes";
 
 export interface ToddHomeSectionsProps {
-  worksContent: WorksContent;
+  artCatalog: ArtCatalog;
   booksContent: BooksContent;
   servicesContent: ServicesContent;
   testimonialContent: TestimonialContent;
@@ -29,7 +29,7 @@ export interface ToddHomeSectionsProps {
 
 /** Todd homepage sections with coordinated scroll chapters. */
 export function ToddHomeSections({
-  worksContent,
+  artCatalog,
   booksContent,
   servicesContent,
   testimonialContent,
@@ -40,7 +40,7 @@ export function ToddHomeSections({
   return (
     <div className={TODD.page.sections}>
       <ScrollChapter id="works-chapter" accent="paper" spacing="first">
-        <WorksGallery content={worksContent} />
+        <ArtArchive catalog={artCatalog} mode="preview" />
       </ScrollChapter>
       <ScrollChapter accent="cream">
         <BooksSection content={booksContent} />

@@ -12,7 +12,7 @@ export default function NotFound() {
           <Link className="todd-not-found__link" href="/">
             Back home
           </Link>
-          <Link className="todd-not-found__link todd-not-found__link--secondary" href="/#works">
+          <Link className="todd-not-found__link todd-not-found__link--secondary" href="/art/">
             View the art
           </Link>
         </div>

@@ -1,0 +1,211 @@
+{
+  "status": "draft",
+  "eyebrow": "Art of Todd Goldman",
+  "titleLead": "Never",
+  "titleEmphasis": "grow up",
+  "intro": "Childlike lines, adult punchlines, and bright pop-art worlds arranged by the ideas and characters that hold them together.",
+  "series": [
+    {
+      "id": "never-grow-up",
+      "label": "Never Grow Up",
+      "description": "Adult observations told with a young visual language and a straight-faced grin.",
+      "order": 1
+    },
+    {
+      "id": "stupid-factory",
+      "label": "Stupid Factory",
+      "description": "Character-first jokes, blunt captions, and a world that refuses to behave.",
+      "order": 2
+    },
+    {
+      "id": "cat-faces",
+      "label": "Cat Faces",
+      "description": "Feline attitude distilled into bold portraits, puns, and limited-edition formats.",
+      "order": 3
+    },
+    {
+      "id": "balloon-dogs",
+      "label": "Balloon Dogs",
+      "description": "One playful form explored through color-led variations and framed editions.",
+      "order": 4
+    }
+  ],
+  "items": [
+    {
+      "id": "sample-never-grow-up-01",
+      "title": "Layout Study 01",
+      "series": "never-grow-up",
+      "medium": "Placeholder image",
+      "year": null,
+      "dimensions": null,
+      "edition": null,
+      "image": {
+        "src": "/assets/images/image-3057b619.png",
+        "alt": "Colorful layout placeholder with rows of illustrated eyes; not Todd Goldman catalogue artwork"
+      },
+      "mature": false,
+      "contentNote": null,
+      "source": "Internal layout placeholder",
+      "credit": "Placeholder artwork — replace before publication",
+      "rightsHolder": "Internal placeholder",
+      "approvedForWeb": false,
+      "featured": true,
+      "order": 1,
+      "externalUrl": null
+    },
+    {
+      "id": "sample-never-grow-up-02",
+      "title": "Layout Study 02",
+      "series": "never-grow-up",
+      "medium": "Placeholder image",
+      "year": null,
+      "dimensions": null,
+      "edition": null,
+      "image": {
+        "src": "/assets/images/image-6a3bd1b1.png",
+        "alt": "Green and white illustrated layout placeholder; not Todd Goldman catalogue artwork"
+      },
+      "mature": false,
+      "contentNote": null,
+      "source": "Internal layout placeholder",
+      "credit": "Placeholder artwork — replace before publication",
+      "rightsHolder": "Internal placeholder",
+      "approvedForWeb": false,
+      "featured": false,
+      "order": 2,
+      "externalUrl": null
+    },
+    {
+      "id": "sample-stupid-factory-01",
+      "title": "Layout Study 03",
+      "series": "stupid-factory",
+      "medium": "Placeholder image",
+      "year": null,
+      "dimensions": null,
+      "edition": null,
+      "image": {
+        "src": "/assets/images/image-57b50b25.png",
+        "alt": "Blue illustrated bird layout placeholder; not Todd Goldman catalogue artwork"
+      },
+      "mature": false,
+      "contentNote": null,
+      "source": "Internal layout placeholder",
+      "credit": "Placeholder artwork — replace before publication",
+      "rightsHolder": "Internal placeholder",
+      "approvedForWeb": false,
+      "featured": true,
+      "order": 3,
+      "externalUrl": null
+    },
+    {
+      "id": "sample-stupid-factory-02",
+      "title": "Layout Study 04",
+      "series": "stupid-factory",
+      "medium": "Placeholder image",
+      "year": null,
+      "dimensions": null,
+      "edition": null,
+      "image": {
+        "src": "/assets/images/image-431c59fd.png",
+        "alt": "Colorful wordmark layout placeholder on a dark background; not Todd Goldman catalogue artwork"
+      },
+      "mature": false,
+      "contentNote": null,
+      "source": "Internal layout placeholder",
+      "credit": "Placeholder artwork — replace before publication",
+      "rightsHolder": "Internal placeholder",
+      "approvedForWeb": false,
+      "featured": false,
+      "order": 4,
+      "externalUrl": null
+    },
+    {
+      "id": "sample-cat-faces-01",
+      "title": "Layout Study 05",
+      "series": "cat-faces",
+      "medium": "Placeholder image",
+      "year": null,
+      "dimensions": null,
+      "edition": null,
+      "image": {
+        "src": "/assets/images/image-542f70bb.png",
+        "alt": "Editorial layout placeholder reserved for approved Cat Faces artwork"
+      },
+      "mature": false,
+      "contentNote": null,
+      "source": "Internal layout placeholder",
+      "credit": "Placeholder artwork — replace before publication",
+      "rightsHolder": "Internal placeholder",
+      "approvedForWeb": false,
+      "featured": true,
+      "order": 5,
+      "externalUrl": null
+    },
+    {
+      "id": "sample-cat-faces-02",
+      "title": "Layout Study 06",
+      "series": "cat-faces",
+      "medium": "Placeholder image",
+      "year": null,
+      "dimensions": null,
+      "edition": null,
+      "image": {
+        "src": "/assets/images/image-562272dc.png",
+        "alt": "Editorial layout placeholder reserved for approved Cat Faces artwork"
+      },
+      "mature": false,
+      "contentNote": null,
+      "source": "Internal layout placeholder",
+      "credit": "Placeholder artwork — replace before publication",
+      "rightsHolder": "Internal placeholder",
+      "approvedForWeb": false,
+      "featured": false,
+      "order": 6,
+      "externalUrl": null
+    },
+    {
+      "id": "sample-balloon-dogs-01",
+      "title": "Layout Study 07",
+      "series": "balloon-dogs",
+      "medium": "Placeholder image",
+      "year": null,
+      "dimensions": null,
+      "edition": null,
+      "image": {
+        "src": "/assets/images/image-13ebfa5e.png",
+        "alt": "Editorial layout placeholder reserved for approved Balloon Dogs artwork"
+      },
+      "mature": false,
+      "contentNote": null,
+      "source": "Internal layout placeholder",
+      "credit": "Placeholder artwork — replace before publication",
+      "rightsHolder": "Internal placeholder",
+      "approvedForWeb": false,
+      "featured": true,
+      "order": 7,
+      "externalUrl": null
+    },
+    {
+      "id": "sample-balloon-dogs-02",
+      "title": "Layout Study 08",
+      "series": "balloon-dogs",
+      "medium": "Placeholder image",
+      "year": null,
+      "dimensions": null,
+      "edition": null,
+      "image": {
+        "src": "/assets/images/image-c54e57a6.png",
+        "alt": "Editorial layout placeholder reserved for approved Balloon Dogs artwork"
+      },
+      "mature": false,
+      "contentNote": null,
+      "source": "Internal layout placeholder",
+      "credit": "Placeholder artwork — replace before publication",
+      "rightsHolder": "Internal placeholder",
+      "approvedForWeb": false,
+      "featured": false,
+      "order": 8,
+      "externalUrl": null
+    }
+  ]
+}

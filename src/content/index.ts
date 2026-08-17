@@ -9,6 +9,10 @@ export function getContentRepository(): ContentRepository {
   return defaultContentRepository;
 }
 
+export async function getArtCatalog() {
+  return getContentRepository().getArtCatalog();
+}
+
 export async function getSite() {
   return getContentRepository().getSite();
 }

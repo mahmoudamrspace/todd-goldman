@@ -1,0 +1,474 @@
+.todd-art-page {
+  min-height: 100vh;
+  background: var(--todd-paper);
+  color: var(--todd-ink);
+}
+
+.todd-art-page__main {
+  width: 100%;
+}
+
+.todd-art-archive {
+  --art-grid-gap: clamp(2rem, 5vw, 5.5rem);
+  color: var(--todd-ink);
+}
+
+.todd-art-archive--full {
+  min-height: 100vh;
+  padding: calc(var(--site-header-clearance) + var(--space-6)) 0 var(--space-9);
+  background:
+    radial-gradient(circle at 8% 10%, rgb(240 205 62 / 22%) 0 7rem, transparent 7.1rem),
+    radial-gradient(circle at 94% 26%, rgb(41 120 243 / 12%) 0 10rem, transparent 10.1rem),
+    var(--todd-paper);
+}
+
+.todd-art-archive--preview {
+  width: 100%;
+  padding-bottom: clamp(2rem, 5vw, 4.5rem);
+}
+
+.todd-art-archive__inner {
+  box-sizing: border-box;
+  width: min(100%, var(--container-max));
+  margin-inline: auto;
+  padding-inline: var(--card-gutter);
+}
+
+.todd-art-archive--preview .todd-art-archive__inner {
+  padding-inline: var(--card-gutter);
+}
+
+.todd-art-archive__header {
+  position: relative;
+  margin-bottom: clamp(2rem, 5vw, 4.5rem);
+}
+
+.todd-art-archive--full .todd-art-archive__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(16rem, 0.65fr);
+  align-items: end;
+  gap: var(--space-4) var(--space-7);
+  min-height: min(52vh, 480px);
+  padding-bottom: var(--space-7);
+  border-bottom: 2px dashed var(--todd-ink);
+}
+
+.todd-art-archive__eyebrow {
+  grid-column: 1 / -1;
+  align-self: start;
+  width: fit-content;
+  margin: 0;
+  padding: 7px 12px;
+  border: 2px solid var(--todd-ink);
+  border-radius: 999px;
+  background: var(--todd-yellow);
+  box-shadow: 3px 3px 0 var(--todd-ink);
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transform: rotate(-1.5deg);
+}
+
+.todd-art-archive--preview .todd-art-archive__eyebrow {
+  display: none;
+}
+
+.todd-art-archive__title {
+  max-width: 12ch;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 10vw, 8.75rem);
+  font-weight: 700;
+  letter-spacing: -0.07em;
+  line-height: 0.78;
+  text-wrap: balance;
+}
+
+.todd-art-archive__title em {
+  display: inline-block;
+  color: var(--todd-red);
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  transform: rotate(-2deg);
+}
+
+.todd-art-archive--preview .todd-art-archive__title {
+  max-width: none;
+  margin-bottom: var(--space-2);
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.todd-art-archive__intro {
+  max-width: 35ch;
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-serif);
+  font-size: clamp(1.2rem, 2.5vw, 1.75rem);
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.todd-art-archive__intro-reveal {
+  align-self: end;
+  min-width: 0;
+}
+
+.todd-art-archive--preview .todd-art-archive__intro {
+  max-width: 47ch;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.todd-art-archive__controls {
+  margin-bottom: clamp(2rem, 5vw, 4.5rem);
+}
+
+.todd-art-archive__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.todd-art-archive__filter {
+  min-height: 44px;
+  padding: 9px 15px;
+  border: 2px solid var(--todd-ink);
+  border-radius: 999px;
+  background: var(--todd-paper);
+  color: var(--todd-ink);
+  box-shadow: 2px 2px 0 transparent;
+  font: 700 var(--text-xs)/1 var(--font-display);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) ease,
+    box-shadow var(--duration-fast) ease,
+    transform var(--duration-fast) ease;
+}
+
+.todd-art-archive__filter.is-active {
+  background: var(--todd-ink);
+  color: var(--todd-paper);
+  box-shadow: 3px 3px 0 var(--todd-red);
+}
+
+.todd-art-archive__filter:focus-visible {
+  outline: 3px solid var(--todd-blue);
+  outline-offset: 3px;
+}
+
+.todd-art-archive__series-note {
+  max-width: 55ch;
+  min-height: 2.8em;
+  margin: var(--space-3) 0 0;
+  color: var(--todd-muted);
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.todd-art-grid,
+.todd-art-grid.todd-works__scenes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--art-grid-gap);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.todd-art-archive--preview .todd-art-grid {
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.todd-art-grid__item {
+  min-width: 0;
+}
+
+.todd-art-grid__empty {
+  grid-column: 1 / -1;
+  padding: var(--space-7);
+  border: 2px dashed var(--todd-ink);
+  border-radius: var(--todd-radius);
+  color: var(--todd-muted);
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  text-align: center;
+}
+
+.todd-art-card {
+  width: 100%;
+  margin: 0;
+}
+
+.todd-art-card[data-scroll-motion="active"] {
+  will-change: transform, clip-path;
+}
+
+.todd-art-card--rhythm-2 {
+  margin-top: clamp(2rem, 8vw, 7rem);
+}
+
+.todd-art-card--rhythm-3 {
+  width: 84%;
+  margin-left: auto;
+}
+
+.todd-art-card--rhythm-4 {
+  width: 90%;
+}
+
+.todd-art-card__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.todd-art-card__image-wrap {
+  position: relative;
+  display: grid;
+  min-height: 18rem;
+  place-items: center;
+  overflow: hidden;
+  border: 2px solid var(--todd-ink);
+  border-radius: var(--todd-radius);
+  background: #fff;
+  box-shadow: var(--todd-shadow);
+  transition:
+    box-shadow var(--duration-fast) ease,
+    transform var(--duration-fast) ease;
+}
+
+.todd-art-card__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 720px;
+  object-fit: contain;
+}
+
+.todd-art-card__number {
+  position: absolute;
+  z-index: 1;
+  border: 2px solid var(--todd-ink);
+  color: var(--todd-ink);
+  box-shadow: 2px 2px 0 var(--todd-ink);
+  top: 12px;
+  left: 12px;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--todd-yellow);
+  font: 400 1.1rem/1 var(--font-script);
+}
+
+.todd-art-card__caption {
+  padding-top: var(--space-3);
+}
+
+.todd-art-card__series {
+  width: fit-content;
+  margin: 0 0 7px;
+  padding: 4px 8px;
+  border: 1.5px solid var(--todd-ink);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--todd-blue) 20%, white);
+  font: 700 0.625rem/1 var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.todd-art-card__title {
+  margin: 0 0 5px;
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.4vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+.todd-art-card__meta,
+.todd-art-card__credit,
+.todd-art-card__content-note {
+  margin: 0;
+  font-family: var(--font-display);
+  line-height: 1.4;
+}
+
+.todd-art-card__meta {
+  color: var(--todd-muted);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.todd-art-card__credit {
+  margin-top: 7px;
+  color: var(--color-muted-soft);
+  font-size: var(--text-xs);
+}
+
+.todd-art-card__content-note {
+  width: fit-content;
+  margin-top: 7px;
+  padding: 4px 7px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--todd-red) 18%, var(--todd-paper));
+  font-size: var(--text-xs);
+  font-weight: 700;
+}
+
+.todd-art-archive__more {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(2rem, 5vw, 4rem);
+}
+
+.todd-art-archive__more-link {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  border: 2px solid var(--todd-ink);
+  border-radius: var(--todd-radius-sm);
+  background: var(--todd-red);
+  color: #fff;
+  box-shadow: 4px 4px 0 var(--todd-ink);
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-decoration: none;
+  transform: rotate(-1deg);
+  transition:
+    box-shadow var(--duration-fast) ease,
+    transform var(--duration-fast) ease;
+}
+
+.todd-art-archive__more-link:focus-visible,
+.todd-art-card__link:focus-visible {
+  outline: 3px solid var(--todd-blue);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .todd-art-archive__filter:hover {
+    background: var(--todd-yellow);
+    box-shadow: 3px 3px 0 var(--todd-ink);
+    transform: translate(-1px, -1px);
+  }
+
+  .todd-art-card__link:hover .todd-art-card__image-wrap,
+  .todd-art-card__link:focus-visible .todd-art-card__image-wrap {
+    box-shadow: var(--todd-shadow-hover);
+    transform: translate(-2px, -2px) rotate(-0.25deg);
+  }
+
+  .todd-art-archive__more-link:hover,
+  .todd-art-archive__more-link:focus-visible {
+    box-shadow: 7px 7px 0 var(--todd-ink);
+    transform: translate(-2px, -2px) rotate(0);
+  }
+}
+
+@media (max-width: 1199.98px) {
+  .todd-art-archive {
+    --art-grid-gap: var(--space-7);
+  }
+
+  .todd-art-archive--full {
+    min-height: 0;
+    padding-top: calc(var(--site-header-clearance) + var(--space-5));
+    background:
+      radial-gradient(circle at 100% 8%, rgb(240 205 62 / 20%) 0 6rem, transparent 6.1rem),
+      var(--todd-paper);
+  }
+
+  .todd-art-archive--full .todd-art-archive__header {
+    display: block;
+    min-height: 0;
+    padding-bottom: var(--space-6);
+  }
+
+  .todd-art-archive__eyebrow,
+  .todd-art-archive__title,
+  .todd-art-archive__intro {
+    margin-bottom: var(--space-4);
+  }
+
+  .todd-art-archive__title {
+    max-width: 10ch;
+    font-size: clamp(3.3rem, 18vw, 5.75rem);
+  }
+
+  .todd-art-archive--preview .todd-art-archive__title {
+    max-width: none;
+    margin-bottom: var(--space-2);
+    font-size: clamp(1.75rem, 8vw, 2.25rem);
+  }
+
+  .todd-art-archive__intro {
+    max-width: 29ch;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 809.98px) {
+  .todd-art-grid,
+  .todd-art-grid.todd-works__scenes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .todd-art-card--rhythm-2,
+  .todd-art-card--rhythm-3,
+  .todd-art-card--rhythm-4 {
+    width: 100%;
+    margin: 0;
+  }
+
+  .todd-art-card {
+    clip-path: none !important;
+    transform: none !important;
+    will-change: auto;
+  }
+
+  .todd-art-card__image-wrap {
+    min-height: 12rem;
+  }
+
+  .todd-art-archive__filter {
+    flex: 1 1 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .todd-art-card {
+    clip-path: none !important;
+    transform: none !important;
+    will-change: auto;
+  }
+
+  .todd-art-archive__filter,
+  .todd-art-card__image-wrap,
+  .todd-art-archive__more-link {
+    transition: none;
+  }
+
+  .todd-art-card__link:hover .todd-art-card__image-wrap,
+  .todd-art-card__link:focus-visible .todd-art-card__image-wrap,
+  .todd-art-archive__filter:hover,
+  .todd-art-archive__filter:focus-visible,
+  .todd-art-archive__more-link:hover,
+  .todd-art-archive__more-link:focus-visible {
+    transform: none;
+  }
+}

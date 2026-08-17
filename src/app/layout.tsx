@@ -6,6 +6,7 @@ import "@/shared/styles/globals.css";
 import "@/shared/styles/todd-typography.css";
 import "@/shared/styles/todd-section-layout.css";
 import "@/shared/styles/todd-identity.css";
+import "@/shared/styles/todd-art.css";
 import "@/shared/styles/faq-interactive.css";
 import "@/shared/styles/testimonial-interactive.css";
 import { getSite } from "@/content";

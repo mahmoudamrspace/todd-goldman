@@ -2,6 +2,7 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { defaultContentRepository } from "@/content/adapters/default";
 import {
+  artCatalogSchema,
   appearMapSchema,
   bookSchema,
   HOMEPAGE_APPEAR_IDS,
@@ -18,6 +19,8 @@ const FORBIDDEN_PLACEHOLDERS = [
   "SneakPeakContent",
   "footerPromo",
 ] as const;
+
+const INTERNAL_PAGE_HREFS = ["/art/"] as const;
 
 const HOMEPAGE_SOURCE_DIRS = [
   "src/widgets",
@@ -59,8 +62,11 @@ function assertNavTargets(nav: { href: string }[]) {
       throw new Error(`Invalid nav href: ${link.href}`);
     }
     if (link.href.startsWith("http") || link.href.startsWith("mailto:")) continue;
+    if (INTERNAL_PAGE_HREFS.includes(link.href as (typeof INTERNAL_PAGE_HREFS)[number])) {
+      continue;
+    }
     if (!link.href.startsWith("/#")) {
-      throw new Error(`Internal nav href must be an in-page anchor: ${link.href}`);
+      throw new Error(`Internal nav href is not an approved page or in-page anchor: ${link.href}`);
     }
     const fragment = link.href.split("#")[1];
     if (
@@ -164,24 +170,38 @@ function assertHomepageSourceGuards() {
     throw new Error("ServiceRow must render exactly one anchor per service");
   }
 
-  const worksSource = readFileSync(
-    join(ROOT, "src/widgets/sections/WorksGallery.tsx"),
+  const artArchiveSource = readFileSync(
+    join(ROOT, "src/widgets/sections/ArtArchive.tsx"),
     "utf8",
   );
-  if (!/todd-works__title/.test(worksSource)) {
-    throw new Error("WorksGallery must preserve todd-works__title class contract");
+  if (!/todd-works__title/.test(artArchiveSource)) {
+    throw new Error("ArtArchive preview must preserve todd-works__title class contract");
   }
-  if (!/todd-works__subtitle/.test(worksSource)) {
-    throw new Error("WorksGallery must preserve todd-works__subtitle class contract");
+  if (!/todd-works__subtitle/.test(artArchiveSource)) {
+    throw new Error("ArtArchive preview must preserve todd-works__subtitle class contract");
   }
-  if (/isMobile\s*\?\s*\(/.test(worksSource)) {
-    throw new Error("WorksGallery must not branch markup on isMobile");
+  if (!/HiddenReveal/.test(artArchiveSource) || !/AnimatedSpan/.test(artArchiveSource)) {
+    throw new Error("ArtArchive heading copy must preserve scroll reveal behavior");
   }
-  if (!/responsiveVisibleOnly\("mobile"\)/.test(worksSource)) {
-    throw new Error("WorksGallery must render mobile list via responsiveVisibleOnly");
+
+  const artGridSource = readFileSync(
+    join(ROOT, "src/features/art/ArtCatalogGrid.tsx"),
+    "utf8",
+  );
+  if (!/role="group"/.test(artGridSource)) {
+    throw new Error("ArtCatalogGrid must preserve filter role=group contract");
   }
-  if (!/role="group"/.test(worksSource)) {
-    throw new Error("WorksGallery must preserve filter role=group contract");
+  if (!/aria-live="polite"/.test(artGridSource)) {
+    throw new Error("ArtCatalogGrid must announce filter result counts");
+  }
+  if (!/useLayoutMotion\s*=\s*!reduced\s*&&\s*!mobile/.test(artGridSource)) {
+    throw new Error("ArtCatalogGrid must disable layout motion on mobile and reduced motion");
+  }
+  if (!/useEntranceMotion\s*=\s*useLayoutMotion\s*&&\s*mode\s*===\s*"preview"/.test(artGridSource)) {
+    throw new Error("ArtCatalogGrid must skip entrance motion on the archive page");
+  }
+  if (!/staticCard\s*=\s*reduced\s*\|\|\s*mobile/.test(artGridSource)) {
+    throw new Error("ArtCatalogGrid must disable scroll motion on mobile and reduced motion");
   }
 
   const booksSource = readFileSync(
@@ -255,6 +275,7 @@ function assertHomepageSourceGuards() {
 }
 
 async function main() {
+  const catalog = artCatalogSchema.parse(await defaultContentRepository.getArtCatalog());
   const site = siteSettingsSchema.parse(await defaultContentRepository.getSite());
   const works = (await defaultContentRepository.getWorks()).map((work) =>
     workSchema.parse(work),
@@ -279,6 +300,32 @@ async function main() {
 
   assertUniqueIds("work", works);
   assertUniqueIds("book", books);
+  assertUniqueIds("art series", catalog.series);
+  assertUniqueIds("art piece", catalog.items);
+
+  const seriesIds = new Set(catalog.series.map((series) => series.id));
+  const seriesOrders = new Set<number>();
+  for (const series of catalog.series) {
+    if (seriesOrders.has(series.order)) {
+      throw new Error(`Duplicate art series order: ${series.order}`);
+    }
+    seriesOrders.add(series.order);
+  }
+
+  for (const piece of catalog.items) {
+    if (!seriesIds.has(piece.series)) {
+      throw new Error(`Art piece ${piece.id} targets unknown series: ${piece.series}`);
+    }
+    if (!piece.image.alt.trim()) {
+      throw new Error(`Art piece ${piece.id} is missing image alt text`);
+    }
+    if (piece.externalUrl && !isValidHref(piece.externalUrl)) {
+      throw new Error(`Art piece ${piece.id} has invalid externalUrl: ${piece.externalUrl}`);
+    }
+    if (catalog.status === "published" && !piece.approvedForWeb) {
+      throw new Error(`Published art piece ${piece.id} is not approved for web use`);
+    }
+  }
 
   for (const work of works) {
     if (!work.gridThumbnail.src || !work.gridThumbnail.alt.trim()) {
@@ -310,7 +357,7 @@ async function main() {
   assertHomepageSourceGuards();
 
   console.log(
-    `PASS: todd (artist=${site.artistName}, works=${works.length}, books=${books.length}, services=${site.serviceItems.length})`,
+    `PASS: todd (artist=${site.artistName}, art=${catalog.items.length}, works=${works.length}, books=${books.length}, services=${site.serviceItems.length})`,
   );
   console.log("PASS: content contract");
 }

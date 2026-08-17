@@ -23,6 +23,45 @@ export const sceneLayerSchema = z.object({
 
 export const workAccentToneSchema = z.enum(["red", "yellow", "blue", "green"]);
 
+export const artCatalogStatusSchema = z.enum(["draft", "published"]);
+
+export const artSeriesSchema = z.object({
+  id: z.string().min(1),
+  label: z.string().min(1),
+  description: z.string().min(1),
+  order: z.number().int().nonnegative(),
+});
+
+export const artPieceSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  series: z.string().min(1),
+  medium: z.string().min(1),
+  year: z.string().nullable(),
+  dimensions: z.string().nullable(),
+  edition: z.string().nullable(),
+  image: workImageSchema,
+  mature: z.boolean(),
+  contentNote: z.string().nullable(),
+  source: z.string().min(1),
+  credit: z.string().min(1),
+  rightsHolder: z.string().min(1),
+  approvedForWeb: z.boolean(),
+  featured: z.boolean(),
+  order: z.number().int().nonnegative(),
+  externalUrl: z.string().url().nullable(),
+});
+
+export const artCatalogSchema = z.object({
+  status: artCatalogStatusSchema,
+  eyebrow: z.string().min(1),
+  titleLead: z.string().min(1),
+  titleEmphasis: z.string().min(1),
+  intro: z.string().min(1),
+  series: z.array(artSeriesSchema).min(1),
+  items: z.array(artPieceSchema).min(1),
+});
+
 export const bookAccentSchema = z.enum([
   "red",
   "yellow",

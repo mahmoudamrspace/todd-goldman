@@ -3,6 +3,11 @@
 import { useActiveSectionFragment } from "@/shared/providers/ActiveSectionProvider";
 import { usePathname } from "next/navigation";
 
+function normalizePath(path: string): string {
+  if (path === "/") return path;
+  return path.replace(/\/+$/, "");
+}
+
 /** Shared active-state for desktop and overlay nav links. */
 export function useNavLinkActive(href: string): boolean {
   const pathname = usePathname();
@@ -14,8 +19,8 @@ export function useNavLinkActive(href: string): boolean {
 
   if (href.includes("#")) {
     const [path = "/", fragment] = href.split("#");
-    return pathname === path && activeFragment === fragment;
+    return normalizePath(pathname) === normalizePath(path) && activeFragment === fragment;
   }
 
-  return pathname === href;
+  return normalizePath(pathname) === normalizePath(href);
 }

@@ -16,21 +16,19 @@ import {
   toIntroContent,
   toServicesContent,
   toTestimonialContent,
-  toWorksContent,
 } from "@/content/section-types";
-import type { Book, SiteSettings, Work } from "@/content/types";
+import type { ArtCatalog, Book, SiteSettings } from "@/content/types";
 import { cn } from "@/shared/lib/cn";
 import { TODD } from "@/shared/lib/todd-semantic-classes";
 
 export interface HomeShellProps {
   site: SiteSettings;
-  works: Work[];
+  catalog: ArtCatalog;
   books: Book[];
 }
 
 /** Composes all home sections with legacy export layout classes and feature behaviors. */
-export function HomeShell({ site, works, books }: HomeShellProps) {
-  const worksContent = toWorksContent(works, site);
+export function HomeShell({ site, catalog, books }: HomeShellProps) {
   const testimonialContent = toTestimonialContent(site);
   const showTestimonials = testimonialContent.items.length > 0;
   const introContent = toIntroContent(site);
@@ -61,7 +59,7 @@ export function HomeShell({ site, works, books }: HomeShellProps) {
               <Intro content={introContent} />
             </HeroIntroRegion>
             <ToddHomeSections
-              worksContent={worksContent}
+              artCatalog={catalog}
               booksContent={toBooksContent(site, books)}
               servicesContent={toServicesContent(site)}
               testimonialContent={testimonialContent}

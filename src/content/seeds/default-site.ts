@@ -31,7 +31,7 @@ export const defaultSiteSeed: SiteSettings = {
   email: "studio@toddgoldman.com",
   phone: "",
   nav: [
-    { label: "Art", href: "/#works" },
+    { label: "Art", href: "/art/" },
     { label: "Books", href: "/#books" },
     { label: "Services", href: "/#services" },
     { label: "About", href: "/#about" },
@@ -47,7 +47,7 @@ export const defaultSiteSeed: SiteSettings = {
     {
       title: "ORIGINAL ART",
       subtitle: "/ Canvas & prints",
-      href: "/#works",
+      href: "/art/",
     },
     {
       title: "BOOKS & PUBLISHING",

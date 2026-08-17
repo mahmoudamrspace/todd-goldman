@@ -1,7 +1,11 @@
-import { getBooks, getSite, getWorks } from "@/content";
+import { getArtCatalog, getBooks, getSite } from "@/content";
 import { HomeShell } from "@/widgets/home-shell/HomeShell";
 
 export default async function HomePage() {
-  const [site, works, books] = await Promise.all([getSite(), getWorks(), getBooks()]);
-  return <HomeShell site={site} works={works} books={books} />;
+  const [site, catalog, books] = await Promise.all([
+    getSite(),
+    getArtCatalog(),
+    getBooks(),
+  ]);
+  return <HomeShell site={site} catalog={catalog} books={books} />;
 }

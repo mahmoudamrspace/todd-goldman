@@ -1,12 +1,15 @@
 import type { ContentRepository } from "@/content/repository";
-import { siteSettingsSchema, workSchema } from "@/content/schemas";
-import type { SiteSettings, Work } from "@/content/types";
+import { artCatalogSchema, siteSettingsSchema, workSchema } from "@/content/schemas";
+import type { ArtCatalog, SiteSettings, Work } from "@/content/types";
 
 /**
  * Sanity CMS adapter — wire when SANITY_PROJECT_ID and SANITY_DATASET are set.
  * Runtime remains intentionally unconfigured until Sanity credentials are provided.
  */
 export const sanityContentRepository: ContentRepository = {
+  async getArtCatalog(): Promise<ArtCatalog> {
+    throw new Error("Sanity adapter not configured.");
+  },
   async getSite(): Promise<SiteSettings> {
     throw new Error(
       "Sanity adapter not configured. Set SANITY_PROJECT_ID and SANITY_DATASET.",
@@ -25,6 +28,10 @@ export const sanityContentRepository: ContentRepository = {
 
 export function parseSanityWork(raw: unknown): Work {
   return workSchema.parse(raw);
+}
+
+export function parseSanityArtCatalog(raw: unknown): ArtCatalog {
+  return artCatalogSchema.parse(raw);
 }
 
 export function parseSanitySite(raw: unknown): SiteSettings {
