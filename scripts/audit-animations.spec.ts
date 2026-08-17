@@ -139,6 +139,63 @@ test.describe("art motion fallbacks", () => {
   });
 });
 
+test.describe("twisted mind ground-impact motion", () => {
+  for (const width of [390, 1024, 1440]) {
+    test(`reveals the animated illustration at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.emulateMedia({ reducedMotion: "no-preference" });
+      await page.goto(`${BASE_URL}/`);
+      await page.waitForLoadState("networkidle");
+
+      await page.evaluate(() => {
+        document
+          .querySelector(".todd-about__twisted-mind-art")
+          ?.scrollIntoView({ block: "center", behavior: "instant" });
+      });
+      await page.waitForTimeout(2500);
+
+      const illustration = page.locator(".todd-about__twisted-mind-art");
+      await expect(illustration).toHaveAttribute("data-revealed", "true");
+      await expect(illustration.locator("img")).toBeVisible();
+      const loaded = await illustration.locator("img").evaluate((node) => {
+        return node instanceof HTMLImageElement && node.complete && node.naturalWidth > 0;
+      });
+      expect(loaded).toBe(true);
+    });
+  }
+
+  test("synchronizes falling drops, splash, stream, and puddle", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto(`${BASE_URL}/assets/todd-scenes/about/twisted-mind.svg`);
+
+    const drop = page.locator(".twisted-impact-drop--1");
+    const splash = page.locator(".twisted-impact-splash");
+    const stream = page.locator(".twisted-stream");
+    const puddle = page.locator(".twisted-puddle");
+
+    await expect(drop).toHaveCSS("animation-name", "twisted-impact-drop");
+    await expect(splash).toHaveCSS("animation-name", "twisted-impact-splash");
+    await expect(drop).toHaveCSS("animation-duration", "1.85s");
+    await expect(puddle).toHaveCSS("animation-duration", "1.85s");
+    await expect(stream).toHaveCSS("animation-duration", "0.925s");
+
+    const before = await drop.evaluate((node) => getComputedStyle(node).transform);
+    await page.waitForTimeout(320);
+    const after = await drop.evaluate((node) => getComputedStyle(node).transform);
+    expect(after).not.toBe(before);
+  });
+
+  test("disables transient impact motion for reduced motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(`${BASE_URL}/assets/todd-scenes/about/twisted-mind.svg`);
+
+    await expect(page.locator(".twisted-impact--drops")).toHaveCSS("display", "none");
+    await expect(page.locator(".twisted-impact--surface")).toHaveCSS("display", "none");
+    await expect(page.locator(".twisted-stream")).toHaveCSS("animation-name", "none");
+    await expect(page.locator(".twisted-puddle")).toHaveCSS("animation-name", "none");
+  });
+});
+
 const CHECKS = [
   {
     name: "intro never-grow-up decor animations",
