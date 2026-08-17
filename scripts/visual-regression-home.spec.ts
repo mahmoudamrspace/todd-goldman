@@ -229,6 +229,39 @@ const MOBILE_SERVICES_VIEWPORTS = [
   { width: 768, height: 900, label: "wide mobile" },
 ] as const;
 
+test.describe("social share metadata", () => {
+  test("exposes a platform-safe Open Graph and Twitter cover image", async ({ page, request }) => {
+    await page.goto(`${BASE_URL}/`);
+    await page.waitForLoadState("networkidle");
+
+    const tags = await page.evaluate(() => ({
+      ogImage: document.querySelector('meta[property="og:image"]')?.getAttribute("content") ?? "",
+      ogWidth: document.querySelector('meta[property="og:image:width"]')?.getAttribute("content") ?? "",
+      ogHeight: document.querySelector('meta[property="og:image:height"]')?.getAttribute("content") ?? "",
+      ogType: document.querySelector('meta[property="og:image:type"]')?.getAttribute("content") ?? "",
+      ogAlt: document.querySelector('meta[property="og:image:alt"]')?.getAttribute("content") ?? "",
+      twitterCard: document.querySelector('meta[name="twitter:card"]')?.getAttribute("content") ?? "",
+      twitterImage: document.querySelector('meta[name="twitter:image"]')?.getAttribute("content") ?? "",
+    }));
+
+    expect(tags.ogImage).toContain("/social-cover-og.png");
+    expect(tags.ogWidth).toBe("1200");
+    expect(tags.ogHeight).toBe("630");
+    expect(tags.ogType).toBe("image/png");
+    expect(tags.ogAlt.length).toBeGreaterThan(0);
+    expect(tags.twitterCard).toBe("summary_large_image");
+    expect(tags.twitterImage).toContain("/social-cover-og.png");
+
+    const imagePath = tags.ogImage.includes("/social-cover-og.png")
+      ? "/social-cover-og.png"
+      : new URL(tags.ogImage, BASE_URL).pathname;
+    const response = await request.get(`${BASE_URL}${imagePath}`);
+
+    expect(response.ok()).toBe(true);
+    expect(response.headers()["content-type"]).toContain("image/png");
+  });
+});
+
 test.describe("services hierarchy (1024px)", () => {
   test.use({
     viewport: { width: 1024, height: 667 },

@@ -14,10 +14,18 @@ import { siteConfig } from "@/shared/config/site";
 import { CustomCursor } from "@/features/CustomCursor";
 import { SmoothScroll } from "@/features/SmoothScroll";
 
+const SOCIAL_COVER = {
+  path: "/social-cover-og.png",
+  width: 1200,
+  height: 630,
+  type: "image/png",
+} as const;
+
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSite();
   const title = site.metaTitle;
   const description = site.metaDescription;
+  const socialCoverAlt = `${site.artistName} — Never Grow Up artwork`;
 
   return {
     metadataBase: new URL(siteConfig.url),
@@ -36,11 +44,21 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: site.artistName,
       title,
       description,
+      images: [
+        {
+          url: SOCIAL_COVER.path,
+          width: SOCIAL_COVER.width,
+          height: SOCIAL_COVER.height,
+          alt: socialCoverAlt,
+          type: SOCIAL_COVER.type,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [SOCIAL_COVER.path],
     },
     icons: {
       icon: [
