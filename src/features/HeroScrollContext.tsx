@@ -39,8 +39,8 @@ export function HeroIntroRegion({ children }: { children: ReactNode }) {
 
     const introTop = intro.offsetTop;
     const viewportHeight = window.innerHeight;
-    const rangeStart = Math.max(0, introTop - viewportHeight);
-    const rangeEnd = introTop;
+    const rangeStart = Math.max(0, introTop - viewportHeight * 1.08);
+    const rangeEnd = introTop - viewportHeight * 0.06;
     const span = rangeEnd - rangeStart;
 
     if (span <= 1) {

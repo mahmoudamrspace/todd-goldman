@@ -11,9 +11,9 @@ export interface NavPhoneMenuContentProps {
 /** Phone nav overlay: primary links and studio email footer action. */
 export function NavPhoneMenuContent({ content, open }: NavPhoneMenuContentProps) {
   return (
-    <div className={"framer-ijjr0j nav-phone-menu-content"} data-framer-name={"Content"}>
+    <div className={"todd-nav-overlay-content__content nav-phone-menu-content"} data-todd-name={"Content"}>
       <NavMenuList content={content} open={open} />
-      <div className="nav-phone-contact" data-framer-name="Contact">
+      <div className="nav-phone-contact" data-todd-name="Contact">
         <a className="nav-phone-contact__link" href={`mailto:${content.email}`}>
           {content.email}
         </a>

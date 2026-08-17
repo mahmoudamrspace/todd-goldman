@@ -5,6 +5,22 @@ export const workImageSchema = z.object({
   alt: z.string(),
 });
 
+export const sceneLayerSchema = z.object({
+  src: z.string().min(1),
+  role: z.enum(["base", "mid", "particle"]).optional(),
+  idle: z.enum(["none", "bob", "wiggle"]).optional(),
+  delay: z.number().optional(),
+  scatter: z
+    .object({
+      x: z.number(),
+      y: z.number(),
+      scale: z.number().optional(),
+      rotate: z.number().optional(),
+    })
+    .optional(),
+  inlineAnim: z.boolean().optional(),
+});
+
 export const workAccentToneSchema = z.enum(["red", "yellow", "blue", "green"]);
 
 export const workSchema = z.object({
@@ -40,11 +56,14 @@ export const siteSettingsSchema = z.object({
   heroGreeting: z.string(),
   heroHeadline: z.string(),
   heroIllustration: z.string(),
+  heroLayers: z.array(sceneLayerSchema),
   aboutTitle: z.string(),
   aboutHeading: z.string(),
   aboutName: z.string(),
   about: z.string(),
   aboutImages: z.array(z.string()),
+  aboutTwistedMind: z.string(),
+  aboutNeverGrowLayers: z.array(sceneLayerSchema),
   email: z.string(),
   phone: z.string(),
   nav: z.array(z.object({ label: z.string(), href: z.string() })),
@@ -57,11 +76,13 @@ export const siteSettingsSchema = z.object({
   serviceLinks: z.array(z.object({ href: z.string() })),
   worksTitleWords: z.array(z.string()),
   sneakPeakTitleWords: z.array(z.string()),
+  sneakPeakDecor: z.string(),
   testimonialTitleWords: z.array(z.string()),
   faqTitle: z.string(),
   faqSubtitleLead: z.string(),
   faqSubtitleEmphasis: z.string(),
   faqSubtitleTail: z.string(),
+  faqDecor: z.string(),
   aboutTalksTitle: z.string(),
   aboutClientsTitle: z.string(),
   aboutAwardsTitle: z.string(),
@@ -88,11 +109,18 @@ export const siteSettingsSchema = z.object({
   ),
   awardsMark: z.string(),
   sneakPeakImages: z.array(z.string()),
+  testimonialIcons: z.array(z.string()),
+  footerHeadlineLead: z.string(),
+  footerHeadlineEmphasis: z.string(),
+  footerHeadlineMiddle: z.string(),
+  footerHeadlineSecondEmphasis: z.string(),
+  footerHeadlineTail: z.string(),
   footerMadeBy: z.string(),
   footerCopyright: z.string(),
   footerPromo: z.string(),
   footerPromoHref: z.string(),
   footerMark: z.string(),
+  footerSceneLayers: z.array(sceneLayerSchema),
   metaTitle: z.string(),
   metaDescription: z.string(),
 });

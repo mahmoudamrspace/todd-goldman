@@ -14,9 +14,9 @@ import { editorialSpring } from "@/shared/lib/motion";
 
 const HIGHLIGHT_STYLE: CSSProperties = {
   "--font-selector": "R0Y7QXZlcmlhIFNlcmlmIExpYnJlLTMwMGl0YWxpYw==",
-  "--framer-font-family": '"Averia Serif Libre", sans-serif',
-  "--framer-font-style": "italic",
-  "--framer-font-weight": "300",
+  "--todd-font-family": '"Averia Serif Libre", sans-serif',
+  "--todd-font-style": "italic",
+  "--todd-font-weight": "300",
 };
 
 /** Words rendered with Averia italic emphasis. */
@@ -42,6 +42,30 @@ type HeadlineToken =
 function isHighlightWord(text: string): boolean {
   const normalized = text.replace(/[.,!?;:'"]/g, "");
   return HIGHLIGHT_WORDS.has(text) || HIGHLIGHT_WORDS.has(normalized);
+}
+
+function IntroScribble() {
+  const reduced = useReducedMotion();
+  return (
+    <svg
+      className="todd-intro-scribble"
+      viewBox="0 0 280 20"
+      preserveAspectRatio="none"
+      aria-hidden={true}
+    >
+      <motion.path
+        d="M4 12 C 62 17, 118 6, 168 12 C 214 18, 248 8, 276 12"
+        fill="none"
+        stroke="rgb(255, 70, 46)"
+        strokeWidth="4.5"
+        strokeLinecap="round"
+        initial={reduced ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 }}
+        whileInView={reduced ? undefined : { pathLength: 1, opacity: 1 }}
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ duration: 1.3, ease: [0.44, 0, 0.56, 1] }}
+      />
+    </svg>
+  );
 }
 
 function buildHeadlineTokens(headline: string): HeadlineToken[] {
@@ -136,13 +160,13 @@ export function IntroHeadline({
 
   const style: CSSProperties = {
     "--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=",
-    "--framer-font-family": '"Inter Display", "Inter Display Placeholder", sans-serif',
-    "--framer-font-size": fontSize,
-    "--framer-font-weight": "700",
-    "--framer-letter-spacing": "-0.04em",
-    "--framer-line-height": "90%",
-    "--framer-text-alignment": "center",
-    "--framer-text-color": "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))",
+    "--todd-font-family": '"Inter Display", "Inter Display Placeholder", sans-serif',
+    "--todd-font-size": fontSize,
+    "--todd-font-weight": "700",
+    "--todd-letter-spacing": "-0.04em",
+    "--todd-line-height": "90%",
+    "--todd-text-alignment": "center",
+    "--todd-text-color": "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))",
   };
 
   const nodes: ReactNode[] = [];
@@ -168,9 +192,17 @@ export function IntroHeadline({
       wordIndex += 1;
 
       if (token.highlight) {
+        const scribbleHere = token.text.replace(/[.,!?;:'"]/g, "").toLowerCase() === "smart-ass";
         nodes.push(
-          <span key={`intro-hl-hi-${index}`} className="framer-text" style={HIGHLIGHT_STYLE}>
+          <span
+            key={`intro-hl-hi-${index}`}
+            className={["todd-text", scribbleHere ? "todd-intro-scribble-word" : ""]
+              .filter(Boolean)
+              .join(" ")}
+            style={HIGHLIGHT_STYLE}
+          >
             {wordNode}
+            {scribbleHere ? <IntroScribble /> : null}
           </span>,
         );
       } else {
@@ -180,7 +212,7 @@ export function IntroHeadline({
   });
 
   return (
-    <h1 dir={"auto"} style={style} className={"framer-text"}>
+    <h1 dir={"auto"} style={style} className={"todd-text"}>
       {nodes}
     </h1>
   );
@@ -194,7 +226,7 @@ export function IntroGreeting({ text }: { text: string }) {
 
   return (
     <h2
-      className={"framer-text framer-styles-preset-1ir8ahu"}
+      className={"todd-text todd-intro-headline__h2"}
       data-styles-preset={"RGebQr53Z"}
       dir={"auto"}
     >

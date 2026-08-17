@@ -13,30 +13,30 @@ const GRAY =
 
 const NAV_ITEMS = [
   {
-    className: "framer-p33yb2 framer-rqn908 nav-menu-link-row",
-    textClassName: "framer-1gfizoq",
-    hoverVariant: "framer-v-1t8jhiu",
+    className: "todd-nav-menu-list__div-8 todd-nav-menu-list__div-9 nav-menu-link-row",
+    textClassName: "todd-nav-menu-list__div-5",
+    hoverVariant: "todd-layout__utility-011",
     defaultLabel: "Art",
     defaultHref: "/#works",
   },
   {
-    className: "framer-2bu14n framer-rqn908 nav-menu-link-row",
-    textClassName: "framer-170psbw",
-    hoverVariant: "framer-v-13jtyaq",
+    className: "todd-nav-menu-list__div-6 todd-nav-menu-list__div-9 nav-menu-link-row",
+    textClassName: "todd-nav-menu-list__div-2",
+    hoverVariant: "todd-layout__utility-003",
     defaultLabel: "About",
     defaultHref: "/#about",
   },
   {
-    className: "framer-18y0jlw framer-rqn908 nav-menu-link-row",
-    textClassName: "framer-15tz0mu",
-    hoverVariant: "framer-v-eormac",
+    className: "todd-nav-menu-list__div-3 todd-nav-menu-list__div-9 nav-menu-link-row",
+    textClassName: "todd-nav-menu-list__div",
+    hoverVariant: "todd-nav-overlay-content__desktop-4-6-eormac",
     defaultLabel: "Shop",
     defaultHref: "https://www.toddart.com/",
   },
   {
-    className: "framer-p33yb2 framer-rqn908 nav-menu-link-row",
-    textClassName: "framer-1gfizoq",
-    hoverVariant: "framer-v-1t8jhiu",
+    className: "todd-nav-menu-list__div-8 todd-nav-menu-list__div-9 nav-menu-link-row",
+    textClassName: "todd-nav-menu-list__div-5",
+    hoverVariant: "todd-layout__utility-011",
     defaultLabel: "Contact",
     defaultHref: "/#contact",
   },
@@ -44,11 +44,11 @@ const NAV_ITEMS = [
 
 const TEXT_STYLE = {
   "--font-selector": "R0Y7QXZlcmlhIFNlcmlmIExpYnJlLTMwMA==",
-  "--framer-font-family": '"Averia Serif Libre", sans-serif',
-  "--framer-font-open-type-features":
+  "--todd-font-family": '"Averia Serif Libre", sans-serif',
+  "--todd-font-open-type-features":
     "'blwf' on, 'cv09' on, 'cv03' on, 'cv04' on, 'cv11' on",
-  "--framer-font-weight": "300",
-  "--framer-letter-spacing": "-0.03em",
+  "--todd-font-weight": "300",
+  "--todd-letter-spacing": "-0.03em",
 } as const;
 
 export interface NavMenuListProps {
@@ -69,17 +69,17 @@ function NavMenuLinkText({
   const textColor = dimmed ? GRAY : CREAM;
   const colorVars = {
     "--extracted-tcooor": textColor,
-    "--framer-text-color": textColor,
+    "--todd-text-color": textColor,
   };
 
   if (reduced) {
     return (
       <div
         className={textClassName}
-        data-framer-component-type={"RichTextContainer"}
+        data-todd-component-type={"RichTextContainer"}
         style={{ ...colorVars, transform: "none" }}
       >
-        <div dir={"auto"} className={"framer-text nav-menu-link-text"} style={{ ...TEXT_STYLE, ...colorVars }}>
+        <div dir={"auto"} className={"todd-text nav-menu-link-text"} style={{ ...TEXT_STYLE, ...colorVars }}>
           {label}
         </div>
       </div>
@@ -89,7 +89,7 @@ function NavMenuLinkText({
   return (
     <motion.div
       className={textClassName}
-      data-framer-component-type={"RichTextContainer"}
+      data-todd-component-type={"RichTextContainer"}
       style={{ transform: "none" }}
       initial={false}
       animate={colorVars}
@@ -97,7 +97,7 @@ function NavMenuLinkText({
     >
       <motion.div
         dir={"auto"}
-        className={"framer-text nav-menu-link-text"}
+        className={"todd-text nav-menu-link-text"}
         style={TEXT_STYLE}
         initial={false}
         animate={colorVars}
@@ -109,13 +109,13 @@ function NavMenuLinkText({
   );
 }
 
-/** Nav menu links with Framer hover-dim sibling behavior. */
+/** Nav menu links with legacy export hover-dim sibling behavior. */
 export function NavMenuList({ content, open }: NavMenuListProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const navEntries = content.nav.slice(0, NAV_ITEMS.length);
 
   const hoveredItem = hoveredIndex === null ? null : NAV_ITEMS[hoveredIndex];
-  const parentVariant = hoveredItem?.hoverVariant ?? "framer-v-1gc058m";
+  const parentVariant = hoveredItem?.hoverVariant ?? "todd-layout__utility-006";
   const parentName =
     hoveredIndex === null
       ? "Default"
@@ -124,10 +124,10 @@ export function NavMenuList({ content, open }: NavMenuListProps) {
         "Default");
 
   return (
-    <div className={"framer-bnx3m7-container nav-menu-list"} data-framer-name={"Menu Items"}>
+    <div className={"todd-nav-menu-list__menu-items nav-menu-list"} data-todd-name={"Menu Items"}>
       <div
-        className={`framer-WwdNp framer-1gc058m nav-menu-list__stack ${parentVariant}`}
-        data-framer-name={parentName}
+        className={`todd-nav-menu-list__div-7 todd-nav-menu-list__div-4 nav-menu-list__stack ${parentVariant}`}
+        data-todd-name={parentName}
         data-highlight={true}
         tabIndex={0}
         style={{ "--1o1r33v": "16px", "--frfhbi": "center" }}
@@ -143,7 +143,7 @@ export function NavMenuList({ content, open }: NavMenuListProps) {
             <NavMenuLink
               key={`${item.defaultHref}-${index}`}
               className={item.className}
-              data-framer-name={label}
+              data-todd-name={label}
               href={href}
               open={open}
               index={index}

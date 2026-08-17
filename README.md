@@ -1,6 +1,6 @@
 # Todd Goldman Portfolio
 
-Standalone Next.js portfolio for Todd Goldman, built on a Framer-derived layout layer with Todd-specific editorial motion and content.
+Standalone Next.js portfolio for Todd Goldman with project-owned responsive layout, editorial motion, and content.
 
 ## Architecture
 
@@ -11,7 +11,6 @@ src/features/     Interactive behaviors (nav, FAQ, marquee, motion)
 src/entities/     Reusable cards and items
 src/content/      Repository, schemas, Todd seeds
 src/shared/       UI primitives and config
-framer/           Extracted layout CSS + appear animation data
 public/assets/    Fonts and placeholder artwork
 ```
 

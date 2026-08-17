@@ -1,6 +1,8 @@
 "use client";
 
 import { useId } from "react";
+import { cn } from "@/shared/lib/cn";
+import { toddState, TODD } from "@/shared/lib/todd-semantic-classes";
 
 const FAQ_EASE = "var(--ease-faq)";
 
@@ -14,7 +16,7 @@ export interface FaqAccordionItemProps {
   style: Record<string, string | number>;
 }
 
-/** Single FAQ accordion row with Framer Open/Closed variant names. */
+/** Single FAQ accordion row with legacy export Open/Closed variant names. */
 export function FaqAccordionItem({
   index,
   openIndex,
@@ -29,10 +31,15 @@ export function FaqAccordionItem({
   const buttonId = useId();
 
   const baseClass = className
-    .replace(/\s*framer-v-195fole\b/g, "")
-    .replace(/\s*framer-v-wlit4m\b/g, "")
+    .replace(/\s*todd-faq__variant\b/g, "")
+    .replace(/\s*todd-layout__utility-027\b/g, "")
     .trim();
-  const rootClass = `${baseClass} ${isOpen ? "framer-v-wlit4m" : "framer-v-195fole"}`;
+  const rootClass = cn(
+    TODD.faq.item,
+    TODD.card.shell,
+    baseClass,
+    isOpen ? cn("todd-layout__utility-027", toddState("open")) : cn("todd-faq__variant", toddState("closed")),
+  );
 
   const chevronColor = isOpen ? "var(--color-white)" : "var(--color-cream)";
 
@@ -40,7 +47,7 @@ export function FaqAccordionItem({
     <div
       className={rootClass}
       data-border={true}
-      data-framer-name={isOpen ? "Open" : "Closed"}
+      data-todd-name={isOpen ? "Open" : "Closed"}
       data-faq-index={index}
       data-highlight={true}
       style={{
@@ -51,15 +58,15 @@ export function FaqAccordionItem({
       <button
         type="button"
         id={buttonId}
-        className="framer-1uy0zak faq-accordion__trigger"
-        data-framer-name="Title"
+        className="todd-faq-accordion-item__title faq-accordion__trigger"
+        data-todd-name="Title"
         aria-expanded={isOpen}
         aria-controls={panelId}
         onClick={() => onToggle(index)}
       >
         <div
-          className="framer-1hl0k4c"
-          data-framer-component-type="RichTextContainer"
+          className="todd-nav-overlay-content__desktop-4-2"
+          data-todd-component-type="RichTextContainer"
           style={{
             "--extracted-r6o4lv": "var(--color-cream)",
             transform: "none",
@@ -67,22 +74,22 @@ export function FaqAccordionItem({
         >
           <p
             dir="auto"
-            className="framer-text"
+            className="todd-text"
             style={{
               "--font-selector": "RlI7SW50ZXJEaXNwbGF5LU1lZGl1bQ==",
-              "--framer-font-family":
+              "--todd-font-family":
                 '"Inter Display", "Inter Display Placeholder", sans-serif',
-              "--framer-font-size": "18px",
-              "--framer-font-weight": "500",
-              "--framer-text-alignment": "left",
-              "--framer-text-color": "var(--extracted-r6o4lv, var(--color-cream))",
+              "--todd-font-size": "18px",
+              "--todd-font-weight": "500",
+              "--todd-text-alignment": "left",
+              "--todd-text-color": "var(--extracted-r6o4lv, var(--color-cream))",
             }}
           >
             {question}
           </p>
         </div>
         <svg
-          className="framer-ohg0r framer-1cx43kf"
+          className="todd-nav-overlay-content__desktop-4-5 todd-nav-overlay-content__desktop-4"
           role="presentation"
           viewBox="0 0 24 24"
           aria-hidden={true}
@@ -100,24 +107,24 @@ export function FaqAccordionItem({
         role="region"
         aria-labelledby={buttonId}
         aria-hidden={!isOpen}
-        className={`framer-1ue276m faq-accordion__panel${isOpen ? " is-open" : ""}`}
+        className={`todd-nav-overlay-content__desktop-4-4 faq-accordion__panel${isOpen ? " is-open" : ""}`}
       >
         <div
-          className="framer-1luxota faq-accordion__panel-inner"
-          data-framer-component-type="RichTextContainer"
+          className="todd-nav-overlay-content__desktop-4-3 faq-accordion__panel-inner"
+          data-todd-component-type="RichTextContainer"
         >
           <p
             dir="auto"
-            className="framer-text faq-accordion__answer"
+            className="todd-text faq-accordion__answer"
             style={{
               "--font-selector": "RlI7SW50ZXJEaXNwbGF5",
-              "--framer-font-family":
+              "--todd-font-family":
                 '"Inter Display", "Inter Display Placeholder", sans-serif',
-              "--framer-font-size": "16px",
-              "--framer-letter-spacing": "-0.02em",
-              "--framer-line-height": "1.5em",
-              "--framer-text-alignment": "left",
-              "--framer-text-color": "var(--color-cream)",
+              "--todd-font-size": "16px",
+              "--todd-letter-spacing": "-0.02em",
+              "--todd-line-height": "1.5em",
+              "--todd-text-alignment": "left",
+              "--todd-text-color": "var(--color-cream)",
             }}
           >
             {answer}

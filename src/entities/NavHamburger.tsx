@@ -44,10 +44,10 @@ export function NavHamburger({
   return (
     <button
       type="button"
-      className={`cartoon-burger framer-S33l9 framer-1rev26v ${
-        open ? "framer-v-16bdydi cartoon-burger--open" : "framer-v-1rev26v"
+      className={`cartoon-burger todd-nav-hamburger__button-2 todd-nav-hamburger__button ${
+        open ? "todd-nav-hamburger__variant cartoon-burger--open" : "todd-nav-hamburger__variant-2"
       }`}
-      data-framer-name={open ? "Disabled" : "Enabled"}
+      data-todd-name={open ? "Disabled" : "Enabled"}
       data-highlight={true}
       aria-expanded={open}
       aria-label={open ? "Close menu" : "Open menu"}

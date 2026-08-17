@@ -10,19 +10,19 @@ export interface NavOverlayPanelProps {
   offset?: number;
   delay?: number;
   className?: string;
-  "data-framer-name"?: string;
+  "data-todd-name"?: string;
   style?: CSSProperties;
   children: ReactNode;
 }
 
-/** Open-triggered nav overlay panel matching Framer spring entrance. */
+/** Open-triggered nav overlay panel matching legacy export spring entrance. */
 export function NavOverlayPanel({
   open,
   axis = "x",
   offset = 20,
   delay = 0.4,
   className,
-  "data-framer-name": dataFramerName,
+  "data-todd-name": dataToddName,
   style,
   children,
 }: NavOverlayPanelProps) {
@@ -35,7 +35,7 @@ export function NavOverlayPanel({
     return (
       <div
         className={className}
-        data-framer-name={dataFramerName}
+        data-todd-name={dataToddName}
         style={{
           ...style,
           opacity: open ? 1 : 0,
@@ -50,7 +50,7 @@ export function NavOverlayPanel({
   return (
     <motion.div
       className={className}
-      data-framer-name={dataFramerName}
+      data-todd-name={dataToddName}
       style={style}
       initial={false}
       animate={open ? visible : hidden}

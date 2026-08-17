@@ -55,14 +55,14 @@ export function MarqueeSection({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const section = rootRef.current?.querySelector(
-      'section[data-framer-name="Sneak peak"]',
+      'section[data-todd-name="Sneak peak"]',
     );
     if (!section) return;
 
-    const viewport = section.querySelector(".framer-1mshsi4-container") as HTMLElement | null;
-    const row = section.querySelector(".framer-1mshsi4-container ul") as RowWithMarquee | null;
+    const viewport = section.querySelector(".todd-marquee-section__sneak-peak") as HTMLElement | null;
+    const row = section.querySelector(".todd-marquee-section__sneak-peak ul") as RowWithMarquee | null;
     const innerSection = section.querySelector(
-      ".framer-1mshsi4-container section",
+      ".todd-marquee-section__sneak-peak section",
     ) as HTMLElement | null;
 
     if (!viewport || !row) return;

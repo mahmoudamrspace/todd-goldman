@@ -32,7 +32,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       const id = decodeURIComponent(hash.slice(1));
       const target =
         document.getElementById(id) ??
-        document.querySelector(`[data-framer-name="${id}"]`);
+        document.querySelector(`[data-todd-name="${id}"]`);
 
       if (target instanceof HTMLElement) {
         instance.scrollTo(target, { offset: -80, duration: 1.1 });

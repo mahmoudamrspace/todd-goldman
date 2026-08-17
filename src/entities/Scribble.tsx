@@ -14,7 +14,7 @@ const VARIANTS = {
     height: "100%",
     path: "M 13 54.5 C 13 54.5 141.925 40.573 249.5 54.5",
     strokeWidth: 5,
-    wrapperClass: "framer-xRhCW framer-ozfvi4 framer-v-ozfvi4",
+    wrapperClass: "todd-layout__utility-541-11 todd-layout__utility-541-8 todd-layout__utility-022",
     wrapperStyle: { height: "100%", width: "100%" } satisfies CSSProperties,
   },
   type2: {
@@ -23,7 +23,7 @@ const VARIANTS = {
     height: "100%",
     path: "M 4 45.478 C 4 45.478 68.5 52 137 45.478 C 205.5 38.956 275 45.478 275 45.478",
     strokeWidth: 5,
-    wrapperClass: "framer-RbzYk framer-1yp7kof framer-v-1yp7kof",
+    wrapperClass: "todd-layout__utility-541-7 todd-layout__utility-541-4 todd-layout__utility-014",
   },
   mobile: {
     viewBox: "0 0 276 73",
@@ -31,7 +31,7 @@ const VARIANTS = {
     height: "100%",
     path: "M 48 54.31 C 48 54.31 143.013 46.835 228 54.31",
     strokeWidth: 3,
-    wrapperClass: "framer-qfzAQ framer-1l1pyqw framer-v-1l1pyqw",
+    wrapperClass: "todd-layout__utility-541-10 todd-layout__utility-541-2 todd-layout__utility-009",
   },
   type3: {
     viewBox: "0 0 275 73",
@@ -39,7 +39,7 @@ const VARIANTS = {
     height: "100%",
     path: "M 60 53.31 C 60 53.31 137.955 44.31 203 53.31",
     strokeWidth: 5,
-    wrapperClass: "framer-Kd6Hd framer-60w5ht framer-v-60w5ht",
+    wrapperClass: "todd-layout__utility-541-6 todd-layout__utility-541-5 todd-layout__utility-016",
   },
   workMeta: {
     viewBox: "0 0 275 73",
@@ -47,10 +47,10 @@ const VARIANTS = {
     height: "100%",
     path: "M 76 52.988 C 76 52.988 141.453 50.738 200 52.988",
     strokeWidth: 3,
-    wrapperClass: "framer-pyv3V framer-1urfguw framer-v-nr5uyv",
-    innerClass: "framer-17n0gzn-container",
+    wrapperClass: "todd-layout__utility-541-9 todd-layout__utility-541-3 todd-layout__utility-020",
+    innerClass: "todd-layout__utility-541",
     wrapperStyle: { height: "100%", width: "100%" } satisfies CSSProperties,
-    framerName: "Animate",
+    toddName: "Animate",
   },
 } as const;
 
@@ -61,7 +61,7 @@ export interface ScribbleProps {
   className?: string;
 }
 
-/** Animated SVG scribble underline matching Framer export paths and wrapper classes. */
+/** Animated SVG scribble underline matching legacy export export paths and wrapper classes. */
 export function Scribble({ variant, className }: ScribbleProps) {
   const reduced = useReducedMotion();
   const config = VARIANTS[variant];
@@ -93,7 +93,7 @@ export function Scribble({ variant, className }: ScribbleProps) {
   return (
     <div
       className={[config.wrapperClass, className].filter(Boolean).join(" ")}
-      data-framer-name={"framerName" in config ? config.framerName : "Default"}
+      data-todd-name={"toddName" in config ? config.toddName : "Default"}
       style={"wrapperStyle" in config ? config.wrapperStyle : undefined}
     >
       {"innerClass" in config ? (

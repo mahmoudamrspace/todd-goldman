@@ -14,6 +14,8 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test:contract": "tsx scripts/test-content-contract.ts",
+    "test:visual": "playwright test scripts/visual-regression-home.spec.ts --reporter=line",
+    "test:animations": "playwright test scripts/audit-animations.spec.ts --reporter=line",
     "check": "pnpm run lint && pnpm run typecheck && pnpm run test:contract && pnpm run build",
     "preview:out": "serve out -l 3460"
   },
@@ -35,6 +37,7 @@
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "serve": "^14.2.4",
     "tsx": "^4.19.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "@playwright/test": "^1.55.0"
   }
 }

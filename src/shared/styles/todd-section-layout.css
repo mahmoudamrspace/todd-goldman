@@ -1,0 +1,284 @@
+/**
+ * Semantic section layout — readable selectors that mirror legacy export overrides.
+ * Dual-targeted rules remain in todd-identity.css during migration.
+ */
+
+/* ── Card geometry contract ── */
+.todd-card-shell {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin-inline: auto;
+}
+
+.todd-card-shell--inset {
+  width: 100%;
+  max-width: 100%;
+}
+
+.todd-section-gutter {
+  padding-inline: var(--card-gutter);
+  box-sizing: border-box;
+}
+
+.todd-card-pad {
+  padding: var(--card-pad);
+}
+
+/* ── Page shell ── */
+.todd-page-shell,
+.todd-intro__wrapper-31 {
+  position: relative;
+  width: 100%;
+}
+
+.todd-page-root {
+  display: contents;
+  min-height: 100vh;
+}
+
+/* ── Hero ── */
+.todd-hero,
+.todd-intro__wrapper-20 {
+  overflow: hidden;
+  background: repeating-linear-gradient(
+    90deg,
+    #22bfe2 0 7.5vw,
+    #53cce7 7.5vw 15vw
+  );
+}
+
+.todd-hero__container,
+.todd-intro__wrapper-20 .todd-intro__wrapper-39 {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  min-height: calc(100svh - 48px);
+  overflow: visible !important;
+}
+
+.todd-hero__illustration,
+.todd-intro__wrapper-20 .todd-hero__illustration.todd-hero-pieces {
+  display: block !important;
+  flex: none !important;
+  width: 100% !important;
+  max-width: 100%;
+  height: auto !important;
+  aspect-ratio: 13 / 9;
+  margin-inline: auto;
+  overflow: visible !important;
+}
+
+.todd-hero__container > .todd-responsive-variant,
+.todd-hero__container > .ssr-variant,
+.todd-intro__wrapper-20 .todd-intro__wrapper-39 > .ssr-variant {
+  display: none !important;
+}
+
+/* ── Intro ── */
+.todd-intro,
+#text_intro.todd-intro {
+  width: 100% !important;
+  height: auto !important;
+  min-height: min(920px, 100svh);
+  overflow: hidden !important;
+}
+
+/* ── Books ── */
+.todd-books,
+.todd-intro__wrapper-34.todd-books {
+  position: relative;
+  width: 100%;
+}
+
+/* ── Services ── */
+.todd-services,
+.todd-intro__wrapper-25 {
+  position: relative;
+  width: 100%;
+}
+
+.todd-services__container,
+.todd-intro__wrapper-25 .todd-intro__wrapper-8 {
+  width: 100%;
+}
+
+/* ── Testimonials ── */
+.todd-testimonials,
+.todd-intro__wrapper-9 {
+  position: relative;
+  width: 100%;
+}
+
+.todd-testimonials__container,
+.todd-intro__wrapper-9 .todd-testimonials__container {
+  width: 100%;
+}
+
+.todd-testimonials__title,
+.todd-intro__wrapper-9 .todd-testimonial__title {
+  position: sticky;
+}
+
+/* ── About ── */
+.todd-about,
+.todd-about {
+  position: relative;
+  width: 100%;
+}
+
+.todd-about__container,
+.todd-about .todd-about__container {
+  position: relative;
+  width: 100%;
+}
+
+.todd-about__card-image,
+.todd-about [data-todd-name="Img"] {
+  position: relative;
+}
+
+/* ── FAQ ── */
+.todd-faq-section,
+.todd-faq-section {
+  width: 100%;
+}
+
+.todd-faq,
+.todd-faq {
+  position: relative;
+  width: 100%;
+}
+
+.todd-faq__title,
+.todd-faq .todd-faq__title {
+  position: relative;
+}
+
+.todd-faq__list,
+.todd-faq__list {
+  width: 100%;
+}
+
+/* ── Footer ── */
+.todd-footer,
+footer.todd-footer {
+  height: auto !important;
+  min-height: 0;
+  overflow: clip;
+  isolation: isolate;
+  width: 100%;
+}
+
+.todd-footer__title-area,
+.todd-footer > .todd-footer__title-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  flex: none !important;
+  width: 100%;
+  height: auto !important;
+  min-height: 0;
+  overflow: visible !important;
+  gap: 0;
+  padding: 0;
+}
+
+@media (max-width: 809.98px) {
+  .todd-hero,
+  .todd-page-root .todd-intro__wrapper-20,
+  .todd-intro__wrapper-20 {
+    margin-top: calc(var(--site-header-clearance) * -1);
+    width: 100%;
+    max-width: 100%;
+    height: 100svh !important;
+    height: 100dvh !important;
+    min-height: 100svh !important;
+    min-height: 100dvh !important;
+    overflow: hidden;
+  }
+
+  .todd-hero__container,
+  .todd-page-root .todd-intro__wrapper-39,
+  .todd-intro__wrapper-20 .todd-intro__wrapper-39 {
+    width: 100% !important;
+    max-width: 100%;
+    height: 100% !important;
+    min-height: 100% !important;
+    padding: var(--site-header-height) 0 0 !important;
+    box-sizing: border-box;
+    overflow: hidden !important;
+  }
+
+  .todd-hero__illustration,
+  .todd-intro__wrapper-20 .todd-hero__illustration.todd-hero-pieces {
+    position: relative !important;
+    width: min(800px, 180vw) !important;
+    max-width: none !important;
+    height: 100% !important;
+    aspect-ratio: auto;
+    margin-left: calc((100vw - min(800px, 180vw)) / 2 + 48px) !important;
+    margin-right: 0 !important;
+  }
+
+  .todd-about,
+  .todd-about {
+    overflow-x: clip;
+    padding-inline: var(--card-gutter) !important;
+  }
+
+  .todd-about__container,
+  .todd-about .todd-about__container {
+    background-color: #edbb6a;
+    border-radius: clamp(28px, 8vw, 48px);
+    padding-bottom: 60px !important;
+    isolation: isolate;
+  }
+
+  .todd-books,
+  .todd-services,
+  .todd-testimonials,
+  .todd-faq-section,
+  .todd-footer,
+  .todd-about,
+  .todd-intro__wrapper-25,
+  .todd-intro__wrapper-9,
+  .todd-intro__wrapper-34,
+  footer.todd-footer {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0;
+  }
+
+  .todd-footer__title-area,
+  footer.todd-footer .todd-footer__title-area {
+    width: 100% !important;
+    max-width: 100%;
+    padding-inline: 0;
+  }
+}
+
+@media (min-width: 810px) {
+  .todd-hero,
+  .todd-intro__wrapper-20 {
+    margin-top: calc(var(--site-header-below) * -1);
+  }
+
+  .todd-hero__container,
+  .todd-intro__wrapper-20 .todd-intro__wrapper-39 {
+    height: calc(100svh - 48px);
+    min-height: calc(100svh - 48px);
+  }
+
+  .todd-hero__illustration,
+  .todd-intro__wrapper-20 .todd-hero__illustration.todd-hero-pieces {
+    width: min(1680px, 112vw, calc((100svh - 50px) * 1.85)) !important;
+    max-width: none !important;
+    height: calc(100svh - 48px) !important;
+    aspect-ratio: auto;
+    margin: 0 !important;
+  }
+}

@@ -1,157 +1,273 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import type { CSSProperties } from "react";
+import booksData from "@/content/data/todd-books.json";
 import type { SneakPeakContent } from "@/content/section-types";
-import { AnimatedSpan, HiddenReveal } from "@/features/HiddenReveal";
-import { SneakPeakLightbox } from "@/features/SneakPeakLightbox";
+import { BooksReplayProvider, HiddenReveal } from "@/features/HiddenReveal";
+import { SceneDoodle } from "@/features/IllustratedScene";
+import { cn } from "@/shared/lib/cn";
+import { sectionMotion } from "@/shared/lib/motion";
+import { TODD } from "@/shared/lib/todd-semantic-classes";
 
-function imageBase(content: SneakPeakContent, index: number) {
-  return content.images[index] ?? "/assets/images/image-placeholder.png";
+const REVEAL_UP = {
+  willChange: "transform",
+  opacity: "0",
+  transform: `translateY(${sectionMotion.artworkY}px)`,
+} as const;
+
+const REVEAL_SOFT = {
+  willChange: "transform",
+  opacity: "0",
+  transform: `translateY(${sectionMotion.softY}px)`,
+} as const;
+
+const REVEAL_CONTENT = {
+  willChange: "transform",
+  opacity: "0",
+  transform: `translateY(${sectionMotion.contentY}px)`,
+} as const;
+
+const REVEAL_DOODLE = {
+  willChange: "transform",
+  opacity: "0",
+  transform: `translateY(${sectionMotion.softY}px) scale(0.96)`,
+} as const;
+
+interface ToddBook {
+  id: string;
+  title: string;
+  year: string;
+  category: string;
+  credit: string;
+  description: string;
+  cover: string;
+  coverAlt: string;
+  accent: string;
+  isbn: string;
+  href: string;
+  featured: boolean;
 }
 
-function imageAlt(content: SneakPeakContent, index: number) {
-  return content.imageAlts[index] ?? `Sketchbook drawing ${index + 1}`;
+const books = booksData satisfies ToddBook[];
+const categories = ["All", ...Array.from(new Set(books.map((book) => book.category)))] as const;
+
+function BookCover({
+  book,
+  compact = false,
+}: {
+  book: ToddBook;
+  compact?: boolean;
+}) {
+  if (book.cover) {
+    return (
+      <img
+        src={book.cover}
+        alt={book.coverAlt}
+        loading="lazy"
+        decoding="async"
+      />
+    );
+  }
+
+  return (
+    <div
+      className="todd-book-cover-placeholder"
+      data-accent={book.accent}
+      aria-label={`${book.coverAlt} — artwork coming soon`}
+    >
+      <span className="todd-book-cover-placeholder__spark" aria-hidden={true}>✦</span>
+      <span className="todd-book-cover-placeholder__title">{book.title}</span>
+      {!compact ? (
+        <span className="todd-book-cover-placeholder__author">TODD GOLDMAN</span>
+      ) : null}
+    </div>
+  );
 }
 
-const SNEAK_PEAK_SLOTS = [
-  { className: "framer-1adc7vo", width: 1696, height: 2258, sizes: "(min-width: 1200px) 259px, (min-width: 810px) and (max-width: 1199.98px) 259px, (max-width: 809.98px) 259px", srcSet: [{ scale: 1024, w: 769 }, { scale: 2048, w: 1538 }, { w: 1696 }] },
-  { className: "framer-1t3i81d", width: 1687, height: 1232, sizes: "(min-width: 1200px) 431px, (min-width: 810px) and (max-width: 1199.98px) 431px, (max-width: 809.98px) 431px", srcSet: [{ scale: 512, w: 512 }, { scale: 1024, w: 1024 }, { w: 1687 }] },
-  { className: "framer-1cf6qxv", width: 1687, height: 2400, sizes: "(min-width: 1200px) 258px, (min-width: 810px) and (max-width: 1199.98px) 258px, (max-width: 809.98px) 258px", srcSet: [{ scale: 1024, w: 719 }, { scale: 2048, w: 1439 }, { w: 1687 }] },
-  { className: "framer-dn7rjw", width: 2615, height: 1684, sizes: "(min-width: 1200px) 399px, (min-width: 810px) and (max-width: 1199.98px) 399px, (max-width: 809.98px) 399px", srcSet: [{ scale: 512, w: 512 }, { scale: 1024, w: 1024 }, { scale: 2048, w: 2048 }, { w: 2615 }] },
-  { className: "framer-1vq20a6", width: 2162, height: 2757, sizes: "(min-width: 1200px) 281px, (min-width: 810px) and (max-width: 1199.98px) 281px, (max-width: 809.98px) 281px", srcSet: [{ scale: 1024, w: 803 }, { scale: 2048, w: 1606 }, { w: 2162 }] },
-  { className: "framer-1hczgnp", width: 2486, height: 1800, sizes: "(min-width: 1200px) 505px, (min-width: 810px) and (max-width: 1199.98px) 505px, (max-width: 809.98px) 505px", srcSet: [{ scale: 512, w: 512 }, { scale: 1024, w: 1024 }, { scale: 2048, w: 2048 }, { w: 2486 }] },
-  { className: "framer-mhqs5e", width: 2668, height: 1840, sizes: "(min-width: 1200px) 555px, (min-width: 810px) and (max-width: 1199.98px) 555px, (max-width: 809.98px) 555px", srcSet: [{ scale: 512, w: 512 }, { scale: 1024, w: 1024 }, { scale: 2048, w: 2048 }, { w: 2668 }] },
-  { className: "framer-wcqli4", width: 2144, height: 1839, sizes: "(min-width: 1200px) 318px, (min-width: 810px) and (max-width: 1199.98px) 318px, (max-width: 809.98px) 318px", srcSet: [{ scale: 512, w: 512 }, { scale: 1024, w: 1024 }, { scale: 2048, w: 2048 }, { w: 2144 }] },
-  { className: "framer-6g8f7l", width: 2457, height: 1794, sizes: "(min-width: 1200px) 393px, (min-width: 810px) and (max-width: 1199.98px) 393px, (max-width: 809.98px) 393px", srcSet: [{ scale: 512, w: 512 }, { scale: 1024, w: 1024 }, { scale: 2048, w: 2048 }, { w: 2457 }] },
-  { className: "framer-18zri0s", width: 1800, height: 1800, sizes: "(min-width: 1200px) 376px, (min-width: 810px) and (max-width: 1199.98px) 376px, (max-width: 809.98px) 376px", srcSet: [{ scale: 512, w: 512 }, { scale: 1024, w: 1024 }, { w: 1800 }] },
-  { className: "framer-lk68t4", width: 1800, height: 1800, sizes: "(min-width: 1200px) 358px, (min-width: 810px) and (max-width: 1199.98px) 358px, (max-width: 809.98px) 358px", srcSet: [{ scale: 512, w: 512 }, { scale: 1024, w: 1024 }, { w: 1800 }] },
-  { className: "framer-vnpj8s", width: 2616, height: 1839, sizes: "(min-width: 1200px) 461px, (min-width: 810px) and (max-width: 1199.98px) 461px, (max-width: 809.98px) 461px", srcSet: [{ scale: 512, w: 512 }, { scale: 1024, w: 1024 }, { scale: 2048, w: 2048 }, { w: 2616 }] },
-] as const;
-
-function buildSrcSet(base: string, width: number, height: number, entries: readonly { scale?: number; w: number }[]) {
-  return entries
-    .map((entry) => {
-      const url = entry.scale
-        ? `${base}?scale-down-to=${entry.scale}&width=${width}&height=${height}`
-        : `${base}?width=${width}&height=${height}`;
-      return `${url} ${entry.w}w`;
-    })
-    .join(",");
+function BookMeta({ book }: { book: ToddBook }) {
+  return (
+    <div className="todd-book-meta">
+      <span>{book.year}</span>
+      <span aria-hidden={true}>/</span>
+      <span>{book.category}</span>
+    </div>
+  );
 }
 
 export function SneakPeak({ content }: { content: SneakPeakContent }) {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const lightboxImages = SNEAK_PEAK_SLOTS.map((slot, index) =>
-    `${imageBase(content, index)}?width=${slot.width}&height=${slot.height}`,
+  const sectionRef = useRef<HTMLElement>(null);
+  const initialBook = books.find((book) => book.featured) ?? books[0]!;
+  const [activeId, setActiveId] = useState(initialBook.id);
+  const [category, setCategory] = useState<(typeof categories)[number]>("All");
+
+  const visibleBooks = useMemo(
+    () => books.filter((book) => category === "All" || book.category === category),
+    [category],
   );
+  const activeBook =
+    visibleBooks.find((book) => book.id === activeId) ?? visibleBooks[0] ?? initialBook;
+
+  const selectCategory = (nextCategory: (typeof categories)[number]) => {
+    setCategory(nextCategory);
+    const nextBook = books.find(
+      (book) => nextCategory === "All" || book.category === nextCategory,
+    );
+    if (nextBook) setActiveId(nextBook.id);
+  };
 
   return (
-    <section className={"framer-gfxbk"} data-framer-name={"Sneak peak"}>
-      <SneakPeakLightbox
-        images={lightboxImages}
-        openIndex={openIndex}
-        onClose={() => setOpenIndex(null)}
-        onNavigate={setOpenIndex}
-      />
-      <div className={"framer-1nxk7xi"} data-framer-name={"Title"}>
-        <HiddenReveal variant="sneak-tree" className={"framer-1odp3ow"} data-framer-name={"Tree"} style={{ willChange: "transform", opacity: "0", transform: "translateY(50px) scale(0.5)" }}>
-          <div className={"ssr-variant hidden-g5y12p"}>
-            <div data-framer-component-type={"SVG"} data-framer-name={"Tree svg"} data-framer-shadows className={"framer-16qb29c"} aria-hidden={true} style={{ imageRendering: "pixelated", flexShrink: "0" }}>
-              <div className={"svgContainer"} style={{ width: "100%", height: "100%", aspectRatio: "inherit" }}>
-                <svg style={{ width: "100%", height: "100%" }}>
-                  <use href={"#svg-1153458233_3329"} />
-                </svg>
-              </div>
-            </div>
-          </div>
-          <div className={"ssr-variant hidden-r4q9g hidden-72rtr7"}>
-            <div data-framer-component-type={"SVG"} data-framer-name={"Tree svg"} data-framer-shadows className={"framer-16qb29c"} aria-hidden={true} style={{ imageRendering: "pixelated", flexShrink: "0" }}>
-              <div className={"svgContainer"} style={{ width: "100%", height: "100%", aspectRatio: "inherit" }}>
-                <svg style={{ width: "100%", height: "100%" }}>
-                  <use href={"#svg-1649790600_3262"} />
-                </svg>
-              </div>
-            </div>
+    <BooksReplayProvider sectionRef={sectionRef}>
+      <section
+        ref={sectionRef}
+        className={TODD.books.section}
+        data-todd-name="Sneak peak"
+        id="books"
+        aria-labelledby="todd-books-title"
+      >
+      <header className="todd-books__header">
+        <HiddenReveal
+          variant="section-artwork"
+          replayGroup="books"
+          className="todd-books__doodle"
+          style={REVEAL_DOODLE}
+        >
+          <div aria-hidden={true}>
+            <SceneDoodle
+              src={content.decor}
+              idle="none"
+              fit="tight"
+              inlineAnim
+              disableEnter
+            />
           </div>
         </HiddenReveal>
-        <div
-          className={"framer-73zdj0"}
-          data-framer-name={"Sneak peak of my works"}
-          id={"sneak-peak"}
-          data-framer-component-type={"RichTextContainer"}
-          style={{ transform: "none" }}
-        >
-          <h2 className={"framer-text framer-styles-preset-1ir8ahu"} data-styles-preset={"RGebQr53Z"} dir={"auto"}>
-            {content.titleWords.map((word, index) => (
-              <AnimatedSpan
-                key={`sneak-title-${word}-${index}`}
-                variant="sneak-title"
-                y={10}
-                delay={0.4 + index * 0.075}
-              >
-                {word}
-                {index < content.titleWords.length - 1 ? " " : ""}
-              </AnimatedSpan>
-            ))}
-          </h2>
+        <div className="todd-books__heading">
+          <HiddenReveal
+            variant="section-row"
+            replayGroup="books"
+            delay={0.1}
+            style={REVEAL_SOFT}
+          >
+            <p className="todd-books__eyebrow">50+ books published · zero grown-up energy</p>
+          </HiddenReveal>
+          <HiddenReveal
+            variant="section-heading"
+            replayGroup="books"
+            delay={sectionMotion.stagger}
+            className="todd-books__title-reveal"
+            style={REVEAL_CONTENT}
+          >
+            <h2 id="todd-books-title">
+              Books by <em>Todd</em>
+            </h2>
+          </HiddenReveal>
+          <HiddenReveal
+            variant="section-row"
+            replayGroup="books"
+            delay={0.18}
+            style={REVEAL_SOFT}
+          >
+            <p>
+              Silly stories, sharp one-liners, heroic pets, and underwear with
+              opinions. Pick a cover to explore the shelf.
+            </p>
+          </HiddenReveal>
         </div>
-      </div>
-      <div className={"framer-1mshsi4-container"}>
-        <div className={"ssr-variant"}>
-          <section style={{ display: "flex", width: "100%", height: "100%", maxWidth: "100%", maxHeight: "100%", placeItems: "center", margin: "0", padding: "0px 0px 0px 0px", listStyleType: "none", textIndent: "none", opacity: "0", overflow: "visible" }}>
-            <ul style={{ display: "flex", width: "100%", height: "100%", maxWidth: "100%", maxHeight: "100%", placeItems: "flex-end", margin: "0", padding: "0", listStyleType: "none", textIndent: "none", gap: "24px", position: "relative", flexDirection: "row", willChange: "auto", transform: "translateX(0px)" }}>
-              <li style={{ width: "4860px", height: "374px" }} aria-hidden={true}>
-                <div className={"framer-1owlvjw-container"} style={{ width: "4860px", height: "374px", flexShrink: "0" }}>
-                  <div className={"framer-QUW6w framer-ftirjw framer-v-ftirjw"} data-framer-name={"Variant 1"} style={{ height: "100%", width: "100%" }}>
-                    {SNEAK_PEAK_SLOTS.map((slot, index) => {
-                      const base = imageBase(content, index);
-                      const src = `${base}?width=${slot.width}&height=${slot.height}`;
-                      const srcSet = buildSrcSet(base, slot.width, slot.height, slot.srcSet);
-                      return (
-                        <button
-                          key={slot.className}
-                          type="button"
-                          className={slot.className}
-                          data-framer-name={"Image"}
-                          data-sneak-peak-index={index}
-                          aria-label={`View sketch ${index + 1}: ${imageAlt(content, index)}`}
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            setOpenIndex(index);
-                          }}
-                          style={{
-                            borderBottomLeftRadius: "16px",
-                            borderBottomRightRadius: "16px",
-                            borderTopLeftRadius: "16px",
-                            borderTopRightRadius: "16px",
-                            border: "none",
-                            padding: 0,
-                            background: "transparent",
-                            cursor: "zoom-in",
-                          }}
-                        >
-                          <div style={{ position: "absolute", borderRadius: "inherit", cornerShape: "inherit", top: "0", right: "0", bottom: "0", left: "0" }} data-framer-background-image-wrapper={true}>
-                            <img
-                              decoding={"async"}
-                              width={slot.width}
-                              height={slot.height}
-                              sizes={slot.sizes}
-                              srcSet={srcSet}
-                              src={src}
-                              alt={imageAlt(content, index)}
-                              style={{ display: "block", width: "100%", height: "100%", borderRadius: "inherit", cornerShape: "inherit", objectPosition: "center", objectFit: "cover" }}
-                            />
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </section>
+      </header>
+
+      <HiddenReveal
+        variant="section-row"
+        replayGroup="books"
+        delay={0.26}
+        className="todd-books__filter-reveal"
+        style={REVEAL_SOFT}
+      >
+        <nav className="todd-books__filters" aria-label="Filter books by category">
+          {categories.map((item) => (
+            <button
+              key={item}
+              type="button"
+              aria-pressed={category === item}
+              onClick={() => selectCategory(item)}
+            >
+              {item}
+            </button>
+          ))}
+        </nav>
+      </HiddenReveal>
+
+      <HiddenReveal
+        variant="section-artwork"
+        replayGroup="books"
+        delay={0.38}
+        className="todd-books__feature-reveal"
+        style={REVEAL_UP}
+      >
+        <div className="todd-books__feature" data-accent={activeBook.accent} aria-live="polite">
+          <div className="todd-books__feature-cover">
+            <BookCover book={activeBook} />
+            {!activeBook.cover ? (
+              <span className="todd-books__cover-note">Designer cover goes here</span>
+            ) : null}
+          </div>
+          <div className="todd-books__feature-copy">
+            <BookMeta book={activeBook} />
+            <h3>{activeBook.title}</h3>
+            <p className="todd-books__credit">{activeBook.credit}</p>
+            <p className="todd-books__description">{activeBook.description}</p>
+            <HiddenReveal
+              variant="section-cta"
+              replayGroup="books"
+              delay={0.18}
+              className="todd-books__feature-actions"
+              style={REVEAL_SOFT}
+            >
+              {activeBook.isbn ? <span>ISBN {activeBook.isbn}</span> : <span>Todd&apos;s bookshelf</span>}
+              {activeBook.href ? (
+                <a href={activeBook.href} target="_blank" rel="noreferrer">
+                  View book ↗
+                </a>
+              ) : (
+                <span className="todd-books__link-pending">Link coming soon</span>
+              )}
+            </HiddenReveal>
+          </div>
         </div>
+      </HiddenReveal>
+
+      <div className="todd-books__shelf" role="list" aria-label={`${category} books`}>
+        {visibleBooks.map((book, index) => (
+          <HiddenReveal
+            key={book.id}
+            variant="section-row"
+            replayGroup="books"
+            className="todd-book-card-reveal"
+            delay={0.42 + Math.min(index * sectionMotion.stagger, 0.32)}
+            style={REVEAL_UP}
+          >
+            <button
+              type="button"
+              role="listitem"
+              className={cn("todd-book-card", TODD.card.shell)}
+              data-active={book.id === activeBook.id}
+              data-accent={book.accent}
+              onClick={() => setActiveId(book.id)}
+              aria-label={`Show ${book.title}`}
+              style={{ "--book-index": index } as CSSProperties}
+            >
+              <span className="todd-book-card__cover">
+                <BookCover book={book} compact />
+              </span>
+              <span className="todd-book-card__copy">
+                <BookMeta book={book} />
+                <strong>{book.title}</strong>
+              </span>
+            </button>
+          </HiddenReveal>
+        ))}
       </div>
-    </section>
+      </section>
+    </BooksReplayProvider>
   );
 }

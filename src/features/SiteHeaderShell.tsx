@@ -6,7 +6,8 @@ import { NavHamburger } from "@/entities/NavHamburger";
 import { DesktopNavLinks } from "@/features/DesktopNavLinks";
 import { NavPhoneMenuContent } from "@/features/NavPhoneMenuContent";
 import { useNavMenu } from "@/features/nav-menu/NavMenuContext";
-import { navFramerName, navShellClass, navShellStyle } from "@/shared/lib/nav-variants";
+import { navVariantName, navShellClass, navShellStyle } from "@/shared/lib/nav-variants";
+import { footerResponsiveVisibleOnly } from "@/shared/lib/todd-semantic-classes";
 
 export interface SiteHeaderShellProps {
   content: IntroContent;
@@ -49,7 +50,7 @@ function SiteHeaderBrand({
       className="site-header-bar__brand"
       href="/"
       aria-label={artistName}
-      {...(homeCurrent ? { "data-framer-page-link-current": true } : {})}
+      {...(homeCurrent ? { "data-todd-page-link-current": true } : {})}
     >
       <span className="site-header-bar__brand-lockup" aria-hidden="true">
         <span className="site-header-bar__brand-word site-header-bar__brand-word--first">
@@ -73,24 +74,24 @@ export function SiteHeaderShell({ content, homeCurrent = false }: SiteHeaderShel
 
   return (
     <>
-      <div className="ssr-variant hidden-qk48ah">
-        <div className="framer-miowvv-container">
-          <header className="site-header-bar site-header-bar--cartoon" data-nav-open="false">
+      <div className={footerResponsiveVisibleOnly("tablet", "desktop")}>
+        <div className="todd-site-header">
+          <header className="site-header-bar site-header-bar--cartoon todd-site-header__bar" data-nav-open="false">
             <SiteHeaderBrand artistName={content.artistName} homeCurrent={homeCurrent} />
             <DesktopNavLinks nav={content.nav} />
           </header>
         </div>
       </div>
 
-      <div className="ssr-variant hidden-16i3gsx hidden-14eie82">
-        <div className="framer-miowvv-container">
+      <div className={footerResponsiveVisibleOnly("mobile")}>
+        <div className="todd-site-header">
           <nav
             className={navShellClass(
-              "framer-Lbjyv framer-1nlcti1 framer-v-aigtuw site-header-nav--cartoon",
+              "todd-site-header__nav-2 todd-site-header__nav todd-nav-overlay-content__desktop-4-6-aigtuw site-header-nav--cartoon todd-site-header__nav",
               "phone",
               present,
             )}
-            data-framer-name={navFramerName("phone", present)}
+            data-todd-name={navVariantName("phone", present)}
             data-nav-open={present ? "true" : "false"}
             data-nav-state={navState}
             style={navShellStyle(
@@ -98,12 +99,12 @@ export function SiteHeaderShell({ content, homeCurrent = false }: SiteHeaderShel
               "var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237))",
             )}
           >
-            <div className="framer-1qmc12j site-header-mobile-bar" data-framer-name="Header">
-              <div className="framer-1y7e82e-container">
+            <div className="todd-site-header-shell__header site-header-mobile-bar" data-todd-name="Header">
+              <div className="todd-site-header-shell__div-2">
                 <SiteHeaderBrand artistName={content.artistName} homeCurrent={homeCurrent} />
               </div>
-              <div className="framer-93f2pg-container" />
-              <div className="framer-109mq70-container site-header-mobile-bar__menu">
+              <div className="todd-site-header-shell__div-3" />
+              <div className="todd-site-header-shell__div site-header-mobile-bar__menu">
                 <NavHamburger
                   open={open}
                   onToggle={toggle}

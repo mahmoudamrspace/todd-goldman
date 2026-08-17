@@ -4,7 +4,6 @@ import { ScrollChapter } from "@/features/ScrollChapter";
 import { StickySection } from "@/features/StickySection";
 import { About } from "@/widgets/sections/About";
 import { FaqSection } from "@/widgets/interactive/FaqSection";
-import { MarqueeSection } from "@/widgets/interactive/MarqueeSection";
 import { ServicesSection } from "@/widgets/interactive/ServicesSection";
 import { SneakPeak } from "@/widgets/sections/SneakPeak";
 import { Testimonial } from "@/widgets/sections/Testimonial";
@@ -17,6 +16,7 @@ import type {
   TestimonialContent,
   WorksContent,
 } from "@/content/section-types";
+import { TODD } from "@/shared/lib/todd-semantic-classes";
 
 export interface ToddHomeSectionsProps {
   worksContent: WorksContent;
@@ -39,14 +39,12 @@ export function ToddHomeSections({
   faqContent,
 }: ToddHomeSectionsProps) {
   return (
-    <div className="site-page-sections">
+    <div className={TODD.page.sections}>
       <ScrollChapter id="works-chapter" accent="paper" spacing="first">
         <WorksGallery content={worksContent} />
       </ScrollChapter>
       <ScrollChapter accent="cream">
-        <MarqueeSection>
-          <SneakPeak content={sneakPeakContent} />
-        </MarqueeSection>
+        <SneakPeak content={sneakPeakContent} />
       </ScrollChapter>
       <ScrollChapter accent="dark">
         <ServicesSection content={servicesContent} />

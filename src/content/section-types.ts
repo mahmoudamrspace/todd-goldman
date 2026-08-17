@@ -1,4 +1,5 @@
 import type { SiteSettings, Work } from "@/content/types";
+import type { SceneLayer } from "@/content/todd-scenes";
 
 /** Narrow section interfaces (Interface Segregation). */
 
@@ -6,6 +7,7 @@ export interface HeroContent {
   greeting: string;
   headline: string;
   illustration: string;
+  layers: SceneLayer[];
   artistName: string;
 }
 
@@ -25,6 +27,8 @@ export interface AboutContent {
   name: string;
   body: string;
   images: string[];
+  twistedMind: string;
+  neverGrowLayers: SceneLayer[];
   email: string;
   phone: string;
   social: SiteSettings["social"];
@@ -49,6 +53,7 @@ export interface ServicesContent {
 export interface TestimonialContent {
   items: SiteSettings["testimonials"];
   titleWords: string[];
+  icons: string[];
 }
 
 export interface FaqContent {
@@ -57,14 +62,23 @@ export interface FaqContent {
   subtitleLead: string;
   subtitleEmphasis: string;
   subtitleTail: string;
+  decor: string;
 }
 
 export interface FooterContent {
+  headline: {
+    lead: string;
+    emphasis: string;
+    middle: string;
+    secondEmphasis: string;
+    tail: string;
+  };
   madeBy: string;
   copyright: string;
   promo: string;
   promoHref: string;
   mark: string;
+  sceneLayers: SceneLayer[];
   email: string;
   phone: string;
   nav: SiteSettings["nav"];
@@ -75,6 +89,7 @@ export interface SneakPeakContent {
   images: string[];
   imageAlts: string[];
   titleWords: string[];
+  decor: string;
 }
 
 export interface WorksContent {
@@ -94,6 +109,7 @@ export function toHeroContent(site: SiteSettings): HeroContent {
     greeting: site.heroGreeting,
     headline: site.heroHeadline,
     illustration: site.heroIllustration,
+    layers: site.heroLayers,
     artistName: site.artistName,
   };
 }
@@ -105,6 +121,8 @@ export function toAboutContent(site: SiteSettings): AboutContent {
     name: site.aboutName,
     body: site.about,
     images: site.aboutImages,
+    twistedMind: site.aboutTwistedMind,
+    neverGrowLayers: site.aboutNeverGrowLayers,
     email: site.email,
     phone: site.phone,
     social: site.social,
@@ -130,7 +148,11 @@ export function toServicesContent(site: SiteSettings): ServicesContent {
 }
 
 export function toTestimonialContent(site: SiteSettings): TestimonialContent {
-  return { items: site.testimonials, titleWords: site.testimonialTitleWords };
+  return {
+    items: site.testimonials,
+    titleWords: site.testimonialTitleWords,
+    icons: site.testimonialIcons,
+  };
 }
 
 export function toFaqContent(site: SiteSettings): FaqContent {
@@ -140,16 +162,25 @@ export function toFaqContent(site: SiteSettings): FaqContent {
     subtitleLead: site.faqSubtitleLead,
     subtitleEmphasis: site.faqSubtitleEmphasis,
     subtitleTail: site.faqSubtitleTail,
+    decor: site.faqDecor,
   };
 }
 
 export function toFooterContent(site: SiteSettings): FooterContent {
   return {
+    headline: {
+      lead: site.footerHeadlineLead,
+      emphasis: site.footerHeadlineEmphasis,
+      middle: site.footerHeadlineMiddle,
+      secondEmphasis: site.footerHeadlineSecondEmphasis,
+      tail: site.footerHeadlineTail,
+    },
     madeBy: site.footerMadeBy,
     copyright: site.footerCopyright,
     promo: site.footerPromo,
     promoHref: site.footerPromoHref,
     mark: site.footerMark,
+    sceneLayers: site.footerSceneLayers,
     email: site.email,
     phone: site.phone,
     nav: site.nav,
@@ -162,6 +193,7 @@ export function toSneakPeakContent(site: SiteSettings): SneakPeakContent {
     images: site.sneakPeakImages,
     imageAlts: site.sneakPeakImageAlts,
     titleWords: site.sneakPeakTitleWords,
+    decor: site.sneakPeakDecor,
   };
 }
 

@@ -1,0 +1,28 @@
+/**
+ * Semantic responsive aliases for legacy export breakpoint hooks.
+ * Imported after todd-layout__utility-007.css — mirrors visibility rules with readable names.
+ */
+
+@media (max-width: 809.98px) {
+  .todd-hide-mobile,
+  .todd-hide-mobile,
+  .todd-hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .todd-hide-tablet,
+  .todd-hide-tablet,
+  .todd-hide-tablet {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .todd-hide-desktop,
+  .todd-hide-desktop,
+  .todd-hide-desktop {
+    display: none !important;
+  }
+}

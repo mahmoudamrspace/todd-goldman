@@ -18,8 +18,9 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
-import appearData from "@framer/data/appear.json";
+import appearData from "@/content/data/appear.json";
 import { useHeroScroll } from "@/features/HeroScrollContext";
+import { LENIS_SCROLL_EVENT } from "@/features/SmoothScroll";
 import {
   HERO_SCATTER,
   HERO_SCROLL_SPRING,
@@ -199,7 +200,7 @@ type AppearScatterProps = {
   children?: ReactNode;
   className?: string;
   style?: CSSProperties;
-  dataFramerName?: string;
+  dataToddName?: string;
   hoverProps: Record<string, unknown>;
   initial: Record<string, unknown> | undefined;
   animateValues: Record<string, unknown> | undefined;
@@ -212,7 +213,7 @@ function AppearScrollScatter({
   children,
   className,
   style,
-  dataFramerName,
+  dataToddName,
   hoverProps,
   initial,
   animateValues,
@@ -224,11 +225,11 @@ function AppearScrollScatter({
 
   return (
     <motion.div
-      data-framer-appear-id={id}
-      data-framer-name={dataFramerName}
+      data-todd-appear-id={id}
+      data-todd-name={dataToddName}
       className={className}
       style={{ x, y, scale, opacity, rotate, willChange: "transform" }}
-      data-framer-scroll-scatter={id}
+      data-todd-scroll-scatter={id}
       {...hoverProps}
     >
       <motion.div
@@ -253,11 +254,11 @@ export interface AppearProps {
   className?: string;
   style?: CSSProperties;
   children?: ReactNode;
-  "data-framer-name"?: string;
+  "data-todd-name"?: string;
   onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
   hoverActive?: boolean;
-  /** Apply Framer `.hover` variant class to this node (works cards). */
+  /** Apply legacy export `.hover` variant class to this node (works cards). */
   hoverClassTarget?: boolean;
 }
 
@@ -266,7 +267,7 @@ export function Appear({
   children,
   style,
   className,
-  "data-framer-name": dataFramerName,
+  "data-todd-name": dataToddName,
   onMouseEnter,
   onMouseLeave,
   hoverActive = false,
@@ -283,7 +284,7 @@ export function Appear({
   const hoverProps = {
     onMouseEnter,
     onMouseLeave,
-    "data-framer-hover": hoverActive ? "true" : undefined,
+    "data-todd-hover": hoverActive ? "true" : undefined,
   };
 
   const isServerRender = useIsServerRender();
@@ -303,20 +304,59 @@ export function Appear({
   const motionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(motionRef, { once: true, amount: 0.1 });
   const [safetyVisible, setSafetyVisible] = useState(false);
+  const [scrollVisible, setScrollVisible] = useState(false);
   const useScrollScatter = Boolean(heroScroll && scatter && entry);
   const isHeroIllustration = id === "10mg3pr";
 
   useEffect(() => {
     if (reduced || isServerRender || useScrollScatter) return;
-    const safety = window.setTimeout(() => setSafetyVisible(true), APPEAR_SAFETY_MS);
+    const safety = window.setTimeout(() => {
+      const node = motionRef.current;
+      if (!node) return;
+      const rect = node.getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0) return;
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const visibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
+      if (visibleHeight >= Math.max(rect.height * 0.2, 24)) setSafetyVisible(true);
+    }, APPEAR_SAFETY_MS);
     return () => window.clearTimeout(safety);
+  }, [reduced, isServerRender, useScrollScatter]);
+
+  useEffect(() => {
+    if (reduced || isServerRender || useScrollScatter) return;
+    const node = motionRef.current;
+    if (!node) return;
+
+    const sync = () => {
+      const rect = node.getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0) return;
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const visibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
+      const parentRevealed = node.closest("[data-revealed='true']");
+      if (parentRevealed && visibleHeight > 0) {
+        setScrollVisible(true);
+        return;
+      }
+      if (visibleHeight >= Math.max(rect.height * 0.15, 16)) setScrollVisible(true);
+    };
+
+    window.addEventListener(LENIS_SCROLL_EVENT, sync, { passive: true });
+    window.addEventListener("scroll", sync, { passive: true });
+    window.addEventListener("resize", sync, { passive: true });
+    sync();
+
+    return () => {
+      window.removeEventListener(LENIS_SCROLL_EVENT, sync);
+      window.removeEventListener("scroll", sync);
+      window.removeEventListener("resize", sync);
+    };
   }, [reduced, isServerRender, useScrollScatter]);
 
   if (isServerRender) {
     return (
       <div
-        data-framer-appear-id={id}
-        data-framer-name={dataFramerName}
+        data-todd-appear-id={id}
+        data-todd-name={dataToddName}
         className={mergedClassName}
         style={staticExportStyle(style, entry)}
         {...hoverProps}
@@ -333,8 +373,8 @@ export function Appear({
 
     return (
       <div
-        data-framer-appear-id={id}
-        data-framer-name={dataFramerName}
+        data-todd-appear-id={id}
+        data-todd-name={dataToddName}
         className={mergedClassName}
         style={visibleStyle}
         {...hoverProps}
@@ -350,7 +390,7 @@ export function Appear({
         id={id}
         className={mergedClassName}
         style={style}
-        dataFramerName={dataFramerName}
+        dataToddName={dataToddName}
         hoverProps={hoverProps}
         initial={initial}
         animateValues={animateValues as Record<string, unknown> | undefined}
@@ -362,12 +402,12 @@ export function Appear({
     );
   }
 
-  if (safetyVisible && !isInView) {
+  if (safetyVisible && !isInView && !scrollVisible) {
     const visibleStyle = mergeFinalStyle(style, animateValues as Record<string, unknown> | undefined);
     return (
       <div
-        data-framer-appear-id={id}
-        data-framer-name={dataFramerName}
+        data-todd-appear-id={id}
+        data-todd-name={dataToddName}
         className={mergedClassName}
         style={visibleStyle}
         {...hoverProps}
@@ -377,6 +417,7 @@ export function Appear({
     );
   }
 
+  const latchedVisible = isInView || scrollVisible;
   const motionStyle: CSSProperties = { ...style };
   if (motionStyle.opacity === 0 || motionStyle.opacity === "0") {
     delete motionStyle.opacity;
@@ -388,13 +429,16 @@ export function Appear({
   return (
     <motion.div
       ref={motionRef}
-      data-framer-appear-id={id}
-      data-framer-name={dataFramerName}
+      data-todd-appear-id={id}
+      data-todd-name={dataToddName}
       className={mergedClassName}
       style={motionStyle}
       {...hoverProps}
       initial={initial as TargetAndTransition | undefined}
-      whileInView={animateValues as TargetAndTransition | undefined}
+      animate={latchedVisible ? (animateValues as TargetAndTransition | undefined) : undefined}
+      whileInView={
+        latchedVisible ? undefined : (animateValues as TargetAndTransition | undefined)
+      }
       viewport={{ once: true, amount: isHeroIllustration ? 0 : 0.15 }}
       transition={transition as Transition | undefined}
     >

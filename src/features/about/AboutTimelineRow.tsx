@@ -29,41 +29,41 @@ export interface AboutTimelineRowProps {
 export function AboutTimelineRow({ entry, index, variant }: AboutTimelineRowProps) {
   const yearClass =
     variant === "mobile"
-      ? "framer-1x0q8a7"
+      ? "todd-layout__utility-001"
       : variant === "tablet"
-        ? "framer-1x0q8a7"
-        : "framer-1x0q8a7";
+        ? "todd-layout__utility-001"
+        : "todd-layout__utility-001";
 
   return (
     <div
       className={yearClass}
-      data-framer-name={`Timeline ${String(index + 1).padStart(2, "0")}`}
+      data-todd-name={`Timeline ${String(index + 1).padStart(2, "0")}`}
       data-about-timeline-index={index}
     >
       <div
-        className="framer-1hl0k4c"
-        data-framer-component-type="RichTextContainer"
+        className="todd-nav-overlay-content__desktop-4-2"
+        data-todd-component-type="RichTextContainer"
         style={{ transform: "none" }}
       >
-        <p className="framer-text" dir="auto">
+        <p className="todd-text" dir="auto">
           <AnimatedWords text={entry.year} />
         </p>
       </div>
       <div
-        className="framer-1luxota"
-        data-framer-component-type="RichTextContainer"
+        className="todd-nav-overlay-content__desktop-4-3"
+        data-todd-component-type="RichTextContainer"
         style={{ transform: "none" }}
       >
-        <p className="framer-text" dir="auto">
+        <p className="todd-text" dir="auto">
           <AnimatedWords text={entry.milestone} />
         </p>
       </div>
       <div
-        className="framer-1hl0k4c"
-        data-framer-component-type="RichTextContainer"
+        className="todd-nav-overlay-content__desktop-4-2"
+        data-todd-component-type="RichTextContainer"
         style={{ transform: "none" }}
       >
-        <p className="framer-text" dir="auto">
+        <p className="todd-text" dir="auto">
           <AnimatedSpan y={10}>{entry.location}</AnimatedSpan>
         </p>
       </div>

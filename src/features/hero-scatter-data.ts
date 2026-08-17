@@ -1,4 +1,4 @@
-/** Reference Framer scroll-scatter targets for Hero illustration pieces. */
+/** Reference legacy export scroll-scatter targets for Hero illustration pieces. */
 export type HeroScatterTarget = {
   x: number;
   y: number;
@@ -17,6 +17,7 @@ export const HERO_SCROLL_SPRING = {
   damping: 60,
   stiffness: 500,
   mass: 1,
+  restDelta: 0.001,
 } as const;
 
 export const HERO_SCATTER: Record<string, HeroScatterTarget> = {

@@ -1,6 +1,7 @@
 /* FAQ accordion — smooth collapse, white answers on green surface */
 
-.framer-E5ePz .faq-accordion__panel {
+.todd-faq__item .faq-accordion__panel,
+.todd-faq__faq-accordion-item .faq-accordion__panel {
   display: grid;
   grid-template-rows: 0fr;
   width: 100%;
@@ -10,13 +11,16 @@
   transition: grid-template-rows 0.55s var(--ease-faq);
 }
 
-.framer-E5ePz .faq-accordion__panel.is-open {
+.todd-faq__item .faq-accordion__panel.is-open,
+.todd-faq__faq-accordion-item .faq-accordion__panel.is-open {
   grid-template-rows: 1fr;
-  padding: 0 0 16px;
+  padding: 0 0 var(--card-pad);
 }
 
-.framer-E5ePz.framer-v-wlit4m,
-.framer-E5ePz[data-framer-name="Open"] {
+.todd-faq__item.todd-state--open,
+.todd-faq__item[data-todd-name="Open"],
+.todd-faq__faq-accordion-item.todd-layout__utility-027,
+.todd-faq__faq-accordion-item[data-todd-name="Open"] {
   overflow: visible;
 }
 
@@ -32,21 +36,24 @@
 }
 
 .faq-accordion__answer,
-.faq-accordion__answer.framer-text {
+.faq-accordion__answer.todd-text {
   color: var(--color-cream) !important;
-  --framer-text-color: var(--color-cream);
+  --todd-text-color: var(--color-cream);
 }
 
-.framer-E5ePz .framer-ohg0r path {
+.todd-faq__item .todd-nav-overlay-content__desktop-4-5 path,
+.todd-faq__faq-accordion-item .todd-nav-overlay-content__desktop-4-5 path {
   transition: fill-opacity 0.4s cubic-bezier(0.12, 0.23, 0.17, 0.99);
 }
 
-.framer-E5ePz[data-framer-name="Closed"]:hover {
+.todd-faq__item[data-todd-name="Closed"]:hover,
+.todd-faq__faq-accordion-item[data-todd-name="Closed"]:hover {
   --border-color: rgb(251, 251, 251);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .framer-E5ePz .faq-accordion__panel {
+  .todd-faq__item .faq-accordion__panel,
+  .todd-faq__faq-accordion-item .faq-accordion__panel {
     transition: none;
   }
 

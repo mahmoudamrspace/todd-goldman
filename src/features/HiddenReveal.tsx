@@ -2,15 +2,16 @@
 
 import {
   motion,
-  motionValue,
   useInView,
+  useMotionValueEvent,
   useReducedMotion,
   useScroll,
   useTransform,
-  type MotionValue,
 } from "motion/react";
 import {
+  createContext,
   useCallback,
+  useContext,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -25,22 +26,27 @@ import { LENIS_SCROLL_EVENT } from "@/features/SmoothScroll";
 
 const REVEAL_SAFETY_MS = 2000;
 const REVEAL_TRANSITION = "opacity 0.6s ease, transform 0.6s ease";
+const SECTION_REVEAL_TRANSITION =
+  "opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)";
 const FOOTER_HEADLINE_TRANSITION =
   "opacity 1s cubic-bezier(0.12, 0.23, 0.17, 0.99), transform 1s cubic-bezier(0.12, 0.23, 0.17, 0.99)";
-const SNEAK_TREE_TRANSITION =
-  "opacity 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)";
 
 export type HiddenRevealVariant =
   | "default"
-  | "sneak-tree"
   | "footer-headline"
   | "testimonial-card"
   | "testimonial-image"
   | "testimonial-title"
   | "intro-decor"
   | "intro-character"
+  | "section-scroll-artwork"
   | "work-block"
-  | "services-row";
+  | "services-row"
+  | "section-heading"
+  | "section-artwork"
+  | "section-row"
+  | "section-cta"
+  | "faq-item";
 
 const TESTIMONIAL_IMAGE_REVEAL_SCALE = 1.08084;
 
@@ -60,7 +66,7 @@ interface ParsedTransform {
   hiddenTransform?: string;
 }
 
-function parseFramerStyle(style?: CSSProperties): ParsedTransform {
+function parseRevealStyle(style?: CSSProperties): ParsedTransform {
   const opacity = parseOpacity(style);
   const hidden = opacity <= 0.001;
   const transformValue = typeof style?.transform === "string" ? style.transform : undefined;
@@ -75,6 +81,7 @@ function parseFramerStyle(style?: CSSProperties): ParsedTransform {
 type VariantConfig = {
   amount: number;
   once: boolean;
+  replay?: boolean;
   baseDelay: number;
   transition: string;
   noSafety?: boolean;
@@ -84,15 +91,43 @@ type VariantConfig = {
   revealedTransformOrigin?: string;
 };
 
+const BooksReplayContext = createContext(false);
+
+export function BooksReplayProvider({
+  sectionRef,
+  children,
+}: {
+  sectionRef: RefObject<HTMLElement | null>;
+  children: ReactNode;
+}) {
+  const reduced = useReducedMotion();
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || reduced) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(Boolean(entry?.isIntersecting)),
+      {
+        rootMargin: "-8% 0px -8% 0px",
+        threshold: 0,
+      },
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, [reduced, sectionRef]);
+
+  return (
+    <BooksReplayContext.Provider value={Boolean(reduced || inView)}>
+      {children}
+    </BooksReplayContext.Provider>
+  );
+}
+
 function variantConfig(variant: HiddenRevealVariant): VariantConfig {
   switch (variant) {
-    case "sneak-tree":
-      return {
-        amount: 1,
-        once: false,
-        baseDelay: 0,
-        transition: SNEAK_TREE_TRANSITION,
-      };
     case "footer-headline":
       return {
         amount: 0.5,
@@ -142,6 +177,7 @@ function variantConfig(variant: HiddenRevealVariant): VariantConfig {
         revealedTransform: "none",
       };
     case "intro-character":
+    case "section-scroll-artwork":
       return {
         amount: 0.15,
         once: true,
@@ -158,18 +194,50 @@ function variantConfig(variant: HiddenRevealVariant): VariantConfig {
         transition: REVEAL_TRANSITION,
         noSafety: true,
         sectionGatedSafety: true,
-        sectionSelector: 'main[data-framer-name="Main"]',
+        sectionSelector: 'main[data-todd-name="Main"]',
         revealedTransform: "none",
       };
     case "services-row":
       return {
         amount: 0.2,
-        once: true,
+        once: false,
+        replay: true,
         baseDelay: 0,
         transition:
           "opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1)",
-        sectionGatedSafety: true,
-        sectionSelector: 'section[data-framer-name="Services"]',
+        revealedTransform: "none",
+      };
+    case "section-heading":
+      return {
+        amount: 0.2,
+        once: true,
+        baseDelay: 0,
+        transition: SECTION_REVEAL_TRANSITION,
+        revealedTransform: "none",
+      };
+    case "section-artwork":
+      return {
+        amount: 0.12,
+        once: true,
+        baseDelay: 0.08,
+        transition: SECTION_REVEAL_TRANSITION,
+        revealedTransform: "none",
+      };
+    case "section-row":
+    case "faq-item":
+      return {
+        amount: 0.12,
+        once: true,
+        baseDelay: 0.12,
+        transition: SECTION_REVEAL_TRANSITION,
+        revealedTransform: "none",
+      };
+    case "section-cta":
+      return {
+        amount: 0.1,
+        once: true,
+        baseDelay: 0.24,
+        transition: SECTION_REVEAL_TRANSITION,
         revealedTransform: "none",
       };
     default:
@@ -184,9 +252,11 @@ function variantConfig(variant: HiddenRevealVariant): VariantConfig {
 
 function isElementInView(node: HTMLElement, amount = 0.15): boolean {
   const rect = node.getBoundingClientRect();
+  if (rect.width <= 0 || rect.height <= 0) return false;
   const viewportHeight = window.innerHeight || globalThis.document?.documentElement?.clientHeight || 0;
   const visibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
-  const threshold = Math.max(rect.height * amount, viewportHeight * amount);
+  if (visibleHeight <= 0) return false;
+  const threshold = Math.max(rect.height * amount, 24);
   return visibleHeight >= threshold;
 }
 
@@ -199,55 +269,6 @@ function resolveVisibilityTarget(
     if (section instanceof HTMLElement) return section;
   }
   return ref.current;
-}
-
-function isElementFullyOut(node: HTMLElement): boolean {
-  const rect = node.getBoundingClientRect();
-  const viewportHeight = window.innerHeight || globalThis.document?.documentElement?.clientHeight || 0;
-  const viewportWidth = window.innerWidth || globalThis.document?.documentElement?.clientWidth || 0;
-  return rect.bottom <= 0 || rect.top >= viewportHeight || rect.right <= 0 || rect.left >= viewportWidth;
-}
-
-function isElementMostlyInView(node: HTMLElement, amount = 0.95): boolean {
-  const rect = node.getBoundingClientRect();
-  const viewportHeight = window.innerHeight || globalThis.document?.documentElement?.clientHeight || 0;
-  const viewportWidth = window.innerWidth || globalThis.document?.documentElement?.clientWidth || 0;
-  const visibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
-  const visibleWidth = Math.min(rect.right, viewportWidth) - Math.max(rect.left, 0);
-  const visibleArea = Math.max(0, visibleHeight) * Math.max(0, visibleWidth);
-  const totalArea = Math.max(rect.width * rect.height, 1);
-  return visibleArea / totalArea >= amount;
-}
-
-/** Hysteresis for sneak-tree: enter at 85% visible, reset only when fully out of viewport. */
-function useSneakTreeVisibility(ref: RefObject<HTMLElement | null>) {
-  const [shown, setShown] = useState(false);
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-
-    const sync = () => {
-      if (isElementMostlyInView(node, 0.85)) {
-        setShown(true);
-        return;
-      }
-      if (isElementFullyOut(node)) setShown(false);
-    };
-
-    window.addEventListener(LENIS_SCROLL_EVENT, sync, { passive: true });
-    window.addEventListener("scroll", sync, { passive: true });
-    window.addEventListener("resize", sync, { passive: true });
-    sync();
-
-    return () => {
-      window.removeEventListener(LENIS_SCROLL_EVENT, sync);
-      window.removeEventListener("scroll", sync);
-      window.removeEventListener("resize", sync);
-    };
-  }, [ref]);
-
-  return shown;
 }
 
 function applyRevealedStyles(
@@ -275,19 +296,24 @@ function HeroIntroDecorReveal({
   children,
   className,
   style,
-  dataFramerName,
+  dataToddName,
   transition,
 }: {
   children: ReactNode;
   className?: string;
   style?: CSSProperties;
-  dataFramerName?: string;
+  dataToddName?: string;
   transition: string;
 }) {
   const reduced = useReducedMotion();
   const heroScroll = useHeroScroll();
   const ref = useRef<HTMLDivElement>(null);
   const [revealed, setRevealed] = useState(false);
+  const inView = useInView(ref, { amount: 0.15, once: true });
+
+  useEffect(() => {
+    if (inView) setRevealed(true);
+  }, [inView]);
 
   useEffect(() => {
     if (reduced || !heroScroll) return;
@@ -316,12 +342,13 @@ function HeroIntroDecorReveal({
     <div
       ref={ref}
       className={className}
-      data-framer-name={dataFramerName}
+      data-todd-name={dataToddName}
+      data-revealed={reduced || revealed || inView ? "true" : undefined}
       style={{
         ...style,
-        opacity: reduced || revealed ? "1" : hiddenOpacity,
-        transform: reduced || revealed ? "none" : hiddenTransform,
-        willChange: revealed ? "auto" : style?.willChange,
+        opacity: reduced || revealed || inView ? "1" : hiddenOpacity,
+        transform: reduced || revealed || inView ? "none" : hiddenTransform,
+        willChange: revealed || inView ? "auto" : style?.willChange,
         transition,
       }}
     >
@@ -330,45 +357,71 @@ function HeroIntroDecorReveal({
   );
 }
 
-/** Character stays hidden until the intro section itself scrolls into view. */
-function IntroCharacterReveal({
+/** Element-relative artwork reveal shared by Intro and later illustrated sections. */
+function ScrollArtworkReveal({
   children,
   className,
   style,
-  dataFramerName,
+  dataToddName,
   transition,
+  initialY = 50,
+  initialScale = 0.5,
 }: {
   children: ReactNode;
   className?: string;
   style?: CSSProperties;
-  dataFramerName?: string;
+  dataToddName?: string;
   transition: string;
+  initialY?: number;
+  initialScale?: number;
 }) {
   const reduced = useReducedMotion();
-  const heroScroll = useHeroScroll();
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
-    target: heroScroll?.introRef ?? ref,
-    offset: ["start start", "end start"],
+    target: ref,
+    offset: ["start end", "center center"],
   });
   const hiddenOpacity = parseOpacity(style) <= 0.001 ? String(parseOpacity(style)) : "0";
+  const [revealed, setRevealed] = useState(false);
+  const inView = useInView(ref, { amount: 0.25, once: true });
+
+  useMotionValueEvent(scrollYProgress, "change", (value) => {
+    if (snapProgress(value, 16) >= 0.05) setRevealed(true);
+  });
+
+  useEffect(() => {
+    if (inView) setRevealed(true);
+  }, [inView]);
+
+  useEffect(() => {
+    const sync = () => {
+      if (snapProgress(scrollYProgress.get(), 16) >= 0.05) setRevealed(true);
+    };
+    sync();
+    window.addEventListener(LENIS_SCROLL_EVENT, sync, { passive: true });
+    window.addEventListener("scroll", sync, { passive: true });
+    return () => {
+      window.removeEventListener(LENIS_SCROLL_EVENT, sync);
+      window.removeEventListener("scroll", sync);
+    };
+  }, [scrollYProgress]);
   const opacity = useTransform(scrollYProgress, (value) => {
     const p = snapProgress(value, 16);
-    if (p <= 0.2) return hiddenOpacity;
-    if (p >= 0.55) return 1;
-    return String(Math.min(1, (p - 0.2) / 0.35));
+    if (p <= 0.05) return hiddenOpacity;
+    if (p >= 0.65) return 1;
+    return String(Math.min(1, (p - 0.05) / 0.6));
   });
   const y = useTransform(scrollYProgress, (value) => {
     const p = snapProgress(value, 16);
-    if (p <= 0.2) return 50;
-    if (p >= 0.55) return 0;
-    return 50 * (1 - (p - 0.2) / 0.35);
+    if (p <= 0.05) return initialY;
+    if (p >= 0.65) return 0;
+    return initialY * (1 - (p - 0.05) / 0.6);
   });
   const scale = useTransform(scrollYProgress, (value) => {
     const p = snapProgress(value, 16);
-    if (p <= 0.2) return 0.5;
-    if (p >= 0.55) return 1;
-    return 0.5 + ((p - 0.2) / 0.35) * 0.5;
+    if (p <= 0.05) return initialScale;
+    if (p >= 0.65) return 1;
+    return initialScale + ((p - 0.05) / 0.6) * (1 - initialScale);
   });
 
   if (reduced) {
@@ -376,7 +429,8 @@ function IntroCharacterReveal({
       <div
         ref={ref}
         className={className}
-        data-framer-name={dataFramerName}
+        data-todd-name={dataToddName}
+        data-revealed="true"
         style={{
           ...style,
           opacity: "1",
@@ -394,7 +448,9 @@ function IntroCharacterReveal({
     <motion.div
       ref={ref}
       className={className}
-      data-framer-name={dataFramerName}
+      data-todd-name={dataToddName}
+      data-revealed={revealed || inView ? "true" : undefined}
+      data-in-view={inView ? "true" : undefined}
       style={{
         ...style,
         opacity,
@@ -418,13 +474,14 @@ export interface HiddenRevealProps {
   id?: string;
   href?: string;
   as?: "div" | "section";
-  "data-framer-name"?: string;
+  replayGroup?: "books";
+  "data-todd-name"?: string;
   "data-highlight"?: boolean;
 }
 
-/** Reveals Framer SSR pre-animation nodes on scroll. */
+/** Reveals legacy export SSR pre-animation nodes on scroll. */
 export function HiddenReveal(props: HiddenRevealProps) {
-  const parsed = parseFramerStyle(props.style);
+  const parsed = parseRevealStyle(props.style);
   const config = variantConfig(props.variant ?? "default");
 
   if (props.variant === "intro-decor" && parsed.needsReveal) {
@@ -432,7 +489,7 @@ export function HiddenReveal(props: HiddenRevealProps) {
       <HeroIntroDecorReveal
         className={props.className}
         style={props.style}
-        dataFramerName={props["data-framer-name"]}
+        dataToddName={props["data-todd-name"]}
         transition={config.transition}
       >
         {props.children}
@@ -442,14 +499,29 @@ export function HiddenReveal(props: HiddenRevealProps) {
 
   if (props.variant === "intro-character" && parsed.needsReveal) {
     return (
-      <IntroCharacterReveal
+      <ScrollArtworkReveal
         className={props.className}
         style={props.style}
-        dataFramerName={props["data-framer-name"]}
+        dataToddName={props["data-todd-name"]}
         transition={config.transition}
       >
         {props.children}
-      </IntroCharacterReveal>
+      </ScrollArtworkReveal>
+    );
+  }
+
+  if (props.variant === "section-scroll-artwork" && parsed.needsReveal) {
+    return (
+      <ScrollArtworkReveal
+        className={props.className}
+        style={props.style}
+        dataToddName={props["data-todd-name"]}
+        transition={config.transition}
+        initialY={40}
+        initialScale={0.9}
+      >
+        {props.children}
+      </ScrollArtworkReveal>
     );
   }
 
@@ -465,17 +537,19 @@ function HiddenRevealDefault({
   id,
   href,
   as = "div",
-  "data-framer-name": dataFramerName,
+  replayGroup,
+  "data-todd-name": dataToddName,
   "data-highlight": dataHighlight,
 }: HiddenRevealProps) {
   const reduced = useReducedMotion();
   const config = variantConfig(variant);
   const totalDelay = config.baseDelay + delay;
   const ref = useRef<HTMLElement>(null);
-  const parsed = parseFramerStyle(style);
+  const parsed = parseRevealStyle(style);
   const [revealed, setRevealed] = useState(false);
   const isInView = useInView(ref, { once: config.once, amount: config.amount });
-  const sneakTreeShown = useSneakTreeVisibility(ref);
+  const booksReplayVisible = useContext(BooksReplayContext);
+  const groupedReplay = replayGroup === "books";
 
   const reveal = useCallback(() => {
     const node = ref.current;
@@ -492,13 +566,22 @@ function HiddenRevealDefault({
   }, [totalDelay, config.transition, config.revealedTransform, config.revealedTransformOrigin]);
 
   useLayoutEffect(() => {
-    if (!parsed.needsReveal || reduced || variant === "sneak-tree") return;
+    if (!parsed.needsReveal || reduced || config.replay || groupedReplay) return;
     const target = resolveVisibilityTarget(ref, config.sectionSelector);
     if (target && isElementInView(target, config.amount)) reveal();
-  }, [parsed.needsReveal, reduced, reveal, config.amount, config.sectionSelector, variant]);
+  }, [
+    parsed.needsReveal,
+    reduced,
+    reveal,
+    config.amount,
+    config.sectionSelector,
+    config.replay,
+    groupedReplay,
+    variant,
+  ]);
 
   useEffect(() => {
-    if (!parsed.needsReveal || reduced || variant === "sneak-tree") return;
+    if (!parsed.needsReveal || reduced || config.replay || groupedReplay) return;
 
     if (config.sectionGatedSafety) {
       const tick = () => {
@@ -506,14 +589,7 @@ function HiddenRevealDefault({
         if (target && isElementInView(target, config.amount)) reveal();
       };
       const interval = window.setInterval(tick, 250);
-      const stop = window.setTimeout(
-        () => window.clearInterval(interval),
-        REVEAL_SAFETY_MS + totalDelay * 1000,
-      );
-      return () => {
-        window.clearInterval(interval);
-        window.clearTimeout(stop);
-      };
+      return () => window.clearInterval(interval);
     }
 
     if (config.noSafety) return;
@@ -529,10 +605,12 @@ function HiddenRevealDefault({
     config.sectionGatedSafety,
     config.sectionSelector,
     config.amount,
+    config.replay,
+    groupedReplay,
   ]);
 
   useEffect(() => {
-    if (!parsed.needsReveal || reduced || variant === "sneak-tree") return;
+    if (!parsed.needsReveal || reduced || config.replay || groupedReplay) return;
 
     const checkVisible = () => {
       const target = resolveVisibilityTarget(ref, config.sectionSelector);
@@ -550,11 +628,24 @@ function HiddenRevealDefault({
       window.removeEventListener("scroll", checkVisible);
       window.removeEventListener("resize", checkVisible);
     };
-  }, [parsed.needsReveal, reduced, reveal, variant, config.amount, config.sectionSelector]);
+  }, [
+    parsed.needsReveal,
+    reduced,
+    reveal,
+    variant,
+    config.amount,
+    config.sectionSelector,
+    config.replay,
+    groupedReplay,
+  ]);
 
   const isVisible =
     reduced ||
-    (variant === "sneak-tree" ? sneakTreeShown : revealed || isInView);
+    (groupedReplay
+      ? booksReplayVisible
+      : config.replay
+      ? isInView
+      : revealed || isInView);
 
   if (!parsed.needsReveal) {
     const Tag = as;
@@ -563,7 +654,7 @@ function HiddenRevealDefault({
         <a
           id={id}
           className={className}
-          data-framer-name={dataFramerName}
+          data-todd-name={dataToddName}
           data-highlight={dataHighlight}
           href={href}
           style={style}
@@ -573,7 +664,7 @@ function HiddenRevealDefault({
       );
     }
     return (
-      <Tag id={id} className={className} data-framer-name={dataFramerName} style={style}>
+      <Tag id={id} className={className} data-todd-name={dataToddName} style={style}>
         {children}
       </Tag>
     );
@@ -599,10 +690,11 @@ function HiddenRevealDefault({
         ref={ref as Ref<HTMLAnchorElement>}
         id={id}
         className={className}
-        data-framer-name={dataFramerName}
+        data-todd-name={dataToddName}
         data-highlight={dataHighlight}
         href={href}
         style={nodeStyle}
+        data-revealed={isVisible ? "true" : undefined}
       >
         {children}
       </a>
@@ -611,7 +703,15 @@ function HiddenRevealDefault({
 
   const Tag = as;
   return (
-    <Tag ref={ref as never} id={id} className={className} data-framer-name={dataFramerName} style={nodeStyle}>
+    <Tag
+      ref={ref as never}
+      id={id}
+      className={className}
+      data-todd-name={dataToddName}
+      data-revealed={isVisible ? "true" : undefined}
+      style={nodeStyle}
+      onFocusCapture={reveal}
+    >
       {children}
     </Tag>
   );
@@ -624,18 +724,18 @@ export interface AnimatedSpanProps {
   children: ReactNode;
   delay?: number;
   className?: string;
-  framerText?: boolean;
+  textClass?: boolean;
   y?: number;
-  variant?: "default" | "sneak-title" | "work-detail" | "services";
+  variant?: "default" | "work-detail" | "services";
   inlineDisplay?: boolean;
 }
 
-/** Word-level intro animation matching Framer stagger. */
+/** Word-level intro animation matching legacy export stagger. */
 export function AnimatedSpan({
   children,
   delay = 0,
   className,
-  framerText = false,
+  textClass = false,
   y = 10,
   variant = "default",
   inlineDisplay = false,
@@ -643,16 +743,14 @@ export function AnimatedSpan({
   const reduced = useReducedMotion();
   const heroScroll = useHeroScroll();
   const ref = useRef<HTMLSpanElement>(null);
-  const amount =
-    variant === "sneak-title" ? 0.5 : variant === "services" ? 0.15 : 0.2;
-  const isInView = useInView(ref, { once: true, amount });
+  const amount = variant === "services" ? 0.15 : 0.2;
+  const isInView = useInView(ref, { once: variant !== "services", amount });
   const [safetyRevealed, setSafetyRevealed] = useState(false);
   const [sectionRevealed, setSectionRevealed] = useState(false);
   const [heroRevealed, setHeroRevealed] = useState(false);
 
   useEffect(() => {
-    if (reduced || variant === "sneak-title" || variant === "work-detail" || variant === "services")
-      return;
+    if (reduced || variant === "work-detail" || variant === "services") return;
     const node = ref.current;
     if (!node?.closest("#text_intro") || !heroScroll) return;
 
@@ -674,7 +772,7 @@ export function AnimatedSpan({
   }, [reduced, delay, heroScroll, variant]);
 
   useEffect(() => {
-    if (reduced || variant === "sneak-title") return;
+    if (reduced || variant === "services") return;
     if (variant === "work-detail") {
       const safety = window.setTimeout(() => setSafetyRevealed(true), REVEAL_SAFETY_MS + delay * 1000);
       return () => window.clearTimeout(safety);
@@ -686,26 +784,17 @@ export function AnimatedSpan({
   }, [reduced, delay, variant]);
 
   useEffect(() => {
-    if (reduced) return;
+    if (reduced || variant === "services") return;
     const node = ref.current;
     const introSection = node?.closest("#text_intro") as HTMLElement | null;
-    const aboutSection = node?.closest('section[data-framer-name="About"]') as HTMLElement | null;
-    const sneakSection = node?.closest('section[data-framer-name="Sneak peak"]') as HTMLElement | null;
-    const servicesSection = node?.closest('section[data-framer-name="Services"]') as HTMLElement | null;
-    const workMain = node?.closest('main[data-framer-name="Main"]') as HTMLElement | null;
+    const aboutSection = node?.closest('section[data-todd-name="About"]') as HTMLElement | null;
+    const workMain = node?.closest('main[data-todd-name="Main"]') as HTMLElement | null;
     const gateSection =
-      variant === "sneak-title"
-        ? sneakSection
-        : variant === "work-detail"
-          ? workMain
-          : variant === "services"
-            ? servicesSection
-            : introSection ?? aboutSection;
+      variant === "work-detail" ? workMain : introSection ?? aboutSection;
     if (!gateSection) return;
 
     const sync = () => {
-      const threshold = variant === "sneak-title" ? 0.35 : 0.1;
-      if (isElementInView(gateSection, threshold)) setSectionRevealed(true);
+      if (isElementInView(gateSection, 0.1)) setSectionRevealed(true);
     };
 
     window.addEventListener(LENIS_SCROLL_EVENT, sync, { passive: true });
@@ -721,8 +810,7 @@ export function AnimatedSpan({
   }, [reduced, variant]);
 
   useEffect(() => {
-    if (reduced || variant === "sneak-title" || variant === "work-detail" || variant === "services")
-      return;
+    if (reduced || variant === "work-detail" || variant === "services") return;
     const node = ref.current;
     if (!node || node.closest("#text_intro")) return;
 
@@ -744,18 +832,18 @@ export function AnimatedSpan({
 
   const visible =
     reduced ||
-    isInView ||
-    sectionRevealed ||
-    heroRevealed ||
-    (variant === "work-detail" && safetyRevealed) ||
-    (variant !== "sneak-title" && variant !== "work-detail" && safetyRevealed);
-  const spanClass = [framerText ? "framer-text" : "", className].filter(Boolean).join(" ");
+    (variant === "services"
+      ? isInView
+      : isInView ||
+        sectionRevealed ||
+        heroRevealed ||
+        (variant === "work-detail" && safetyRevealed) ||
+        (variant !== "work-detail" && safetyRevealed));
+  const spanClass = [textClass ? "todd-text" : "", className].filter(Boolean).join(" ");
   const transition =
-    variant === "sneak-title"
-      ? { duration: 0.8, ease: [0.34, 1, 0.64, 1] as const, delay }
-      : variant === "services"
-        ? { duration: 0.85, ease: SITE_EASE_OUT, delay }
-        : { duration: 1.4, ease: SITE_EASE_OUT, delay };
+    variant === "services"
+      ? { duration: 0.85, ease: SITE_EASE_OUT, delay }
+      : { duration: 1.4, ease: SITE_EASE_OUT, delay };
 
   return (
     <motion.span
@@ -775,7 +863,7 @@ export function AnimatedSpan({
   );
 }
 
-/** Staggered word spans matching Framer intro typography. */
+/** Staggered word spans matching legacy export intro typography. */
 export function AnimatedWords({
   text,
   startDelay = 0,
@@ -787,7 +875,7 @@ export function AnimatedWords({
   startDelay?: number;
   y?: number;
   stagger?: number;
-  variant?: "default" | "sneak-title" | "work-detail" | "services";
+  variant?: "default" | "work-detail" | "services";
 }) {
   const words = text.trim().split(/\s+/).filter(Boolean);
   const wordStagger = variant === "services" ? 0.04 : stagger;

@@ -40,6 +40,16 @@
   --bp-tablet: 810px;
   --bp-desktop: 1200px;
 
+  /* Card geometry — shared width, gutter, and padding contract */
+  --card-gutter: var(--container-pad);
+  --card-pad-sm: 12px;
+  --card-pad: 16px;
+  --card-pad-lg: 20px;
+  --card-gap: var(--space-4);
+  --card-radius: 18px;
+  --card-max-width: var(--container-max);
+  --card-viewport-width: min(var(--card-max-width), calc(100vw - (var(--card-gutter) * 2)));
+
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-faq: cubic-bezier(0.12, 0.23, 0.17, 0.99);
   --ease-nav: cubic-bezier(0.27, 0.1, 0.17, 1);

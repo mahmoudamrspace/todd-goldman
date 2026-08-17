@@ -3,18 +3,18 @@ import { AnimatedSpan } from "@/features/HiddenReveal";
 
 const BODY_BOLD_STYLE = {
   "--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=",
-  "--framer-font-weight": "700",
-  "--framer-text-color": "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))",
+  "--todd-font-weight": "700",
+  "--todd-text-color": "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))",
 } as const;
 
 const CLIENT_BOLD_STYLE = {
   "--font-selector": "RlI7SW50ZXJEaXNwbGF5LUJvbGQ=",
-  "--framer-font-weight": "700",
-  "--framer-text-color": "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))",
+  "--todd-font-weight": "700",
+  "--todd-text-color": "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))",
 } as const;
 
 const SEPARATOR_STYLE = {
-  "--framer-text-color": "var(--token-ae5d2ed2-395e-4ac7-9825-f57ad4d7ddc7, rgb(240, 205, 62))",
+  "--todd-text-color": "var(--token-ae5d2ed2-395e-4ac7-9825-f57ad4d7ddc7, rgb(240, 205, 62))",
 } as const;
 
 const BOLD_CLIENT_NAMES = new Set([
@@ -32,7 +32,7 @@ export function AboutBodyRichText({ body }: { body: string }) {
 
   return (
     <>
-      <span className={"framer-text"} style={BODY_BOLD_STYLE}>
+      <span className={"todd-text"} style={BODY_BOLD_STYLE}>
         {"         "}
         {lead}
       </span>
@@ -51,22 +51,22 @@ export function AboutMeHeading({ heading = "About me" }: { heading?: string }) {
     <>
       {lead}
       <span
-        className={"framer-text"}
+        className={"todd-text"}
         style={{
           "--font-selector": "R0Y7QXZlcmlhIFNlcmlmIExpYnJlLTcwMGl0YWxpYw==",
-          "--framer-font-family": '"Averia Serif Libre", sans-serif',
-          "--framer-font-style": "italic",
+          "--todd-font-family": '"Averia Serif Libre", sans-serif',
+          "--todd-font-style": "italic",
         }}
       >
         {" "}
       </span>
       <span
-        className={"framer-text"}
+        className={"todd-text"}
         style={{
           "--font-selector": "R0Y7QXZlcmlhIFNlcmlmIExpYnJlLWl0YWxpYw==",
-          "--framer-font-family": '"Averia Serif Libre", sans-serif',
-          "--framer-font-style": "italic",
-          "--framer-font-weight": "400",
+          "--todd-font-family": '"Averia Serif Libre", sans-serif',
+          "--todd-font-style": "italic",
+          "--todd-font-weight": "400",
         }}
       >
         {tail}
@@ -75,36 +75,35 @@ export function AboutMeHeading({ heading = "About me" }: { heading?: string }) {
   );
 }
 
-/** About title h2 — “The person” in a styled `framer-text` wrapper. */
+/** Two-level editorial heading for the Twisted Mind section. */
 export function AboutMainTitle({ title }: { title: string }) {
   const words = title.split(/\s+/).filter(Boolean);
-  const lead = words.slice(0, 2);
-  const rest = words.slice(2);
+  const primary = words.slice(0, 3).join(" ");
+  const accent = words.slice(3).join(" ");
+
   return (
     <>
-      <span
-        className={"framer-text"}
-        style={{
-          "--font-selector": "R0Y7QXZlcmlhIFNlcmlmIExpYnJlLWl0YWxpYw==",
-          "--framer-font-family": '"Averia Serif Libre", sans-serif',
-          "--framer-font-style": "italic",
-          "--framer-font-weight": "400",
-        }}
-      >
-        <AnimatedSpan y={10}>{lead[0] ?? ""}</AnimatedSpan>{" "}
-        <AnimatedSpan y={10}>{lead[1] ?? ""}</AnimatedSpan>
-      </span>{" "}
-      {rest.map((word, index) => (
-        <AnimatedSpan key={`about-title-${word}-${index}`} y={10}>
+      <span className="todd-about-heading__primary">{primary || title}</span>
+      {accent ? <span className="todd-about-heading__accent">{accent}</span> : null}
+    </>
+  );
+}
+
+/** Handwritten name under the about-me card. */
+export function AboutHandwrittenName({ name }: { name: string }) {
+  return (
+    <>
+      {name.split(/\s+/).filter(Boolean).map((word, index, words) => (
+        <AnimatedSpan key={`about-name-${word}-${index}`} y={10}>
           {word}
-          {index < rest.length - 1 ? " " : ""}
+          {index < words.length - 1 ? " " : ""}
         </AnimatedSpan>
       ))}
     </>
   );
 }
 
-/** Client list with bold `framer-text` on highlighted names. */
+/** Client list with bold `todd-text` on highlighted names. */
 export function AboutClientsList({ clients }: { clients: string[] }) {
   return (
     <>
@@ -116,14 +115,14 @@ export function AboutClientsList({ clients }: { clients: string[] }) {
             ) : (
               <>
                 {" "}
-                <span className={"framer-text"} style={SEPARATOR_STYLE}>
+                <span className={"todd-text"} style={SEPARATOR_STYLE}>
                   /
                 </span>{" "}
               </>
             )
           ) : null}
           {BOLD_CLIENT_NAMES.has(client) ? (
-            <span className={"framer-text"} style={CLIENT_BOLD_STYLE}>
+            <span className={"todd-text"} style={CLIENT_BOLD_STYLE}>
               {client}
             </span>
           ) : (

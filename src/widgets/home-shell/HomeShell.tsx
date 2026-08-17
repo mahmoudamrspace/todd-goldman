@@ -19,31 +19,33 @@ import {
   toWorksContent,
 } from "@/content/section-types";
 import type { SiteSettings, Work } from "@/content/types";
+import { cn } from "@/shared/lib/cn";
+import { TODD } from "@/shared/lib/todd-semantic-classes";
 
 export interface HomeShellProps {
   site: SiteSettings;
   works: Work[];
 }
 
-/** Composes all home sections with Framer layout classes and feature behaviors. */
+/** Composes all home sections with legacy export layout classes and feature behaviors. */
 export function HomeShell({ site, works }: HomeShellProps) {
   const worksContent = toWorksContent(works, site);
   const testimonialContent = toTestimonialContent(site);
   const showTestimonials = testimonialContent.items.length > 0;
 
   return (
-    <main id="main" data-framer-hydrate-v2="" data-framer-generated-page="">
+    <main id="main" data-todd-hydrate-v2="" data-todd-generated-page="">
       <div
-        className="framer-XP9RI framer-16i3gsx"
+        className={cn(TODD.page.shell, "todd-intro__wrapper-31", "todd-page-shell-layout")}
         data-layout-template="true"
         style={{ minHeight: "100vh", width: "auto" }}
       >
         <div
-          data-framer-root=""
-          className="framer-v1Omn framer-Q4hZR framer-72rtr7"
+          data-todd-root=""
+          className={cn(TODD.page.root, "todd-page-root", "todd-page-root-layout", "todd-page-root-variant")}
           style={{ minHeight: "100vh", width: "auto", display: "contents" }}
         >
-          <div className="site-page-content">
+          <div className={TODD.page.content}>
             <HeroIntroRegion>
               <Hero content={toHeroContent(site)} />
               <Intro content={toIntroContent(site)} />

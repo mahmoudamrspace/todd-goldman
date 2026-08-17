@@ -1,22 +1,22 @@
 import type { CSSProperties } from "react";
 
-/** Maps Framer nav closed variant classes to open variants. */
+/** Maps legacy export nav closed variant classes to open variants. */
 export const NAV_VARIANTS = {
   desktop: {
-    closed: "framer-v-7daz3r",
-    open: "framer-v-pw2coq",
+    closed: "todd-layout__utility-017",
+    open: "todd-layout__utility-023",
     closedName: "Desktop Closed",
     openName: "Desktop Open",
   },
   tablet: {
-    closed: "framer-v-ns08x6",
-    open: "framer-v-pw2coq",
+    closed: "todd-layout__utility-021",
+    open: "todd-layout__utility-023",
     closedName: "Tablet Closed",
     openName: "Tablet Open",
   },
   phone: {
-    closed: "framer-v-aigtuw",
-    open: "framer-v-wwyydj",
+    closed: "todd-nav-overlay-content__desktop-4-6-aigtuw",
+    open: "todd-nav-overlay-content__desktop-4-6-wwyydj",
     closedName: "Phone Closed",
     openName: "Phone Open",
   },
@@ -32,13 +32,13 @@ export function navShellClass(
   const variant = NAV_VARIANTS[breakpoint];
   const token = open ? variant.open : variant.closed;
   const withoutClosed = base.replace(
-    /framer-v-(7daz3r|ns08x6|aigtuw|pw2coq|wwyydj)/g,
+    /todd-nav-overlay-content__desktop-4-6-(7daz3r|ns08x6|aigtuw|pw2coq|wwyydj)/g,
     "",
   );
   return `${withoutClosed.trim()} ${token}`.replace(/\s+/g, " ").trim();
 }
 
-export function navFramerName(breakpoint: NavBreakpoint, open: boolean): string {
+export function navVariantName(breakpoint: NavBreakpoint, open: boolean): string {
   const variant = NAV_VARIANTS[breakpoint];
   return open ? variant.openName : variant.closedName;
 }

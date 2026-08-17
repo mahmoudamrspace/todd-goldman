@@ -22,12 +22,12 @@ export const FOOTER_DECO_SETTLED_TRANSFORM = "translate3d(0px, 0px, 0px) scale(1
 const ENTER_DEFAULT = { x: -10, y: 50, scale: 0.9, opacity: 1 };
 const ENTER_STEM4 = { x: -5, y: 40, scale: 0.9, opacity: 1 };
 
-const LOOP_DEFAULT = { x: [0, 5, 0], y: [0, 5, 0], rotate: [0, 2, 0] };
-const LOOP_STEM4 = { x: [0, 1, 0], y: [0, 5, 0], rotate: [0, 2, 0] };
-const LOOP_STEM6 = { x: [0, -2, 0], y: [0, 5, 0], rotate: [0, 2, 0] };
+const LOOP_DEFAULT = { x: [0, 3, 0], y: [0, 3, 0], rotate: [0, 1, 0] };
+const LOOP_STEM4 = { x: [0, 1, 0], y: [0, 3, 0], rotate: [0, 1, 0] };
+const LOOP_STEM6 = { x: [0, -1, 0], y: [0, 3, 0], rotate: [0, 1, 0] };
 
 const LOOP_TRANSITION: Transition = {
-  duration: 1,
+  duration: 4.5,
   repeat: Infinity,
   repeatType: "mirror",
   ease: [0.44, 0, 0.56, 1],
@@ -53,13 +53,13 @@ export function FooterDecoMotion({
   children,
   className,
   preset = "default",
-  "data-framer-name": dataFramerName,
+  "data-todd-name": dataToddName,
   style,
 }: {
   children: ReactNode;
   className?: string;
   preset?: FooterDecoPreset;
-  "data-framer-name"?: string;
+  "data-todd-name"?: string;
   style?: CSSProperties;
 }) {
   const reduced = useReducedMotion();
@@ -72,7 +72,7 @@ export function FooterDecoMotion({
       <div
         ref={ref}
         className={className}
-        data-framer-name={dataFramerName}
+        data-todd-name={dataToddName}
         style={style}
       >
         {children}
@@ -100,7 +100,7 @@ export function FooterDecoMotion({
     <motion.div
       ref={ref}
       className={className}
-      data-framer-name={dataFramerName}
+      data-todd-name={dataToddName}
       data-footer-deco-motion=""
       style={{ ...style, transform: undefined, willChange: "transform" }}
       initial={initial}

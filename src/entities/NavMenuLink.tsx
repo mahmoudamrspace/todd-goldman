@@ -15,18 +15,18 @@ export interface NavMenuLinkProps {
   open: boolean;
   index: number;
   className: string;
-  "data-framer-name": string;
+  "data-todd-name": string;
   onMouseEnter?: () => void;
   children: ReactNode;
 }
 
-/** Staggered nav overlay link entrance matching Framer spring timing. */
+/** Staggered nav overlay link entrance matching legacy export spring timing. */
 export function NavMenuLink({
   href,
   open,
   index,
   className,
-  "data-framer-name": dataFramerName,
+  "data-todd-name": dataToddName,
   onMouseEnter,
   children,
 }: NavMenuLinkProps) {
@@ -40,7 +40,7 @@ export function NavMenuLink({
     return (
       <a
         className={className}
-        data-framer-name={dataFramerName}
+        data-todd-name={dataToddName}
         data-highlight={true}
         href={href}
         style={{
@@ -59,7 +59,7 @@ export function NavMenuLink({
   return (
     <motion.a
       className={className}
-      data-framer-name={dataFramerName}
+      data-todd-name={dataToddName}
       data-highlight={true}
       href={href}
       style={{ willChange: "transform", pointerEvents: open ? undefined : "none" }}

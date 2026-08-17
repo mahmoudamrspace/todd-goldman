@@ -18,6 +18,7 @@ import {
   editorialSpring,
   workDetailEnter,
 } from "@/shared/lib/motion";
+import { TODD } from "@/shared/lib/todd-semantic-classes";
 
 function gallerySrcSet(src: string, width: number, height: number) {
   return `${src}?scale-down-to=512&width=${width}&height=${height} 512w,${src}?scale-down-to=1024&width=${width}&height=${height} 1024w,${src}?width=${width}&height=${height} ${width}w`;
@@ -57,7 +58,7 @@ function DetailHero({ work }: { work: Work }) {
 
   if (reduced) {
     return (
-      <div ref={ref} className="todd-detail__hero-wrap">
+      <div ref={ref} className={cn("todd-detail__hero-wrap", TODD.card.shell)}>
         {image}
       </div>
     );
@@ -66,7 +67,7 @@ function DetailHero({ work }: { work: Work }) {
   return (
     <motion.div
       ref={ref}
-      className="todd-detail__hero-wrap"
+      className={cn("todd-detail__hero-wrap", TODD.card.shell)}
       style={{ y: heroY, clipPath: heroClip }}
     >
       {image}
@@ -120,7 +121,7 @@ function DetailGalleryItem({
 
   if (reduced) {
     return (
-      <figure ref={ref} className="todd-detail__gallery-item">
+      <figure ref={ref} className={cn("todd-detail__gallery-item", TODD.card.shell)}>
         {img}
       </figure>
     );
@@ -129,7 +130,7 @@ function DetailGalleryItem({
   return (
     <motion.figure
       ref={ref}
-      className="todd-detail__gallery-item"
+      className={cn("todd-detail__gallery-item", TODD.card.shell)}
       style={{ y: itemY, clipPath: itemClip }}
     >
       {img}
@@ -168,7 +169,7 @@ export function ToddWorkDetail({ work, navLabels }: ToddWorkDetailProps) {
   };
 
   return (
-    <main className="todd-detail" data-framer-name="Main">
+    <main className="todd-detail" data-todd-name="Main">
       <div className="todd-detail__inner">
         <header className="todd-detail__header">
           {work.category
@@ -242,7 +243,7 @@ export function ToddWorkDetail({ work, navLabels }: ToddWorkDetailProps) {
         <HiddenReveal variant="work-block" style={{ opacity: 0.001, transform: "translateY(10px)" }}>
           <nav className="todd-detail__nav" aria-label="Project navigation">
             {hasPrev ? (
-              <a className="todd-detail__nav-link" href={prevHref}>
+              <a className={cn("todd-detail__nav-link", TODD.card.shell)} href={prevHref}>
                 ← {navLabels.prevFull}
               </a>
             ) : (
@@ -251,7 +252,7 @@ export function ToddWorkDetail({ work, navLabels }: ToddWorkDetailProps) {
               </span>
             )}
             {hasNext ? (
-              <a className={cn("todd-detail__nav-link", "todd-detail__nav-link--next")} href={nextHref}>
+              <a className={cn("todd-detail__nav-link", "todd-detail__nav-link--next", TODD.card.shell)} href={nextHref}>
                 {navLabels.nextFull} →
               </a>
             ) : (

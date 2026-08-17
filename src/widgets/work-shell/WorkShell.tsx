@@ -18,21 +18,21 @@ export function WorkShell({ site, work, works }: WorkShellProps) {
   const navLabels = toWorkDetailNavLabels(site);
 
   return (
-    <div id="main" data-framer-generated-page="">
+    <div id="main" data-todd-generated-page="">
       <div
-        className="framer-XP9RI framer-16i3gsx"
+        className="todd-intro__wrapper-31 todd-page-shell-layout"
         data-layout-template="true"
         style={{ minHeight: "100vh", width: "auto" }}
       >
         <div
-          data-framer-root=""
-          className="framer-KPXZq framer-bi9rI framer-Rk1Eg framer-r9bvin"
+          data-todd-root=""
+          className="todd-work-shell__div-2 todd-work-shell__div-4 todd-work-shell__div-3 todd-work-shell__div-5"
           style={{ minHeight: "100vh", width: "auto", display: "contents" }}
         >
           <div className="site-page-content site-page-content--work">
             <ToddWorkDetail work={work} navLabels={navLabels} />
           </div>
-          <div className="framer-1pymhjr-container">
+          <div className="todd-work-shell__div">
             <div />
           </div>
         </div>

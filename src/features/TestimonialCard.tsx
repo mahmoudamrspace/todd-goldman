@@ -1,6 +1,7 @@
 "use client";
 
 import type { SiteSettings } from "@/content/types";
+import { cn } from "@/shared/lib/cn";
 
 type TestimonialItem = SiteSettings["testimonials"][number];
 
@@ -41,26 +42,27 @@ function toneName(tone: TestimonialItem["tone"]) {
 function toneClass(tone: TestimonialItem["tone"]) {
   switch (tone) {
     case "blue":
-      return "framer-mxbDt framer-UENfp framer-1by6t1 framer-v-1iesd0j";
+      return "todd-testimonial-card__rich-text-container-7 todd-testimonial-card__rich-text-container-6 todd-testimonial-card__rich-text-container-2 todd-layout__utility-007";
     case "green":
-      return "framer-mxbDt framer-UENfp framer-1by6t1 framer-v-1wv5hh2";
+      return "todd-testimonial-card__rich-text-container-7 todd-testimonial-card__rich-text-container-6 todd-testimonial-card__rich-text-container-2 todd-layout__utility-013";
     default:
-      return "framer-mxbDt framer-UENfp framer-1by6t1 framer-v-1by6t1";
+      return "todd-testimonial-card__rich-text-container-7 todd-testimonial-card__rich-text-container-6 todd-testimonial-card__rich-text-container-2 todd-layout__utility-005";
   }
 }
 
 function avatarClass(index: number) {
-  return index % 2 === 1 ? "framer-RaAOo framer-16ldkq7" : "framer-Fjt7A framer-16ldkq7";
+  return index % 2 === 1 ? "todd-testimonial-card__rich-text-container-5 todd-testimonial-card__rich-text-container" : "todd-testimonial-card__rich-text-container-4 todd-testimonial-card__rich-text-container";
 }
 
 export interface TestimonialCardProps {
   item: TestimonialItem;
   index: number;
   width?: "full" | "fluid";
+  iconSrc?: string;
 }
 
 /** Single testimonial card with semantic quote markup. */
-export function TestimonialCard({ item, index, width = "full" }: TestimonialCardProps) {
+export function TestimonialCard({ item, index, width = "full", iconSrc }: TestimonialCardProps) {
   const widthStyle =
     width === "fluid"
       ? { width: "100%" }
@@ -68,16 +70,16 @@ export function TestimonialCard({ item, index, width = "full" }: TestimonialCard
 
   return (
     <figure
-      className={toneClass(item.tone)}
+      className={cn("todd-testimonial-card", "todd-card-shell", toneClass(item.tone))}
       data-border={true}
-      data-framer-name={toneName(item.tone)}
+      data-todd-name={toneName(item.tone)}
       style={{ ...CARD_BORDER_STYLE, ...widthStyle }}
     >
-      <div className="framer-ouh49u" data-framer-name="Top">
-        <div className="framer-1mdcqwk" data-framer-name="Name">
+      <div className="todd-testimonial-card__top" data-todd-name="Top">
+        <div className="todd-testimonial-card__name" data-todd-name="Name">
           <div
-            className="framer-p3pcx6"
-            data-framer-component-type="RichTextContainer"
+            className="todd-testimonial-card__rich-text-container-8"
+            data-todd-component-type="RichTextContainer"
             style={{
               "--extracted-1of0zx5":
                 "var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15))",
@@ -86,13 +88,13 @@ export function TestimonialCard({ item, index, width = "full" }: TestimonialCard
           >
             <p
               dir="auto"
-              className="framer-text"
+              className="todd-text"
               style={{
                 "--font-selector": "R0Y7QXZlcmlhIFNlcmlmIExpYnJlLXJlZ3VsYXI=",
-                "--framer-font-family": '"Averia Serif Libre", sans-serif',
-                "--framer-font-size": "24px",
-                "--framer-text-alignment": "left",
-                "--framer-text-color":
+                "--todd-font-family": '"Averia Serif Libre", sans-serif',
+                "--todd-font-size": "24px",
+                "--todd-text-alignment": "left",
+                "--todd-text-color":
                   "var(--extracted-1of0zx5, var(--token-7feae51d-d17a-4590-a9ca-40881e3e0ba2, rgb(15, 15, 15)))",
               }}
             >
@@ -100,8 +102,8 @@ export function TestimonialCard({ item, index, width = "full" }: TestimonialCard
             </p>
           </div>
           <div
-            className="framer-t3jff2"
-            data-framer-component-type="RichTextContainer"
+            className="todd-testimonial-card__rich-text-container-10"
+            data-todd-component-type="RichTextContainer"
             style={{
               "--extracted-r6o4lv":
                 "var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(148, 147, 137))",
@@ -110,36 +112,46 @@ export function TestimonialCard({ item, index, width = "full" }: TestimonialCard
           >
             <p
               dir="auto"
-              className="framer-text"
+              className="todd-text"
               style={{
                 "--font-selector": "R0Y7QXZlcmlhIFNlcmlmIExpYnJlLWl0YWxpYw==",
-                "--framer-font-family": '"Averia Serif Libre", sans-serif',
-                "--framer-font-size": "14px",
-                "--framer-font-style": "italic",
-                "--framer-text-alignment": "left",
-                "--framer-text-color":
+                "--todd-font-family": '"Averia Serif Libre", sans-serif',
+                "--todd-font-size": "14px",
+                "--todd-font-style": "italic",
+                "--todd-text-alignment": "left",
+                "--todd-text-color":
                   "var(--extracted-r6o4lv, var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(148, 147, 137)))",
-                "--framer-text-transform": "lowercase",
+                "--todd-text-transform": "lowercase",
               }}
             >
               {item.role}
             </p>
           </div>
         </div>
-        <div className="framer-30s6rf" data-framer-name="Avatar" aria-hidden={true}>
-          <svg
-            className={avatarClass(index)}
-            role="presentation"
-            viewBox="0 0 515 497"
-            style={{ transform: "translateX(-50%)" }}
-          >
-            <use href={AVATAR_IDS[index % AVATAR_IDS.length]} />
-          </svg>
+        <div className="todd-testimonial-avatar" data-todd-name="Avatar">
+          {iconSrc ? (
+            <img
+              className={avatarClass(index)}
+              src={iconSrc}
+              alt=""
+              draggable={false}
+              style={{ transform: "translateX(-50%)" }}
+            />
+          ) : (
+            <svg
+              className={avatarClass(index)}
+              role="presentation"
+              viewBox="0 0 515 497"
+              style={{ transform: "translateX(-50%)" }}
+            >
+              <use href={AVATAR_IDS[index % AVATAR_IDS.length]} />
+            </svg>
+          )}
         </div>
       </div>
       <blockquote
-        className="framer-1rv0nxo"
-        data-framer-component-type="RichTextContainer"
+        className="todd-testimonial-card__rich-text-container-3"
+        data-todd-component-type="RichTextContainer"
         style={{
           transform: "none",
           margin: 0,
@@ -151,7 +163,7 @@ export function TestimonialCard({ item, index, width = "full" }: TestimonialCard
         cite={item.role}
       >
         <p
-          className="framer-text framer-styles-preset-gg9u5z"
+          className="todd-text todd-testimonial-card__rich-text-container-9"
           data-styles-preset="Y5DlTiI5k"
           dir="auto"
           style={{ maxWidth: "100%", margin: 0 }}

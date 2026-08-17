@@ -1,4 +1,6 @@
 export { Appear } from "./Appear";
+export { HeroScatterScene } from "./HeroScatterScene";
+export { IllustratedScene, SceneDoodle } from "./IllustratedScene";
 export { AnimatedSpan, AnimatedWords, HiddenReveal } from "./HiddenReveal";
 export { CustomCursor } from "./CustomCursor";
 export { EditorialWorkScene, pairWorksForScenes } from "./EditorialWorkScene";

@@ -19,6 +19,24 @@ export const editorialSpring = {
   mass: 0.35,
 };
 
+/** Shared choreography for post-Books homepage sections. */
+export const sectionRevealSpring = {
+  type: "spring" as const,
+  stiffness: 90,
+  damping: 26,
+  mass: 0.45,
+};
+
+export const sectionMotion = {
+  softY: 16,
+  contentY: 28,
+  artworkY: 40,
+  stagger: 0.08,
+  cardStagger: 0.12,
+  standardDuration: 0.8,
+  dramaticDuration: 1,
+} as const;
+
 export const editorialSceneHeight = "min(62vh, 640px)";
 
 export const chapterScrollRange = {
@@ -99,7 +117,7 @@ export const editorialFilterTransition = {
   opacity: { duration: 0.25 },
 };
 
-/** Nav overlay springs — recovered from Framer reference. */
+/** Nav overlay springs — recovered from legacy export reference. */
 export const navOverlaySpring = {
   type: "spring" as const,
   damping: 60,

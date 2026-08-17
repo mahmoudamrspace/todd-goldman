@@ -1,8 +1,18 @@
-#testimonial-section {
+#testimonial-section,
+.todd-testimonials {
   overflow-x: clip;
 }
 
-#testimonial-section blockquote {
+#testimonial-section .todd-testimonial-card.todd-card-shell,
+.todd-testimonials .todd-testimonial-card.todd-card-shell {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding: var(--card-pad);
+}
+
+#testimonial-section blockquote,
+.todd-testimonials blockquote {
   margin: 0;
   padding: 0;
   border: 0;
@@ -10,16 +20,16 @@
   box-sizing: border-box;
 }
 
-#testimonial-section .framer-1rv0nxo p {
+#testimonial-section .todd-testimonial-card__rich-text-container-3 p {
   max-width: 100%;
   overflow-wrap: anywhere;
 }
 
-#testimonial-section .framer-1of63no > * {
+#testimonial-section .todd-testimonial__list > * {
   min-width: 0;
 }
 
-#testimonial-section .framer-mxbDt {
+#testimonial-section .todd-testimonial-card__rich-text-container-7 {
   max-width: 100%;
   box-sizing: border-box;
 }

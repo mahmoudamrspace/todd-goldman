@@ -8,7 +8,7 @@ export interface ServicesSectionProps {
   content: ServicesContent;
 }
 
-/** Desktop service row hover state for Framer psO7m rows. */
+/** Desktop service row hover state for legacy export psO7m rows. */
 export function ServicesSection({ content }: ServicesSectionProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 

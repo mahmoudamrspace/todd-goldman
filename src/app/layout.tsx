@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import "@framer/styles/framer-fonts.css";
-import "@framer/styles/framer-breakpoints.css";
-import "@framer/styles/framer-site.css";
+import "@/shared/styles/todd-fonts.css";
+import "@/shared/styles/todd-responsive.css";
+import "@/shared/styles/todd-layout.css";
 import "@/shared/styles/globals.css";
+import "@/shared/styles/todd-typography.css";
+import "@/shared/styles/todd-section-layout.css";
 import "@/shared/styles/todd-identity.css";
 import "@/shared/styles/faq-interactive.css";
 import "@/shared/styles/testimonial-interactive.css";

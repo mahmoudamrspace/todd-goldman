@@ -24,16 +24,16 @@ import { LENIS_SCROLL_EVENT } from "@/features/SmoothScroll";
 
 const ZERO_PROGRESS = motionValue(0);
 
-/** Desktop testimonial card parallax (start → end px from Framer onScrollTarget). */
+/** Desktop testimonial card parallax (start → end px from legacy export onScrollTarget). */
 export const CARD_PARALLAX = [
-  { x: [-10, 0] as [number, number], y: [0, -50] as [number, number] },
-  { x: [10, 0], y: [0, -80] },
-  { x: [-6, 0], y: [0, -100] },
-  { x: [6, 0], y: [0, -150] },
-  { x: [6, 0], y: [0, -150] },
-  { x: [6, 0], y: [0, -150] },
-  { x: [10, 0], y: [0, -80] },
-  { x: [6, 0], y: [0, -150] },
+  { x: [-8, 0] as [number, number], y: [24, -28] as [number, number] },
+  { x: [8, 0], y: [30, -34] },
+  { x: [-6, 0], y: [34, -38] },
+  { x: [6, 0], y: [38, -40] },
+  { x: [6, 0], y: [38, -40] },
+  { x: [6, 0], y: [38, -40] },
+  { x: [8, 0], y: [30, -34] },
+  { x: [6, 0], y: [38, -40] },
 ] as const;
 
 type TestimonialScrollContextValue = {
@@ -103,13 +103,13 @@ export function TestimonialCardReveal({
   children,
   className,
   style,
-  "data-framer-name": dataFramerName,
+  "data-todd-name": dataToddName,
 }: {
   index: number;
   children: ReactNode;
   className?: string;
   style?: CSSProperties;
-  "data-framer-name"?: string;
+  "data-todd-name"?: string;
 }) {
   const isServerRender = useIsServerRender();
   const reduced = useReducedMotion();
@@ -171,7 +171,7 @@ export function TestimonialCardReveal({
       <div
         ref={ref}
         className={className}
-        data-framer-name={dataFramerName}
+        data-todd-name={dataToddName}
         style={style}
       >
         {children}
@@ -184,7 +184,7 @@ export function TestimonialCardReveal({
       <div
         ref={ref}
         className={className}
-        data-framer-name={dataFramerName}
+        data-todd-name={dataToddName}
         style={{
           ...style,
           opacity: visible ? 1 : hiddenOpacity,
@@ -202,7 +202,7 @@ export function TestimonialCardReveal({
       <div
         ref={ref}
         className={className}
-        data-framer-name={dataFramerName}
+        data-todd-name={dataToddName}
         style={{
           ...(style ?? {}),
           opacity: hiddenOpacity,
@@ -219,7 +219,7 @@ export function TestimonialCardReveal({
     <motion.div
       ref={ref}
       className={className}
-      data-framer-name={dataFramerName}
+      data-todd-name={dataToddName}
       style={{
         willChange: "transform",
         opacity: 1,

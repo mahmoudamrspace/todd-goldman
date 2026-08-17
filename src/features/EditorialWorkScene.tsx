@@ -36,7 +36,7 @@ function WorkPanel({
   return (
     <motion.a
       href={href}
-      className={cn("todd-scene__panel", `todd-scene__panel--${role}`, className)}
+      className={cn("todd-scene__panel", "todd-card-shell", `todd-scene__panel--${role}`, className)}
       style={style}
     >
       <div className="todd-scene__frame">
@@ -82,7 +82,7 @@ function StaticWorkPanel({
   return (
     <a
       href={href}
-      className={cn("todd-scene__panel", `todd-scene__panel--${role}`)}
+      className={cn("todd-scene__panel", "todd-card-shell", `todd-scene__panel--${role}`)}
       data-highlight
     >
       <div className="todd-scene__frame">
@@ -119,7 +119,7 @@ export function MobileWorkCard({ work, index }: { work: Work; index: number }) {
   return (
     <a
       href={`/works/${work.slug}`}
-      className="todd-scene__panel todd-scene__panel--uniform"
+      className="todd-scene__panel todd-scene__panel--uniform todd-card-shell"
       data-highlight
     >
       <div className="todd-scene__frame">

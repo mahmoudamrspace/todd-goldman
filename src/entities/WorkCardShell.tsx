@@ -9,10 +9,10 @@ export interface WorkCardShellProps {
   children: ReactNode;
   className: string;
   style: Record<string, string | number>;
-  framerName?: string;
+  toddName?: string;
 }
 
-/** Hover-enabled work card shell preserving Framer project item classes. */
+/** Hover-enabled work card shell preserving legacy export project item classes. */
 export function WorkCardShell({
   slug,
   activeSlug,
@@ -20,15 +20,15 @@ export function WorkCardShell({
   children,
   className,
   style,
-  framerName = "Desktop",
+  toddName = "Desktop",
 }: WorkCardShellProps) {
   const hovered = activeSlug === slug;
 
   return (
     <div
-      className={`${className}${hovered ? " framer-v-hover" : ""}`}
-      data-framer-name={framerName}
-      data-framer-hover={hovered ? "true" : undefined}
+      className={`${className}${hovered ? " todd-nav-overlay-content__desktop-4-6-hover" : ""}`}
+      data-todd-name={toddName}
+      data-todd-hover={hovered ? "true" : undefined}
       data-highlight={true}
       data-work-slug={slug}
       onMouseEnter={() => onHover(slug)}

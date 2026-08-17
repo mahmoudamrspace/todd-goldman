@@ -1,0 +1,29 @@
+/**
+ * Semantic typography utilities — gradual replacement for todd-text hooks.
+ */
+
+.todd-text {
+  font-family: var(--font-display, "Inter Display", "Inter Display Placeholder", sans-serif);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.6;
+  color: var(--todd-ink, rgb(15, 15, 15));
+}
+
+.todd-text-emphasis {
+  font-family: var(--font-serif, "Averia Serif Libre", serif);
+  font-style: italic;
+  font-weight: 300;
+}
+
+.todd-heading {
+  font-family: var(--font-display, "Inter Display", "Inter Display Placeholder", sans-serif);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--todd-ink, rgb(15, 15, 15));
+}
+
+.todd-heading--center {
+  text-align: center;
+}
