@@ -1,17 +1,6 @@
-/** Reference legacy export scroll-scatter targets for Hero illustration pieces. */
-export type HeroScatterTarget = {
-  x: number;
-  y: number;
-  scale: number;
-  opacity?: number;
-  rotate?: number;
-  spring?: {
-    damping: number;
-    stiffness: number;
-    mass: number;
-    bounce?: number;
-  };
-};
+import type { HeroScatterTarget } from "@/shared/lib/hero-scatter-target";
+
+export type { HeroScatterTarget };
 
 export const HERO_SCROLL_SPRING = {
   damping: 60,

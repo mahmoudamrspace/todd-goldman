@@ -1,18 +1,17 @@
 "use client";
 
 import { ScrollChapter } from "@/features/ScrollChapter";
-import { StickySection } from "@/features/StickySection";
 import { About } from "@/widgets/sections/About";
+import { BooksSection } from "@/widgets/sections/BooksSection";
 import { FaqSection } from "@/widgets/interactive/FaqSection";
 import { ServicesSection } from "@/widgets/interactive/ServicesSection";
-import { SneakPeak } from "@/widgets/sections/SneakPeak";
 import { Testimonial } from "@/widgets/sections/Testimonial";
 import { WorksGallery } from "@/widgets/sections/WorksGallery";
 import type {
   AboutContent,
+  BooksContent,
   FaqContent,
   ServicesContent,
-  SneakPeakContent,
   TestimonialContent,
   WorksContent,
 } from "@/content/section-types";
@@ -20,7 +19,7 @@ import { TODD } from "@/shared/lib/todd-semantic-classes";
 
 export interface ToddHomeSectionsProps {
   worksContent: WorksContent;
-  sneakPeakContent: SneakPeakContent;
+  booksContent: BooksContent;
   servicesContent: ServicesContent;
   testimonialContent: TestimonialContent;
   showTestimonials: boolean;
@@ -31,7 +30,7 @@ export interface ToddHomeSectionsProps {
 /** Todd homepage sections with coordinated scroll chapters. */
 export function ToddHomeSections({
   worksContent,
-  sneakPeakContent,
+  booksContent,
   servicesContent,
   testimonialContent,
   showTestimonials,
@@ -44,16 +43,14 @@ export function ToddHomeSections({
         <WorksGallery content={worksContent} />
       </ScrollChapter>
       <ScrollChapter accent="cream">
-        <SneakPeak content={sneakPeakContent} />
+        <BooksSection content={booksContent} />
       </ScrollChapter>
       <ScrollChapter accent="dark">
         <ServicesSection content={servicesContent} />
       </ScrollChapter>
       {showTestimonials ? (
         <ScrollChapter accent="paper">
-          <StickySection>
-            <Testimonial content={testimonialContent} />
-          </StickySection>
+          <Testimonial content={testimonialContent} />
         </ScrollChapter>
       ) : null}
       <ScrollChapter accent="paper">

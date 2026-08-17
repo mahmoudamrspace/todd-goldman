@@ -82,7 +82,15 @@ export function NavMenuProvider({ children }: { children: ReactNode }) {
     document.body.style.overflow = "hidden";
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key !== "Escape") return;
+      setOpen(false);
+      requestAnimationFrame(() => {
+        document
+          .querySelector<HTMLButtonElement>(
+            ".todd-nav-hamburger__button[aria-controls='todd-nav-menu']",
+          )
+          ?.focus();
+      });
     };
 
     window.addEventListener("keydown", onKeyDown);

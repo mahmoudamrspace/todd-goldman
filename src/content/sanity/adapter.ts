@@ -4,6 +4,7 @@ import type { SiteSettings, Work } from "@/content/types";
 
 /**
  * Sanity CMS adapter — wire when SANITY_PROJECT_ID and SANITY_DATASET are set.
+ * Runtime remains intentionally unconfigured until Sanity credentials are provided.
  */
 export const sanityContentRepository: ContentRepository = {
   async getSite(): Promise<SiteSettings> {
@@ -15,6 +16,9 @@ export const sanityContentRepository: ContentRepository = {
     throw new Error("Sanity adapter not configured.");
   },
   async getWork(_slug: string): Promise<Work | null> {
+    throw new Error("Sanity adapter not configured.");
+  },
+  async getBooks() {
     throw new Error("Sanity adapter not configured.");
   },
 };

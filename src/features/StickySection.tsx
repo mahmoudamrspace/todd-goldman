@@ -21,6 +21,7 @@ import {
   type MotionValue,
 } from "motion/react";
 import { LENIS_SCROLL_EVENT } from "@/features/SmoothScroll";
+import { useIsDesktop } from "@/shared/lib/use-media-query";
 
 const ZERO_PROGRESS = motionValue(0);
 
@@ -97,25 +98,38 @@ function isElementInView(node: HTMLElement, amount = 0.15): boolean {
   return visibleHeight >= rect.height * amount;
 }
 
+const CARD_REVEAL_TRANSITION: Pick<
+  CSSProperties,
+  "transitionProperty" | "transitionDuration" | "transitionTimingFunction"
+> = {
+  transitionProperty: "opacity, transform",
+  transitionDuration: "0.8s",
+  transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
+};
+
 /** Desktop testimonial card: per-card scroll reveal + section parallax on one node. */
 export function TestimonialCardReveal({
   index,
   children,
   className,
   style,
+  revealDelay = 0,
   "data-todd-name": dataToddName,
 }: {
   index: number;
   children: ReactNode;
   className?: string;
   style?: CSSProperties;
+  revealDelay?: number;
   "data-todd-name"?: string;
 }) {
   const isServerRender = useIsServerRender();
   const reduced = useReducedMotion();
+  const isDesktop = useIsDesktop();
   const ctx = useTestimonialScroll();
   const config = CARD_PARALLAX[index] ?? CARD_PARALLAX[0];
   const scrollYProgress = ctx?.scrollYProgress;
+  const useParallax = isDesktop && !reduced && Boolean(scrollYProgress);
 
   const x = useTransform(scrollYProgress ?? ZERO_PROGRESS, [0, 1], [config.x[0], config.x[1]]);
   const y = useTransform(scrollYProgress ?? ZERO_PROGRESS, [0, 1], [config.y[0], config.y[1]]);
@@ -128,6 +142,24 @@ export function TestimonialCardReveal({
       ? style.transform
       : undefined;
   const visible = reduced || inViewNow;
+
+  const revealedStyle: CSSProperties = {
+    ...style,
+    opacity: 1,
+    transform: "none",
+    ...CARD_REVEAL_TRANSITION,
+    transitionDelay: `${revealDelay}s`,
+    pointerEvents: undefined,
+  };
+
+  const hiddenStyle: CSSProperties = {
+    ...(style ?? {}),
+    opacity: hiddenOpacity,
+    transform: isDesktop ? hiddenTransform : "translateY(30px)",
+    ...CARD_REVEAL_TRANSITION,
+    transitionDelay: `${revealDelay}s`,
+    pointerEvents: "none",
+  };
 
   const syncInView = useCallback(() => {
     const node = ref.current;
@@ -179,18 +211,13 @@ export function TestimonialCardReveal({
     );
   }
 
-  if (reduced || !scrollYProgress) {
+  if (reduced || !useParallax) {
     return (
       <div
         ref={ref}
         className={className}
         data-todd-name={dataToddName}
-        style={{
-          ...style,
-          opacity: visible ? 1 : hiddenOpacity,
-          transform: visible ? "none" : hiddenTransform,
-          pointerEvents: visible ? undefined : "none",
-        }}
+        style={visible ? revealedStyle : hiddenStyle}
       >
         {children}
       </div>
@@ -203,12 +230,7 @@ export function TestimonialCardReveal({
         ref={ref}
         className={className}
         data-todd-name={dataToddName}
-        style={{
-          ...(style ?? {}),
-          opacity: hiddenOpacity,
-          transform: hiddenTransform,
-          pointerEvents: "none",
-        }}
+        style={hiddenStyle}
       >
         {children}
       </div>

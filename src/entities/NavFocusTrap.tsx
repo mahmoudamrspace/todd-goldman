@@ -5,13 +5,14 @@ import { useEffect, useRef, type ReactNode } from "react";
 export interface NavFocusTrapProps {
   open: boolean;
   children: ReactNode;
+  labelledBy?: string;
 }
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
 
 /** Traps keyboard focus inside the open navigation overlay. */
-export function NavFocusTrap({ open, children }: NavFocusTrapProps) {
+export function NavFocusTrap({ open, children, labelledBy }: NavFocusTrapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -57,6 +58,8 @@ export function NavFocusTrap({ open, children }: NavFocusTrapProps) {
       ref={containerRef}
       role="dialog"
       aria-modal={open ? "true" : undefined}
+      aria-labelledby={open ? labelledBy : undefined}
+      aria-label={open && !labelledBy ? "Site menu" : undefined}
       aria-hidden={open ? undefined : "true"}
       style={{ display: "contents" }}
     >

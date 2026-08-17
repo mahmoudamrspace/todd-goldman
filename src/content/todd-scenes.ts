@@ -142,6 +142,8 @@ export const toddSceneArt = {
   introNeverGrowUpSecond: `${ROOT}/about/never-grow-up-part-2.svg`,
   faqDecor: `${ROOT}/faq/doodle.svg`,
   sneakPeakDecor: `${ROOT}/sneak/doodle.svg`,
+  /** @deprecated Use booksDecor — kept for seed migration compatibility. */
+  booksDecor: `${ROOT}/sneak/doodle.svg`,
   testimonialMain: `${ROOT}/testimonials/main.svg`,
   testimonialIcons: [
     `${ROOT}/testimonials/icon-1.svg`,

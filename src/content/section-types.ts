@@ -1,14 +1,10 @@
-import type { SiteSettings, Work } from "@/content/types";
+import type { Book, SiteSettings, Work } from "@/content/types";
 import type { SceneLayer } from "@/content/todd-scenes";
 
 /** Narrow section interfaces (Interface Segregation). */
 
 export interface HeroContent {
-  greeting: string;
-  headline: string;
   illustration: string;
-  layers: SceneLayer[];
-  artistName: string;
 }
 
 export interface IntroContent {
@@ -26,7 +22,12 @@ export interface AboutContent {
   heading: string;
   name: string;
   body: string;
-  images: string[];
+  images: {
+    neverGrow: string;
+    timeline: string;
+    byTheNumbers: string;
+    whereArt: string;
+  };
   twistedMind: string;
   neverGrowLayers: SceneLayer[];
   email: string;
@@ -41,13 +42,16 @@ export interface AboutContent {
   awardsTitle: string;
 }
 
+export interface ServiceItem {
+  title: string;
+  subtitle: string;
+  href: string;
+}
+
 export interface ServicesContent {
-  items: string[];
+  items: ServiceItem[];
   decor: string;
   title: string;
-  subtitles: string[];
-  headlines: string[];
-  links: { href: string }[];
 }
 
 export interface TestimonialContent {
@@ -75,8 +79,6 @@ export interface FooterContent {
   };
   madeBy: string;
   copyright: string;
-  promo: string;
-  promoHref: string;
   mark: string;
   sceneLayers: SceneLayer[];
   email: string;
@@ -85,16 +87,19 @@ export interface FooterContent {
   social: SiteSettings["social"];
 }
 
-export interface SneakPeakContent {
-  images: string[];
-  imageAlts: string[];
-  titleWords: string[];
+export interface BooksContent {
+  eyebrow: string;
+  titleLead: string;
+  titleEmphasis: string;
+  description: string;
   decor: string;
+  books: Book[];
 }
 
 export interface WorksContent {
   works: Work[];
   titleWords: string[];
+  subtitle: string;
 }
 
 export interface WorkDetailNavLabels {
@@ -106,11 +111,7 @@ export interface WorkDetailNavLabels {
 
 export function toHeroContent(site: SiteSettings): HeroContent {
   return {
-    greeting: site.heroGreeting,
-    headline: site.heroHeadline,
     illustration: site.heroIllustration,
-    layers: site.heroLayers,
-    artistName: site.artistName,
   };
 }
 
@@ -138,12 +139,9 @@ export function toAboutContent(site: SiteSettings): AboutContent {
 
 export function toServicesContent(site: SiteSettings): ServicesContent {
   return {
-    items: site.services,
+    items: site.serviceItems,
     decor: site.servicesDecor,
     title: site.servicesTitle,
-    subtitles: site.servicesSubtitles,
-    headlines: site.servicesHeadlines,
-    links: site.serviceLinks,
   };
 }
 
@@ -177,8 +175,6 @@ export function toFooterContent(site: SiteSettings): FooterContent {
     },
     madeBy: site.footerMadeBy,
     copyright: site.footerCopyright,
-    promo: site.footerPromo,
-    promoHref: site.footerPromoHref,
     mark: site.footerMark,
     sceneLayers: site.footerSceneLayers,
     email: site.email,
@@ -188,17 +184,23 @@ export function toFooterContent(site: SiteSettings): FooterContent {
   };
 }
 
-export function toSneakPeakContent(site: SiteSettings): SneakPeakContent {
+export function toBooksContent(site: SiteSettings, books: Book[]): BooksContent {
   return {
-    images: site.sneakPeakImages,
-    imageAlts: site.sneakPeakImageAlts,
-    titleWords: site.sneakPeakTitleWords,
-    decor: site.sneakPeakDecor,
+    eyebrow: site.booksEyebrow,
+    titleLead: site.booksTitleLead,
+    titleEmphasis: site.booksTitleEmphasis,
+    description: site.booksDescription,
+    decor: site.booksDecor,
+    books,
   };
 }
 
 export function toWorksContent(works: Work[], site: SiteSettings): WorksContent {
-  return { works, titleWords: site.worksTitleWords };
+  return {
+    works,
+    titleWords: site.worksTitleWords,
+    subtitle: site.worksSubtitle,
+  };
 }
 
 export function toIntroContent(site: SiteSettings): IntroContent {

@@ -15,13 +15,32 @@ import { SmoothScroll } from "@/features/SmoothScroll";
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSite();
+  const title = site.metaTitle;
+  const description = site.metaDescription;
+
   return {
     metadataBase: new URL(siteConfig.url),
     title: {
-      default: site.metaTitle,
+      default: title,
       template: `%s · ${site.artistName}`,
     },
-    description: site.metaDescription,
+    description,
+    alternates: {
+      canonical: "/",
+    },
+    openGraph: {
+      type: "website",
+      locale: siteConfig.locale,
+      url: siteConfig.url,
+      siteName: site.artistName,
+      title,
+      description,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
 }
 

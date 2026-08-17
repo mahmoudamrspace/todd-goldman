@@ -1,5 +1,3 @@
-/* Todd Goldman identity layer — production profile overrides */
-
 :root {
   --todd-ink: var(--color-ink);
   --todd-paper: var(--color-cream);
@@ -20,6 +18,18 @@ body[data-content-profile="default"] {
   color: var(--todd-ink);
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ── Selected Projects gallery ── */
 
 .todd-works {
@@ -31,12 +41,12 @@ body[data-content-profile="default"] {
 }
 
 .todd-works__inner {
-  max-width: var(--card-max-width, 1128px);
+  width: min(100%, var(--card-max-width, 1128px));
+  max-width: min(100%, var(--card-max-width, 1128px));
   margin: 0 auto;
   padding: 0 var(--card-gutter);
-  width: 100%;
-  max-width: 100%;
   box-sizing: border-box;
+  min-width: 0;
 }
 
 .todd-works__header {
@@ -101,6 +111,11 @@ body[data-content-profile="default"] {
   color: var(--todd-paper);
 }
 
+.todd-works__filter:focus-visible {
+  outline: 3px solid var(--todd-yellow);
+  outline-offset: 3px;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .todd-works__filter:hover,
   .todd-works__filter:focus-visible {
@@ -119,6 +134,9 @@ body[data-content-profile="default"] {
   display: flex;
   flex-direction: column;
   gap: clamp(var(--card-gap), 3vh, var(--space-6));
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .todd-works__empty {
@@ -243,10 +261,25 @@ body[data-content-profile="default"] {
   margin-bottom: 6px;
 }
 
-.todd-scene__category--red { background: var(--todd-red); color: #fff; border-color: var(--todd-ink); }
+.todd-scene__category--red {
+  background: color-mix(in srgb, var(--todd-red) 72%, white);
+  color: var(--todd-ink);
+  border-color: var(--todd-ink);
+}
+
 .todd-scene__category--yellow { background: var(--todd-yellow); color: var(--todd-ink); }
-.todd-scene__category--blue { background: var(--todd-blue); color: #fff; border-color: var(--todd-ink); }
-.todd-scene__category--green { background: var(--todd-green); color: #fff; border-color: var(--todd-ink); }
+
+.todd-scene__category--blue {
+  background: color-mix(in srgb, var(--todd-blue) 58%, white);
+  color: var(--todd-ink);
+  border-color: var(--todd-ink);
+}
+
+.todd-scene__category--green {
+  background: color-mix(in srgb, var(--todd-green) 58%, white);
+  color: var(--todd-ink);
+  border-color: var(--todd-ink);
+}
 
 .todd-scene__title {
   font-family: var(--font-display, "Inter Display", sans-serif);
@@ -309,6 +342,16 @@ body[data-content-profile="default"] {
   width: 100% !important;
   max-width: 100% !important;
   padding: var(--card-pad);
+}
+
+.todd-testimonial-card__role {
+  --todd-text-color: var(--color-muted);
+  color: var(--color-muted);
+  font-family: "Averia Serif Libre", sans-serif;
+  font-size: 14px;
+  font-style: italic;
+  text-align: left;
+  text-transform: lowercase;
 }
 
 .todd-about .todd-about__card.todd-card-shell,
@@ -374,6 +417,14 @@ footer.todd-footer .todd-contact-stage {
   min-width: 0;
 }
 
+.todd-page-shell-layout #main {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  align-self: stretch;
+}
+
 .site-page-content {
   width: 100%;
   max-width: 100%;
@@ -390,6 +441,16 @@ footer.todd-footer .todd-contact-stage {
   display: flex;
   flex-direction: column;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+#works-chapter.todd-chapter--first {
+  padding-top: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+#works-chapter .todd-chapter__line {
+  margin-bottom: var(--space-4);
 }
 
 #works,
@@ -407,6 +468,8 @@ footer.todd-footer .todd-contact-stage {
   flex-direction: column;
   align-items: center;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   flex: none;
   align-self: stretch;
   padding-top: var(--site-section-gap);
@@ -773,6 +836,31 @@ body[data-content-profile="default"] .todd-intro__wrapper-11 {
   }
 }
 
+@media (min-width: 600px) and (max-width: 809.98px) {
+  .todd-works__mobile-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--card-gap);
+  }
+
+  .todd-scene__panel--uniform .todd-scene__frame {
+    aspect-ratio: 4 / 5;
+  }
+
+  .todd-scene__panel--uniform .todd-scene__copy {
+    padding-top: var(--space-2);
+  }
+
+  .todd-scene__panel--uniform .todd-scene__title {
+    font-size: 1rem;
+  }
+
+  .todd-scene__panel--uniform .todd-scene__hook {
+    font-size: 0.8125rem;
+    -webkit-line-clamp: 2;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .todd-scene__frame,
   .todd-detail__nav-link {
@@ -866,12 +954,32 @@ nav[data-nav-open="true"] .site-header-bar__scribble {
     padding-inline: clamp(1.25rem, 6vw, 1.75rem);
     padding-bottom: max(env(safe-area-inset-bottom), 1.25rem);
     overflow-x: clip;
+    overflow-y: hidden;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: clamp(0.5rem, 2vh, 1rem);
+  }
+
+  nav[data-nav-open="true"].todd-nav-overlay-content__desktop-4-6-wwyydj
+    .nav-phone-menu-content
+    .todd-nav-menu-list__menu-items,
+  nav[data-nav-open="true"].todd-nav-overlay-content__desktop-4-6-wwyydj
+    .nav-phone-menu-content
+    .nav-menu-list {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: clip;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    align-items: stretch;
-    gap: clamp(0.75rem, 3vh, 1.5rem);
+  }
+
+  nav[data-nav-open="true"] .nav-phone-contact {
+    flex-shrink: 0;
+    margin-top: 0;
+    padding-top: clamp(0.25rem, 1vh, 0.5rem);
   }
 
   nav[data-nav-open="true"].todd-nav-overlay-content__desktop-4-6-wwyydj .todd-nav-menu-list__menu-items,
@@ -987,9 +1095,38 @@ nav[data-nav-open="true"].todd-nav-overlay-content__desktop-4-6-wwyydj .todd-nav
   transform: translateY(0);
 }
 
-html.custom-cursor-active,
-html.custom-cursor-active * {
+html.custom-cursor-active [data-highlight] {
   cursor: none !important;
+}
+
+@media (pointer: fine) {
+  html.custom-cursor-active:focus-within :focus-visible {
+    cursor: auto !important;
+  }
+}
+
+.custom-cursor__finger {
+  display: block;
+  image-rendering: pixelated;
+  filter: drop-shadow(2px 2px 0 var(--color-ink));
+}
+
+.custom-cursor__label {
+  position: absolute;
+  top: 43px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 7px;
+  border: 2px solid var(--color-ink);
+  border-radius: 0;
+  background: var(--color-cream);
+  box-shadow: 3px 3px 0 var(--color-yellow);
+  font-size: 9px;
+  font-family: ui-monospace, monospace;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  color: var(--color-ink);
 }
 
 .site-header-bar {
@@ -1289,17 +1426,32 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   }
 
   .desktop-nav-links__link--art {
-    color: var(--todd-red);
+    color: var(--color-ink);
+    box-shadow: inset 0 -0.22em 0 color-mix(in srgb, var(--todd-red) 52%, transparent);
     transform: rotate(-1deg);
   }
 
+  .desktop-nav-links__link--books {
+    color: var(--color-ink);
+    box-shadow: inset 0 -0.22em 0 color-mix(in srgb, var(--todd-blue) 52%, transparent);
+    transform: rotate(0.75deg);
+  }
+
+  .desktop-nav-links__link--services {
+    color: var(--color-ink);
+    box-shadow: inset 0 -0.22em 0 color-mix(in srgb, var(--todd-green) 52%, transparent);
+    transform: rotate(-0.75deg);
+  }
+
   .desktop-nav-links__link--about {
-    color: var(--todd-blue);
+    color: var(--color-ink);
+    box-shadow: inset 0 -0.22em 0 color-mix(in srgb, var(--todd-blue) 52%, transparent);
     transform: rotate(0.5deg);
   }
 
   .desktop-nav-links__link--contact {
-    color: var(--todd-green);
+    color: var(--color-ink);
+    box-shadow: inset 0 -0.22em 0 color-mix(in srgb, var(--todd-green) 52%, transparent);
     transform: rotate(-0.5deg);
   }
 
@@ -1346,6 +1498,18 @@ nav[data-nav-state="closing"] .nav-phone-contact {
     background: var(--todd-blue);
     color: var(--color-cream);
     text-decoration-color: var(--color-cream);
+  }
+}
+
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .desktop-nav-links__list {
+    flex-wrap: nowrap;
+    gap: clamp(4px, 0.8vw, 12px);
+  }
+
+  .desktop-nav-links__link {
+    padding-inline: clamp(8px, 1vw, 12px);
+    font-size: clamp(0.95rem, 0.85rem + 0.22vw, 1.08rem);
   }
 }
 
@@ -1396,6 +1560,11 @@ nav[data-nav-state="closing"] .nav-phone-contact {
 }
 
 .nav-phone-contact__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 0.5rem;
   color: var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(148, 147, 137));
   font-family: var(--font-sans);
   font-size: clamp(0.875rem, 3.5vw, 1rem);
@@ -1404,7 +1573,6 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   text-decoration: none;
   word-break: break-word;
   max-width: 100%;
-  padding-inline: 0.5rem;
 }
 
 .nav-phone-contact__link:hover {
@@ -1428,6 +1596,36 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   padding: 0;
   text-align: left;
   cursor: pointer;
+}
+
+.faq-accordion__trigger:focus-visible {
+  outline: 3px solid var(--todd-yellow);
+  outline-offset: 4px;
+  border-radius: var(--todd-radius-sm);
+}
+
+.todd-faq__subtitle {
+  --font-selector: RlI7SW50ZXJEaXNwbGF5LVNlbWlCb2xk;
+  --todd-font-family: "Inter Display", "Inter Display Placeholder", sans-serif;
+  --todd-font-size: 36px;
+  --todd-font-weight: 600;
+  --todd-letter-spacing: -0.03em;
+  --todd-line-height: 1.1em;
+  --todd-text-alignment: center;
+  --todd-text-color: rgb(251, 251, 251);
+  text-align: center;
+}
+
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .todd-faq__subtitle {
+    --todd-font-size: clamp(2rem, 4vw, 2.75rem);
+  }
+}
+
+@media (max-width: 809.98px) {
+  .todd-faq__subtitle {
+    --todd-font-size: clamp(1.5rem, 6.5vw, 2rem);
+  }
 }
 
 .todd-detail__cta-wrap {
@@ -2751,7 +2949,11 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   font-weight: 400;
   line-height: 1;
   letter-spacing: -0.02em;
-  color: var(--todd-red, #e6462d);
+  color: var(--todd-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--todd-red);
+  text-decoration-thickness: 0.12em;
+  text-underline-offset: 0.08em;
 }
 
 .todd-about__twisted-mind-art {
@@ -2787,6 +2989,47 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   width: fit-content;
 }
 
+.todd-about-timeline__row-border {
+  --border-bottom-width: 1px;
+  --border-color: var(--token-ae5d2ed2-395e-4ac7-9825-f57ad4d7ddc7, rgb(240, 205, 62));
+  --border-left-width: 0px;
+  --border-right-width: 0px;
+  --border-style: dotted;
+  --border-top-width: 0px;
+  width: 100%;
+}
+
+.todd-about-timeline__year p,
+.todd-about-timeline__milestone p,
+.todd-about-timeline__location p,
+.todd-about-timeline__sep p {
+  font-family: "Inter Display", "Inter Display Placeholder", sans-serif;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  line-height: 1.4em;
+  text-align: center;
+}
+
+.todd-about-timeline__year p {
+  font-weight: 700;
+  color: var(--todd-ink);
+}
+
+.todd-about-timeline__sep p {
+  font-weight: 500;
+  color: var(--todd-yellow);
+}
+
+.todd-about-timeline__milestone p {
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+.todd-about-timeline__location p {
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
 @media (max-width: 809.98px) {
   .todd-about-card-icon {
     width: 55px !important;
@@ -2800,7 +3043,7 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   }
 }
 
-/* FAQ — single column at all breakpoints; illustration below Q&A */
+/* FAQ — single column on phone; two columns + doodle from tablet up */
 .todd-faq__list.todd-faq__list-layout {
   flex-flow: column nowrap;
   flex-wrap: nowrap;
@@ -2809,6 +3052,63 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   width: 100%;
   max-width: 640px;
   margin-inline: auto;
+}
+
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .todd-faq__list.todd-faq__list-layout {
+    flex-flow: row wrap;
+    align-items: flex-start;
+    gap: clamp(20px, 2.5vw, 28px);
+    max-width: min(920px, 100%);
+  }
+
+  .todd-faq__list .todd-faq__rich-text-container-7,
+  .todd-faq__list .todd-faq__rich-text-container-2 {
+    flex: 1 1 calc(50% - 14px);
+    width: auto;
+    min-width: 0;
+  }
+
+  .todd-faq__list .todd-intro__wrapper-16 {
+    flex: 0 0 100%;
+    margin-top: clamp(0.5rem, 2vw, 1rem);
+  }
+}
+
+@media (min-width: 1200px) {
+  .todd-faq__list.todd-faq__list-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) min(200px, 22%);
+    align-items: start;
+    gap: clamp(24px, 2.8vw, 36px);
+    width: 100%;
+    max-width: var(--card-max-width);
+  }
+
+  .todd-faq__list .todd-faq__rich-text-container-7 {
+    grid-column: 1;
+  }
+
+  .todd-faq__list .todd-faq__rich-text-container-2 {
+    grid-column: 2;
+  }
+
+  .todd-faq__list .todd-intro__wrapper-16 {
+    grid-column: 3;
+    grid-row: 1 / span 12;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    flex: none;
+    width: 100% !important;
+    margin-top: clamp(1rem, 4vh, 2.5rem);
+    align-self: center;
+    justify-self: center;
+  }
+
+  .todd-faq-illustration {
+    width: min(190px, 100%);
+  }
 }
 
 .todd-faq__list .todd-faq__rich-text-container-7,
@@ -2906,6 +3206,30 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   .todd-testimonials__main-art {
     width: min(340px, 26vw);
   }
+
+  .todd-testimonials__title-copy.todd-testimonial__title-text,
+  .todd-testimonial__title-text {
+    width: min(100%, 520px) !important;
+    max-width: min(100%, 520px) !important;
+    height: auto !important;
+    flex-flow: row wrap !important;
+    place-content: center !important;
+    align-items: center !important;
+    gap: 0.08em 0.22em !important;
+  }
+
+  .todd-testimonials__title-copy h2.testimonial-section-title {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    column-gap: 0.22em;
+    row-gap: 0.04em;
+    width: 100%;
+    max-width: 100%;
+    --todd-font-size: clamp(57px, 4.2vw, 68px);
+    --todd-line-height: 0.95em;
+  }
 }
 
 .todd-testimonials__title-copy {
@@ -2915,8 +3239,228 @@ nav[data-nav-state="closing"] .nav-phone-contact {
 }
 
 .todd-testimonials__title-copy h2 {
-  --todd-text-color: var(--todd-ink) !important;
-  color: var(--todd-ink) !important;
+  margin: 0;
+}
+
+@media (max-width: 809.98px) {
+  .todd-testimonials__title-copy h2,
+  .todd-testimonials__title-copy .testimonial-section-title {
+    --todd-text-color: var(--todd-ink) !important;
+    color: var(--todd-ink) !important;
+  }
+}
+
+.testimonial-section-title {
+  --font-selector: RlI7SW50ZXJEaXNwbGF5LUJvbGQ=;
+  --todd-font-family: "Inter Display", "Inter Display Placeholder", sans-serif;
+  --todd-font-weight: 700;
+  --todd-letter-spacing: -0.03em;
+  --todd-line-height: 1em;
+  --todd-text-alignment: center;
+  --todd-font-size: 36px;
+  text-align: center;
+}
+
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .todd-testimonials__title-copy h2.testimonial-section-title {
+    --todd-font-size: 57px;
+    --todd-text-color: var(--todd-ink);
+    color: var(--todd-ink);
+  }
+}
+
+.todd-books__shelf {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.todd-book-card-reveal-wrap {
+  list-style: none;
+}
+
+.todd-service-row__link {
+  display: block;
+  border-radius: var(--todd-radius-sm);
+  text-decoration: none;
+  transition:
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.todd-page-root .todd-service-row__link:hover,
+.todd-page-root .todd-service-row__link:focus-visible {
+  outline: 2px solid var(--todd-yellow);
+  outline-offset: 4px;
+  background: rgb(247 244 237 / 12%);
+  box-shadow: 0 0 0 8px rgb(247 244 237 / 12%);
+  transform: translateX(6px);
+}
+
+.todd-service-row__title {
+  --font-selector: RlI7SW50ZXJEaXNwbGF5LUJvbGQ=;
+  --todd-font-family: "Inter Display", "Inter Display Placeholder", sans-serif;
+  --todd-font-weight: 700;
+  --todd-letter-spacing: -0.04em;
+  --todd-text-alignment: left;
+  --todd-text-color: var(--token-d10d7d5c-1c4f-4f9d-802c-1a10cef2fa55, rgb(247, 244, 237));
+}
+
+h3.todd-text.todd-service-row__title {
+  --todd-font-size: 32px;
+  --todd-line-height: 140%;
+}
+
+.todd-page-root .todd-service-row__subtitle.todd-text {
+  --todd-text-color: var(--todd-ink);
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  width: max-content;
+  max-width: 100%;
+  min-height: 26px;
+  margin-top: 8px;
+  padding: 4px 10px;
+  border: 1.5px solid var(--todd-ink);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--todd-paper) 90%, var(--todd-yellow));
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--todd-ink);
+  box-shadow: 2px 2px 0 rgb(15 15 15 / 28%);
+}
+
+@media (max-width: 809.98px) {
+  .todd-service-row {
+    height: auto !important;
+    min-height: 84px;
+  }
+
+  .todd-service-row__link.todd-services__tablet-10 {
+    cursor: unset;
+    justify-content: space-between;
+    height: auto;
+    min-height: 84px;
+    padding: 6px 8px 10px;
+  }
+
+  .todd-service-row__link .todd-services__icon-and-title {
+    justify-content: center;
+    width: min(247px, 100%);
+  }
+
+  .todd-service-row__link .todd-services__tablet-11 {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.todd-services__icon-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.todd-page-root .todd-services__ompass {
+  margin-top: clamp(36px, 4vw, 52px);
+}
+
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .todd-services__container.todd-card-shell {
+    height: auto !important;
+    min-height: min(760px, calc(100svh - 24px));
+    padding-block: clamp(20px, 3vw, 32px);
+  }
+
+  .todd-intro__wrapper-25 .todd-intro__wrapper-8 {
+    height: auto !important;
+    gap: clamp(12px, 1.5vw, 18px);
+  }
+
+  .todd-service-row {
+    height: auto !important;
+    min-height: 100px;
+  }
+
+  .todd-service-row__link.todd-services__tablet-10 {
+    height: auto;
+    min-height: 100px;
+    padding: 8px 12px 12px;
+  }
+
+  .todd-service-row__link .todd-services__tablet-11 {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .todd-service-row__link .todd-services__icon {
+    top: 50% !important;
+    margin-top: -35.5px;
+  }
+
+  h3.todd-text.todd-service-row__title {
+    --todd-font-size: clamp(60px, 7vw, 72px);
+    --todd-line-height: 92%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .todd-service-row {
+    height: auto !important;
+    min-height: 96px;
+  }
+
+  .todd-service-row__link.todd-services__tablet-10 {
+    height: auto;
+    min-height: 96px;
+    padding-block: 8px 12px;
+  }
+
+  .todd-service-row__link .todd-services__tablet-11 {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  h3.todd-text.todd-service-row__title {
+    --todd-font-size: 72px;
+    --todd-line-height: 90%;
+  }
+
+  .todd-page-root .todd-service-row__subtitle.todd-text {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  .todd-testimonials__card .todd-testimonial-card {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 810px) and (max-width: 1199.98px) {
+  .todd-testimonials__card-slot {
+    padding-inline: clamp(8px, 1.2vw, 16px);
+  }
+
+  .todd-testimonials__card-reveal {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 809.98px) {
+  .todd-testimonials__card-slot {
+    padding-inline: 0;
+  }
+
+  .todd-testimonials__card-reveal {
+    transform: translateY(0);
+  }
 }
 
 .todd-testimonials__title-word--accent {
@@ -2925,6 +3469,10 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   font-family: "Averia Serif Libre", serif;
   font-style: italic;
   font-weight: 300;
+}
+
+.todd-testimonials__title-word:not(.todd-testimonials__title-word--accent) {
+  color: var(--todd-ink);
 }
 
 @media (max-width: 809.98px) {
@@ -2942,10 +3490,24 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   .todd-about .todd-about__title-4 {
     gap: 12px;
     padding: 28px var(--card-gutter) 14px;
+    overflow-x: clip;
   }
 
   .todd-about .todd-about__title-text h2 {
     gap: 6px;
+  }
+
+  .todd-about [data-todd-name="Wrapper"].todd-about__wrapper--responsive {
+    position: relative !important;
+    top: unset !important;
+    left: unset !important;
+    right: unset !important;
+    transform: none !important;
+  }
+
+  .todd-about .todd-about__responsive-row.todd-about__desktop-2,
+  .todd-about .todd-about__responsive-row.todd-about__desktop {
+    width: 100% !important;
   }
 
   .todd-about-heading__primary {
@@ -2957,8 +3519,10 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   }
 
   .todd-about__twisted-mind-art {
-    width: min(460px, 88vw);
+    width: 100%;
+    max-width: 100%;
     max-height: min(360px, 48vh);
+    overflow-x: clip;
   }
 }
 
@@ -3090,8 +3654,15 @@ nav[data-nav-state="closing"] .nav-phone-contact {
 }
 
 .todd-contact-stage .todd-contact-headline h2 {
+  --todd-font-size: 66px;
   line-height: 1.12;
   padding: 0 clamp(0.25rem, 1.5vw, 0.75rem);
+}
+
+@media (min-width: 1200px) {
+  .todd-contact-stage .todd-contact-headline h2 {
+    --todd-font-size: 54px;
+  }
 }
 
 .todd-contact-headline__mobile-break {
@@ -3202,8 +3773,56 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   box-sizing: border-box;
 }
 
-.todd-contact-stage .todd-contact-credits .todd-intro__wrapper-36 {
+.todd-contact-stage .todd-contact-credits .todd-intro__wrapper-36,
+.todd-contact-stage .todd-contact-credits .todd-footer__credits-shell {
   width: 100% !important;
+}
+
+.todd-contact-credits .todd-footer__credits-shell {
+  display: flex;
+  position: relative;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+@media (min-width: 810px) {
+  .todd-contact-credits .todd-footer__credits-shell {
+    flex-flow: row;
+    place-content: center space-between;
+    align-items: center;
+    width: min(940px, 100%);
+    height: min-content;
+    padding: 0 32px 16px;
+  }
+
+  .todd-footer__links {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: clamp(8px, 1.5vw, 20px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+}
+
+@media (max-width: 809.98px) {
+  .todd-contact-credits .todd-footer__credits-shell {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+    padding: 16px 32px 8px;
+  }
+
+  .todd-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 16px;
+    margin: 8px 0 4px;
+    padding: 0;
+    list-style: none;
+  }
 }
 
 @media (max-width: 809.98px) {
@@ -3232,7 +3851,7 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   }
 
   .todd-contact-stage .todd-contact-headline h2 {
-    --todd-font-size: clamp(1.3rem, 6vw, 1.8rem) !important;
+    --todd-font-size: 34px !important;
     --todd-line-height: 1.12 !important;
     overflow-wrap: break-word;
     padding-inline: 0;
@@ -3249,6 +3868,7 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   .todd-contact-stage .todd-contact-email {
     gap: 10px;
     min-height: 54px;
+    min-width: 44px;
     padding: 8px 9px 8px 14px !important;
     border-radius: 14px !important;
   }
@@ -3282,6 +3902,22 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   .todd-contact-stage .todd-contact-credits .todd-text {
     --todd-font-size: clamp(0.68rem, 2.9vw, 0.78rem) !important;
     --todd-line-height: 1.35 !important;
+  }
+
+  .todd-footer__phone-11.todd-footer__variant {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px 10px;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .todd-footer__phone-11.todd-footer__variant:hover .todd-footer__link-text-2 {
+    bottom: 0;
+    top: unset;
   }
 }
 
@@ -3410,11 +4046,18 @@ footer.todd-footer,
   min-width: 0;
 }
 
+.todd-books__heading .todd-section-heading {
+  margin: 0;
+}
+
 .todd-books__eyebrow {
+  display: inline-block;
   margin: 0 0 14px;
+  padding: 0.12em 0.42em 0.08em;
   font-family: var(--font-script, "Grape Nuts", cursive);
   font-size: clamp(1.15rem, 1.5vw, 1.5rem);
-  color: var(--todd-red);
+  color: var(--todd-ink);
+  background: color-mix(in srgb, var(--todd-red) 22%, var(--todd-paper));
   transform: rotate(-1deg);
 }
 
@@ -3436,7 +4079,8 @@ footer.todd-footer,
 }
 
 .todd-books__heading > p:last-child,
-.todd-books__heading > div:last-child > p {
+.todd-books__heading > div:last-child > p,
+.todd-books__heading .todd-books__heading-copy {
   max-width: 56ch;
   margin: 24px 0 0;
   font-family: var(--font-display, "Inter Display", sans-serif);
@@ -3652,6 +4296,42 @@ footer.todd-footer,
   margin: 0 auto;
 }
 
+@media (min-width: 810px) and (max-width: 959.98px) {
+  .todd-books__shelf {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .todd-book-card-reveal-wrap {
+    max-width: min(280px, 100%);
+    justify-self: center;
+    width: 100%;
+  }
+}
+
+@media (min-width: 960px) and (max-width: 1199.98px) {
+  .todd-books__shelf {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .todd-book-card-reveal-wrap {
+    max-width: min(260px, 100%);
+    justify-self: center;
+    width: 100%;
+  }
+}
+
+.todd-books__filters-scroll:focus-visible,
+.todd-books__shelf-scroll:focus-visible {
+  outline: 3px solid var(--todd-blue);
+  outline-offset: 4px;
+  border-radius: var(--todd-radius-sm);
+}
+
+.todd-books__filters-scroll,
+.todd-books__shelf-scroll {
+  scroll-behavior: smooth;
+}
+
 .todd-book-card-reveal {
   min-width: 0;
 }
@@ -3670,6 +4350,11 @@ footer.todd-footer,
   cursor: pointer;
   transform: rotate(calc((var(--book-index) - 3) * 0.28deg));
   transition: transform 220ms ease, border-color 220ms ease, background-color 220ms ease;
+}
+
+.todd-book-card:focus-visible {
+  outline: 3px solid var(--todd-blue);
+  outline-offset: 4px;
 }
 
 .todd-book-card:hover,
@@ -3779,6 +4464,25 @@ footer.todd-footer,
     scrollbar-width: none;
   }
 
+  .todd-books__filter-reveal {
+    position: relative;
+  }
+
+  .todd-books__filter-reveal::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: calc(var(--card-gutter) * -1);
+    bottom: 0;
+    width: clamp(32px, 12vw, 52px);
+    pointer-events: none;
+    background: linear-gradient(
+      to left,
+      var(--todd-paper) 18%,
+      rgb(247 244 237 / 0)
+    );
+  }
+
   .todd-books__filters::-webkit-scrollbar,
   .todd-books__shelf::-webkit-scrollbar {
     display: none;
@@ -3790,38 +4494,82 @@ footer.todd-footer,
 
   .todd-books__feature {
     grid-template-columns: 1fr;
-    gap: 28px;
-    padding: var(--card-pad-lg);
-    border-radius: 24px;
+    gap: 20px;
+    margin-bottom: 28px;
+    padding: var(--card-pad);
+    border-radius: 20px;
     box-shadow: 5px 6px 0 var(--todd-ink);
   }
 
   .todd-books__feature-cover {
-    width: min(220px, 68vw);
+    width: min(180px, 54vw);
     margin-inline: auto;
   }
 
   .todd-books__feature-copy h3 {
-    font-size: clamp(1.8rem, 9vw, 2.6rem);
+    margin-block: 14px;
+    font-size: clamp(1.75rem, 8vw, 2.35rem);
+  }
+
+  .todd-books__credit {
+    margin-bottom: 12px;
+  }
+
+  .todd-books__description {
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+
+  .todd-books__feature-actions {
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 16px;
   }
 
   .todd-books__shelf {
     display: flex;
+    align-items: flex-start;
     gap: var(--card-gap);
     margin-inline: calc(var(--card-gutter) * -1);
     padding: 10px var(--card-gutter) 18px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--card-gutter);
+    overscroll-behavior-inline: contain;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    position: relative;
+  }
+
+  .todd-books__shelf::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: clamp(36px, 14vw, 56px);
+    pointer-events: none;
+    background: linear-gradient(
+      to left,
+      var(--todd-paper) 16%,
+      rgb(247 244 237 / 0)
+    );
+  }
+
+  .todd-book-card-reveal-wrap {
+    flex: 0 0 min(76vw, 260px);
+    min-width: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
 
   .todd-book-card-reveal {
-    flex: 0 0 min(70vw, 240px);
-    scroll-snap-align: center;
+    width: 100%;
+    min-width: 0;
   }
 
   .todd-book-card {
+    grid-template-rows: auto auto;
     width: 100%;
   }
 
@@ -3868,6 +4616,7 @@ footer.todd-footer,
   }
 
   .todd-about {
+    --about-mobile-parent-radius: clamp(28px, 10vw, 40px);
     overflow-x: clip;
   }
 
@@ -3878,6 +4627,8 @@ footer.todd-footer,
     top: 80px !important;
     padding-bottom: 0 !important;
     margin-bottom: 0 !important;
+    border-radius: var(--about-mobile-parent-radius) !important;
+    overflow: clip !important;
   }
 
   .todd-about #about-1 {
@@ -3901,13 +4652,48 @@ footer.todd-footer,
     margin-bottom: 0 !important;
   }
 
-  .todd-about .todd-about__container,
   .todd-about .todd-about__card,
   .todd-about .todd-intro__wrapper-24,
   .todd-about .todd-about__container-2,
   .todd-about .todd-intro__wrapper-17 {
+    --about-mobile-frame-radius: var(--about-mobile-parent-radius);
+    --about-mobile-frame-inset: var(--card-gutter);
     width: 100% !important;
     max-width: 100% !important;
+    min-height: 100%;
+    border-radius: var(--about-mobile-parent-radius) !important;
+    overflow: clip !important;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    box-sizing: border-box;
+  }
+
+  .todd-about #about-1 .todd-about__card,
+  .todd-about #selected-talks .todd-intro__wrapper-24,
+  .todd-about #selected-clients .todd-about__container-2 {
+    border-radius: inherit !important;
+  }
+
+  .todd-page-root .todd-about .todd-about__img,
+  .todd-page-root .todd-about .todd-about__img-2,
+  .todd-page-root .todd-about .todd-about__img-3,
+  .todd-page-root .todd-about .todd-about__img-4 {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    border-radius: inherit;
+  }
+
+  .todd-about .todd-about__card-image {
+    border-radius: inherit;
+  }
+
+  .todd-about .todd-about-card-img {
+    border-radius: inherit;
   }
 
   .todd-about .todd-about__container {
@@ -3915,24 +4701,115 @@ footer.todd-footer,
     border-radius: clamp(28px, 8vw, 48px);
     padding-bottom: 60px !important;
     isolation: isolate;
+    overflow: clip;
   }
 
-  .todd-about .todd-about__container > [data-todd-background-image-wrapper] {
+  .todd-about .todd-about__container > .todd-about__section-background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    overflow: clip;
+    pointer-events: none;
+  }
+
+  .todd-about .todd-about__container > .todd-about__section-background [data-todd-background-image-wrapper] {
     z-index: -1;
     overflow: hidden;
     border-radius: inherit !important;
     pointer-events: none;
   }
 
-  .todd-about
-    > .ssr-variant.todd-hide-tablet.todd-hide-desktop
-    [data-todd-name="Wrapper"] {
+  .todd-about .todd-about__container > .todd-about__section-background img {
+    border-radius: inherit;
+  }
+
+  .todd-about .todd-about__title-heading {
+    --todd-font-size: clamp(2rem, 9vw, 2.75rem) !important;
+    --todd-text-color: rgb(9, 9, 9) !important;
+    color: rgb(9, 9, 9) !important;
+  }
+
+  .todd-about [data-todd-name="Wrapper"][data-border="true"] {
     z-index: 1;
-    width: calc(100% - (var(--card-gutter) * 2)) !important;
-    flex: none !important;
-    margin: var(--card-gutter);
-    background: rgb(255 255 255 / 88%) !important;
-    backdrop-filter: blur(2px);
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 0;
+    align-self: stretch;
+    margin: var(--about-mobile-frame-inset, var(--card-gutter));
+    padding: clamp(28px, 8vw, 40px) clamp(16px, 4vw, 20px) !important;
+    border-radius: calc(var(--about-mobile-parent-radius) - 4px) !important;
+    background: var(--todd-white, #fff) !important;
+    backdrop-filter: none;
+    box-sizing: border-box;
+    overflow: visible;
+  }
+
+  .todd-about [data-todd-name="Wrapper"][data-border="true"]::after {
+    border-radius: inherit;
+  }
+
+  .todd-about .todd-about__content-4 {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .todd-about .todd-about__rich-text-container-19,
+  .todd-about .todd-about__rich-text-container-19 p {
+    min-width: 0;
+    overflow-wrap: break-word;
+  }
+
+  .todd-about .todd-about__title-wrap-4 {
+    padding-top: clamp(36px, 10vw, 44px);
+  }
+
+  .todd-page-root .todd-about .todd-about__rich-text-container-8 {
+    left: auto;
+    right: 0;
+    top: 0;
+    transform: none !important;
+    max-width: 100%;
+    white-space: normal;
+    text-align: right;
+    line-height: 0.95;
+  }
+
+  .todd-page-root .todd-about .todd-about__rich-text-container-8 p {
+    --todd-font-size: clamp(24px, 6.8vw, 34px) !important;
+    font-size: clamp(24px, 6.8vw, 34px) !important;
+    white-space: normal;
+  }
+
+  .todd-about #selected-talks .todd-about__responsive-row {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .todd-about #selected-talks .todd-about__rich-text-container-3 {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    gap: 4px;
+  }
+
+  .todd-about #selected-talks .todd-about__rich-text-container-2,
+  .todd-about #selected-talks .todd-about__rich-text-container-7,
+  .todd-about #selected-talks .todd-about__rich-text-container-10,
+  .todd-about #selected-talks .todd-about__rich-text-container-18,
+  .todd-about #selected-talks .todd-about__rich-text-container {
+    white-space: normal;
+    max-width: 100%;
   }
 
   .todd-about h2 {

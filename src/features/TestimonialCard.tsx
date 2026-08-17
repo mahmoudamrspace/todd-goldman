@@ -112,17 +112,7 @@ export function TestimonialCard({ item, index, width = "full", iconSrc }: Testim
           >
             <p
               dir="auto"
-              className="todd-text"
-              style={{
-                "--font-selector": "R0Y7QXZlcmlhIFNlcmlmIExpYnJlLWl0YWxpYw==",
-                "--todd-font-family": '"Averia Serif Libre", sans-serif',
-                "--todd-font-size": "14px",
-                "--todd-font-style": "italic",
-                "--todd-text-alignment": "left",
-                "--todd-text-color":
-                  "var(--extracted-r6o4lv, var(--token-5c9fb93e-5d1e-4f79-b937-cc4862155663, rgb(148, 147, 137)))",
-                "--todd-text-transform": "lowercase",
-              }}
+              className="todd-text todd-testimonial-card__role"
             >
               {item.role}
             </p>

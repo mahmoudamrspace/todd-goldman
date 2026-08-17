@@ -3,8 +3,9 @@
 import Lenis from "lenis";
 import { cancelFrame, frame } from "motion/react";
 import { useEffect, type ReactNode } from "react";
+import { dispatchNavHashSync, LENIS_SCROLL_EVENT } from "@/shared/lib/scroll-events";
 
-export const LENIS_SCROLL_EVENT = "lenis-scroll";
+export { LENIS_SCROLL_EVENT } from "@/shared/lib/scroll-events";
 
 function hashFromHref(href: string) {
   const hashIndex = href.indexOf("#");
@@ -58,6 +59,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       if (scrollToHash(hash)) {
         event.preventDefault();
         window.history.pushState(null, "", hash);
+        dispatchNavHashSync();
       }
     };
 

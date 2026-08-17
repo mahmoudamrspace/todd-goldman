@@ -29,11 +29,17 @@
   --text-muted: var(--color-muted-soft);
   --border-subtle: var(--color-border);
 
-  --font-serif: var(--font-averia), "Times New Roman", serif;
-  --font-display: var(--font-inter-display), "Helvetica Neue", sans-serif;
-  --font-sans: var(--font-inter), "Helvetica Neue", sans-serif;
-  --font-script: var(--font-grape-nuts), cursive;
-  --font-grotesk: var(--font-cabinet), "Helvetica Neue", sans-serif;
+  --font-averia: "Averia Serif Libre", "Times New Roman", serif;
+  --font-inter: "Inter", "Helvetica Neue", sans-serif;
+  --font-inter-display: "Inter Display", "Helvetica Neue", sans-serif;
+  --font-grape-nuts: "Grape Nuts", cursive;
+  --font-cabinet: "Cabinet Grotesk", "Helvetica Neue", sans-serif;
+
+  --font-serif: var(--font-averia);
+  --font-display: var(--font-inter-display);
+  --font-sans: var(--font-inter);
+  --font-script: var(--font-grape-nuts);
+  --font-grotesk: var(--font-cabinet);
 
   --container-max: 1128px;
   --container-pad: 24px;
@@ -47,6 +53,9 @@
   --card-pad-lg: 20px;
   --card-gap: var(--space-4);
   --card-radius: 18px;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --todd-radius-sm: var(--radius-sm);
   --card-max-width: var(--container-max);
   --card-viewport-width: min(var(--card-max-width), calc(100vw - (var(--card-gutter) * 2)));
 
@@ -57,6 +66,7 @@
   /* Typography scale */
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
+  --text-md: 0.9375rem;
   --text-base: 1rem;
   --text-lg: 1.125rem;
   --text-xl: 1.25rem;
@@ -88,8 +98,9 @@
 
   /* Controls */
   --button-bg: var(--color-ink);
+  --button-bg-hover: color-mix(in srgb, var(--color-ink) 88%, var(--color-white));
   --button-fg: var(--color-cream);
-  --button-radius: var(--todd-radius-sm, 12px);
+  --button-radius: var(--todd-radius-sm);
   --link-fg: var(--color-blue);
   --duration-fast: 180ms;
   --duration-normal: 320ms;

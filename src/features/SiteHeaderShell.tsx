@@ -4,10 +4,14 @@ import type { IntroContent } from "@/content/section-types";
 import { NavFocusTrap } from "@/entities/NavFocusTrap";
 import { NavHamburger } from "@/entities/NavHamburger";
 import { DesktopNavLinks } from "@/features/DesktopNavLinks";
+import { ActiveSectionProvider } from "@/shared/providers/ActiveSectionProvider";
 import { NavPhoneMenuContent } from "@/features/NavPhoneMenuContent";
 import { useNavMenu } from "@/features/nav-menu/NavMenuContext";
 import { navVariantName, navShellClass, navShellStyle } from "@/shared/lib/nav-variants";
+import { navFragmentsFromHrefs } from "@/shared/lib/nav-section-fragments";
 import { footerResponsiveVisibleOnly } from "@/shared/lib/todd-semantic-classes";
+import { usePathname } from "next/navigation";
+import { useMemo } from "react";
 
 export interface SiteHeaderShellProps {
   content: IntroContent;
@@ -71,9 +75,17 @@ function SiteHeaderBrand({
 export function SiteHeaderShell({ content, homeCurrent = false }: SiteHeaderShellProps) {
   const { open, closing, present, toggle } = useNavMenu();
   const navState = closing ? "closing" : present ? "open" : "closed";
+  const pathname = usePathname();
+  const navFragments = useMemo(
+    () => navFragmentsFromHrefs(
+      content.nav.map((item) => item.href),
+      pathname,
+    ),
+    [content.nav, pathname],
+  );
 
   return (
-    <>
+    <ActiveSectionProvider fragments={navFragments}>
       <div className={footerResponsiveVisibleOnly("tablet", "desktop")}>
         <div className="todd-site-header">
           <header className="site-header-bar site-header-bar--cartoon todd-site-header__bar" data-nav-open="false">
@@ -86,6 +98,7 @@ export function SiteHeaderShell({ content, homeCurrent = false }: SiteHeaderShel
       <div className={footerResponsiveVisibleOnly("mobile")}>
         <div className="todd-site-header">
           <nav
+            id="todd-nav-menu"
             className={navShellClass(
               "todd-site-header__nav-2 todd-site-header__nav todd-nav-overlay-content__desktop-4-6-aigtuw site-header-nav--cartoon todd-site-header__nav",
               "phone",
@@ -116,12 +129,12 @@ export function SiteHeaderShell({ content, homeCurrent = false }: SiteHeaderShel
                 />
               </div>
             </div>
-            <NavFocusTrap open={present}>
+            <NavFocusTrap open={present} labelledBy="todd-nav-menu-title">
               <NavPhoneMenuContent content={content} open={open} />
             </NavFocusTrap>
           </nav>
         </div>
       </div>
-    </>
+    </ActiveSectionProvider>
   );
 }

@@ -49,7 +49,6 @@ export function FaqAccordionItem({
       data-border={true}
       data-todd-name={isOpen ? "Open" : "Closed"}
       data-faq-index={index}
-      data-highlight={true}
       style={{
         ...style,
         transition: `opacity 0.4s ${FAQ_EASE}`,

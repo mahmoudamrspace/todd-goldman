@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Services } from "@/widgets/sections/Services";
 import type { ServicesContent } from "@/content/section-types";
 
@@ -8,16 +7,7 @@ export interface ServicesSectionProps {
   content: ServicesContent;
 }
 
-/** Desktop service row hover state for legacy export psO7m rows. */
+/** Services section wrapper for scroll chapter composition. */
 export function ServicesSection({ content }: ServicesSectionProps) {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
-  return (
-    <Services
-      content={content}
-      activeIndex={activeIndex}
-      onRowEnter={setActiveIndex}
-      onRowLeave={() => setActiveIndex(null)}
-    />
-  );
+  return <Services content={content} />;
 }

@@ -20,3 +20,7 @@ export async function getWorks() {
 export async function getWork(slug: string) {
   return getContentRepository().getWork(slug);
 }
+
+export async function getBooks() {
+  return getContentRepository().getBooks();
+}

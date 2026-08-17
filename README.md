@@ -25,6 +25,10 @@ pnpm run check             # lint + typecheck + contract + build
 pnpm run preview:out       # Serve out/ on :3460
 ```
 
+## CSS ownership
+
+Homepage layout and identity styles live in `src/shared/styles/todd-section-layout.css` and `src/shared/styles/todd-identity.css`. Prefer semantic `todd-*` selectors there when refactoring sections. Legacy rules in `todd-layout.css` remain for work-detail routes until those pages migrate—avoid adding new homepage selectors to `todd-layout.css`.
+
 ## Sanity CMS
 
 Set `SANITY_PROJECT_ID` and `SANITY_DATASET` to swap adapters via `getContentRepository()` without touching components.

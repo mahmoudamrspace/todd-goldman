@@ -7,6 +7,7 @@ import {
   navLinkDelays,
   navOverlaySpring,
 } from "@/shared/lib/motion";
+import { useNavLinkActive } from "@/shared/lib/use-nav-link-active";
 import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
 
@@ -32,8 +33,9 @@ export function NavMenuLink({
 }: NavMenuLinkProps) {
   const reduced = useReducedMotion();
   const { setOpen } = useNavMenu();
-  const enterDelay = navLinkDelays[index] ?? 0.45;
-  const exitDelay = navLinkCloseDelays[index] ?? 0;
+  const active = useNavLinkActive(href);
+  const enterDelay = navLinkDelays[index] ?? navLinkDelays.at(-1) ?? 0.45;
+  const exitDelay = navLinkCloseDelays[index] ?? navLinkCloseDelays.at(-1) ?? 0;
   const external = href.startsWith("http");
 
   if (reduced) {
@@ -43,6 +45,7 @@ export function NavMenuLink({
         data-todd-name={dataToddName}
         data-highlight={true}
         href={href}
+        aria-current={active ? "page" : undefined}
         style={{
           opacity: open ? 1 : 0,
           pointerEvents: open ? undefined : "none",
@@ -62,6 +65,7 @@ export function NavMenuLink({
       data-todd-name={dataToddName}
       data-highlight={true}
       href={href}
+      aria-current={active ? "page" : undefined}
       style={{ willChange: "transform", pointerEvents: open ? undefined : "none" }}
       initial={false}
       animate={open ? { opacity: 1, y: 0 } : { opacity: 0, y: -16 }}

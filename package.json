@@ -17,6 +17,7 @@
     "test:visual": "playwright test scripts/visual-regression-home.spec.ts --reporter=line",
     "test:animations": "playwright test scripts/audit-animations.spec.ts --reporter=line",
     "check": "pnpm run lint && pnpm run typecheck && pnpm run test:contract && pnpm run build",
+    "check:release": "pnpm run check && pnpm run test:visual && pnpm run test:animations",
     "preview:out": "serve out -l 3460"
   },
   "dependencies": {

@@ -1,4 +1,4 @@
-import type { HeroScatterTarget } from "@/features/hero-scatter-data";
+import type { HeroScatterTarget } from "@/shared/lib/hero-scatter-target";
 
 const ROOT = "/assets/todd-scenes/hero";
 

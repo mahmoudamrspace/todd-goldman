@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { imageSizes } from "@/shared/config/breakpoints";
 import { cn } from "@/shared/lib/cn";
 import styles from "./Media.module.css";
 
@@ -19,7 +20,7 @@ export function Media({
   height = 1200,
   priority,
   className,
-  sizes = "(max-width: 768px) 100vw, 50vw",
+  sizes = imageSizes.full,
 }: MediaProps) {
   return (
     <div className={cn(styles.root, className)}>

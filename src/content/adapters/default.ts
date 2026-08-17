@@ -1,5 +1,6 @@
 import type { ContentRepository } from "@/content/repository";
-import { siteSettingsSchema, workSchema } from "@/content/schemas";
+import { bookSchema, siteSettingsSchema, workSchema } from "@/content/schemas";
+import booksData from "@/content/data/todd-books.json";
 import { defaultSiteSeed } from "@/content/seeds/default-site";
 import { defaultWorksSeed } from "@/content/seeds/default-works";
 
@@ -14,5 +15,8 @@ export const defaultContentRepository: ContentRepository = {
   async getWork(slug: string) {
     const work = defaultWorksSeed.find((item) => item.slug === slug);
     return work ? workSchema.parse(work) : null;
+  },
+  async getBooks() {
+    return booksData.map((book) => bookSchema.parse(book));
   },
 };

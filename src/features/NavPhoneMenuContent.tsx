@@ -12,9 +12,16 @@ export interface NavPhoneMenuContentProps {
 export function NavPhoneMenuContent({ content, open }: NavPhoneMenuContentProps) {
   return (
     <div className={"todd-nav-overlay-content__content nav-phone-menu-content"} data-todd-name={"Content"}>
+      <h2 id="todd-nav-menu-title" className="visually-hidden">
+        Site menu
+      </h2>
       <NavMenuList content={content} open={open} />
       <div className="nav-phone-contact" data-todd-name="Contact">
-        <a className="nav-phone-contact__link" href={`mailto:${content.email}`}>
+        <a
+          className="nav-phone-contact__link"
+          href={`mailto:${content.email}`}
+          aria-label={`Email ${content.email}`}
+        >
           {content.email}
         </a>
       </div>

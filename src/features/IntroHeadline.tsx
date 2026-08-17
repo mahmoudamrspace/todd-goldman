@@ -225,8 +225,8 @@ export function IntroGreeting({ text }: { text: string }) {
   const useMotion = smoothProgress !== null;
 
   return (
-    <h2
-      className={"todd-text todd-intro-headline__h2"}
+    <p
+      className={"todd-text todd-intro-headline__h2 todd-intro__greeting"}
       data-styles-preset={"RGebQr53Z"}
       dir={"auto"}
     >
@@ -249,6 +249,6 @@ export function IntroGreeting({ text }: { text: string }) {
           </IntroStaticWord>
         ),
       )}
-    </h2>
+    </p>
   );
 }

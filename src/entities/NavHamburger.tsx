@@ -9,6 +9,7 @@ export interface NavHamburgerProps {
   onToggle: () => void;
   style: CSSProperties;
   dark?: boolean;
+  controlsId?: string;
 }
 
 const TOP_STROKE = "M3.5 8.5 C7.5 7, 16.5 10, 20.5 8.5";
@@ -24,6 +25,7 @@ export function NavHamburger({
   onToggle,
   style,
   dark: _dark = false,
+  controlsId = "todd-nav-menu",
 }: NavHamburgerProps) {
   const reduced = useReducedMotion();
 
@@ -48,8 +50,8 @@ export function NavHamburger({
         open ? "todd-nav-hamburger__variant cartoon-burger--open" : "todd-nav-hamburger__variant-2"
       }`}
       data-todd-name={open ? "Disabled" : "Enabled"}
-      data-highlight={true}
       aria-expanded={open}
+      aria-controls={controlsId}
       aria-label={open ? "Close menu" : "Open menu"}
       onClick={onClick}
       onKeyDown={onKeyDown}

@@ -18,6 +18,44 @@ import {
   editorialSupportParallax,
 } from "@/shared/lib/motion";
 
+function WorkPanelCopy({
+  work,
+  index,
+}: {
+  work: Work;
+  index: number;
+}) {
+  return (
+    <>
+      <div className="todd-scene__frame">
+        <span className="todd-scene__number" aria-hidden="true">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <img
+          src={work.gridThumbnail.src}
+          alt={work.gridThumbnail.alt}
+          loading={index < 4 ? "eager" : "lazy"}
+          decoding="async"
+        />
+      </div>
+      <div className="todd-scene__copy">
+        {work.category ? (
+          <span
+            className={cn(
+              "todd-scene__category",
+              work.accentTone && `todd-scene__category--${work.accentTone}`,
+            )}
+          >
+            {work.category}
+          </span>
+        ) : null}
+        <h3 className="todd-scene__title">{work.title}</h3>
+        {work.hook ? <p className="todd-scene__hook">{work.hook}</p> : null}
+      </div>
+    </>
+  );
+}
+
 function WorkPanel({
   work,
   role,
@@ -25,6 +63,8 @@ function WorkPanel({
   href,
   className,
   style,
+  asMotion = false,
+  interactive = false,
 }: {
   work: Work;
   role: "dominant" | "supporting";
@@ -32,84 +72,34 @@ function WorkPanel({
   href: string;
   className?: string;
   style?: MotionStyle;
+  asMotion?: boolean;
+  interactive?: boolean;
 }) {
-  return (
-    <motion.a
-      href={href}
-      className={cn("todd-scene__panel", "todd-card-shell", `todd-scene__panel--${role}`, className)}
-      style={style}
-    >
-      <div className="todd-scene__frame">
-        <span className="todd-scene__number" aria-hidden="true">
-          {String(index + 1).padStart(2, "0")}
-        </span>
-        <img
-          src={work.gridThumbnail.src}
-          alt={work.gridThumbnail.alt}
-          loading={index < 4 ? "eager" : "lazy"}
-          decoding="async"
-        />
-      </div>
-      <div className="todd-scene__copy">
-        {work.category ? (
-          <span
-            className={cn(
-              "todd-scene__category",
-              work.accentTone && `todd-scene__category--${work.accentTone}`,
-            )}
-          >
-            {work.category}
-          </span>
-        ) : null}
-        <h3 className="todd-scene__title">{work.title}</h3>
-        {work.hook ? <p className="todd-scene__hook">{work.hook}</p> : null}
-      </div>
-    </motion.a>
+  const panelClassName = cn(
+    "todd-scene__panel",
+    "todd-card-shell",
+    `todd-scene__panel--${role}`,
+    className,
   );
-}
+  const copy = <WorkPanelCopy work={work} index={index} />;
 
-function StaticWorkPanel({
-  work,
-  role,
-  index,
-  href,
-}: {
-  work: Work;
-  role: "dominant" | "supporting";
-  index: number;
-  href: string;
-}) {
+  if (asMotion) {
+    return (
+      <motion.a href={href} className={panelClassName} style={style}>
+        {copy}
+      </motion.a>
+    );
+  }
+
   return (
     <a
       href={href}
-      className={cn("todd-scene__panel", "todd-card-shell", `todd-scene__panel--${role}`)}
-      data-highlight
+      className={panelClassName}
+      {...(interactive
+        ? { "data-highlight": true, "data-cursor-label": "View" }
+        : {})}
     >
-      <div className="todd-scene__frame">
-        <span className="todd-scene__number" aria-hidden="true">
-          {String(index + 1).padStart(2, "0")}
-        </span>
-        <img
-          src={work.gridThumbnail.src}
-          alt={work.gridThumbnail.alt}
-          loading={index < 4 ? "eager" : "lazy"}
-          decoding="async"
-        />
-      </div>
-      <div className="todd-scene__copy">
-        {work.category ? (
-          <span
-            className={cn(
-              "todd-scene__category",
-              work.accentTone && `todd-scene__category--${work.accentTone}`,
-            )}
-          >
-            {work.category}
-          </span>
-        ) : null}
-        <h3 className="todd-scene__title">{work.title}</h3>
-        {work.hook ? <p className="todd-scene__hook">{work.hook}</p> : null}
-      </div>
+      {copy}
     </a>
   );
 }
@@ -117,37 +107,14 @@ function StaticWorkPanel({
 /** Uniform single card for mobile flat list. */
 export function MobileWorkCard({ work, index }: { work: Work; index: number }) {
   return (
-    <a
+    <WorkPanel
+      work={work}
+      role="dominant"
+      index={index}
       href={`/works/${work.slug}`}
-      className="todd-scene__panel todd-scene__panel--uniform todd-card-shell"
-      data-highlight
-    >
-      <div className="todd-scene__frame">
-        <span className="todd-scene__number" aria-hidden="true">
-          {String(index + 1).padStart(2, "0")}
-        </span>
-        <img
-          src={work.gridThumbnail.src}
-          alt={work.gridThumbnail.alt}
-          loading={index < 4 ? "eager" : "lazy"}
-          decoding="async"
-        />
-      </div>
-      <div className="todd-scene__copy">
-        {work.category ? (
-          <span
-            className={cn(
-              "todd-scene__category",
-              work.accentTone && `todd-scene__category--${work.accentTone}`,
-            )}
-          >
-            {work.category}
-          </span>
-        ) : null}
-        <h3 className="todd-scene__title">{work.title}</h3>
-        {work.hook ? <p className="todd-scene__hook">{work.hook}</p> : null}
-      </div>
-    </a>
+      className="todd-scene__panel--uniform"
+      interactive
+    />
   );
 }
 
@@ -203,56 +170,38 @@ export function EditorialWorkScene({
   const metaOpacity = useTransform(smooth, [0.18, 0.48], [0, 1]);
   const metaX = useTransform(smooth, [0.18, 0.48], [reversed ? 28 : -28, 0]);
 
-  if (useStaticPanels) {
-    return (
-      <section
-        ref={ref}
-        className={cn("todd-scene", reversed && "todd-scene--reversed")}
-        aria-label={`Artworks ${startIndex + 1}${supporting ? ` and ${startIndex + 2}` : ""}`}
-      >
-        <div className="todd-scene__stage">
-          <StaticWorkPanel
-            work={dominant}
-            role="dominant"
-            index={startIndex}
-            href={`/works/${dominant.slug}`}
-          />
-          {supporting ? (
-            <StaticWorkPanel
-              work={supporting}
-              role="supporting"
-              index={startIndex + 1}
-              href={`/works/${supporting.slug}`}
-            />
-          ) : null}
-        </div>
-      </section>
-    );
-  }
-
-  return (
-    <section
-      ref={ref}
-      className={cn("todd-scene", reversed && "todd-scene--reversed")}
-      aria-label={`Artworks ${startIndex + 1}${supporting ? ` and ${startIndex + 2}` : ""}`}
-    >
-      <div className="todd-scene__stage">
+  const sceneLabel = `Artworks ${startIndex + 1}${supporting ? ` and ${startIndex + 2}` : ""}`;
+  const stage = (
+    <>
+      <WorkPanel
+        work={dominant}
+        role="dominant"
+        index={startIndex}
+        href={`/works/${dominant.slug}`}
+        asMotion={!useStaticPanels}
+        interactive={useStaticPanels}
+        style={
+          useStaticPanels
+            ? undefined
+            : { y: dominantY, clipPath: dominantClip }
+        }
+      />
+      {supporting ? (
         <WorkPanel
-          work={dominant}
-          role="dominant"
-          index={startIndex}
-          href={`/works/${dominant.slug}`}
-          style={{ y: dominantY, clipPath: dominantClip }}
+          work={supporting}
+          role="supporting"
+          index={startIndex + 1}
+          href={`/works/${supporting.slug}`}
+          asMotion={!useStaticPanels}
+          interactive={useStaticPanels}
+          style={
+            useStaticPanels
+              ? undefined
+              : { y: supportY, clipPath: supportClip }
+          }
         />
-        {supporting ? (
-          <WorkPanel
-            work={supporting}
-            role="supporting"
-            index={startIndex + 1}
-            href={`/works/${supporting.slug}`}
-            style={{ y: supportY, clipPath: supportClip }}
-          />
-        ) : null}
+      ) : null}
+      {!useStaticPanels ? (
         <motion.div
           className="todd-scene__meta-rail"
           style={{ opacity: metaOpacity, x: metaX }}
@@ -267,7 +216,17 @@ export function EditorialWorkScene({
             </>
           ) : null}
         </motion.div>
-      </div>
+      ) : null}
+    </>
+  );
+
+  return (
+    <section
+      ref={ref}
+      className={cn("todd-scene", reversed && "todd-scene--reversed")}
+      aria-label={sceneLabel}
+    >
+      <div className="todd-scene__stage">{stage}</div>
     </section>
   );
 }

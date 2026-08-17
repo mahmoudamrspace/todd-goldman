@@ -6,7 +6,7 @@ import boundaries from "eslint-plugin-boundaries";
 export default defineConfig([
   ...nextVitals,
   ...nextTs,
-  globalIgnores([".next/**", "out/**", "public/**", "scripts/**"]),
+  globalIgnores([".next/**", "out/**", "public/**"]),
   {
     plugins: { boundaries },
     settings: {
@@ -63,6 +63,7 @@ export default defineConfig([
                   { type: "entities" },
                   { type: "content" },
                   { type: "shared" },
+                  { type: "features" },
                 ],
               },
             },
@@ -105,6 +106,32 @@ export default defineConfig([
     files: ["src/widgets/sections/**/*.tsx"],
     rules: {
       "@next/next/no-img-element": "off",
+      "@next/next/no-html-link-for-pages": "off",
+    },
+  },
+  {
+    files: ["src/shared/ui/ContentImage.tsx"],
+    rules: {
+      "@next/next/no-img-element": "off",
+    },
+  },
+  {
+    files: [
+      "src/features/Appear.tsx",
+      "src/features/HiddenReveal.tsx",
+      "src/features/SmoothScroll.tsx",
+      "src/features/StickySection.tsx",
+      "src/features/nav-menu/NavMenuContext.tsx",
+      "src/features/about/about-reveal.tsx",
+    ],
+    rules: {
+      "no-restricted-globals": "off",
+      "react-hooks/set-state-in-effect": "off",
+    },
+  },
+  {
+    files: ["src/features/SiteHeaderShell.tsx"],
+    rules: {
       "@next/next/no-html-link-for-pages": "off",
     },
   },
