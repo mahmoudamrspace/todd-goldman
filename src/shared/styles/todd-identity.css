@@ -1095,11 +1095,21 @@ nav[data-nav-open="true"].todd-nav-overlay-content__desktop-4-6-wwyydj .todd-nav
   transform: translateY(0);
 }
 
-html.custom-cursor-active [data-highlight] {
-  cursor: none !important;
-}
-
 @media (pointer: fine) {
+  html.custom-cursor-active,
+  html.custom-cursor-active * {
+    cursor: none !important;
+  }
+
+  html.custom-cursor-active input,
+  html.custom-cursor-active textarea,
+  html.custom-cursor-active select,
+  html.custom-cursor-active [contenteditable="true"],
+  html.custom-cursor-active [data-native-cursor],
+  html.custom-cursor-active [data-native-cursor] * {
+    cursor: auto !important;
+  }
+
   html.custom-cursor-active:focus-within :focus-visible {
     cursor: auto !important;
   }
@@ -1108,7 +1118,15 @@ html.custom-cursor-active [data-highlight] {
 .custom-cursor__finger {
   display: block;
   image-rendering: pixelated;
-  filter: drop-shadow(2px 2px 0 var(--color-ink));
+  filter:
+    drop-shadow(0 0 1px var(--color-cream))
+    drop-shadow(2px 2px 0 var(--color-ink));
+}
+
+.custom-cursor--interactive .custom-cursor__finger {
+  filter:
+    drop-shadow(0 0 1px var(--color-cream))
+    drop-shadow(3px 3px 0 var(--color-ink));
 }
 
 .custom-cursor__label {
@@ -1127,6 +1145,28 @@ html.custom-cursor-active [data-highlight] {
   letter-spacing: -0.02em;
   white-space: nowrap;
   color: var(--color-ink);
+}
+
+.custom-cursor--flip-x .custom-cursor__label {
+  right: 0;
+  left: auto;
+  transform: none;
+}
+
+.custom-cursor--flip-y .custom-cursor__label {
+  top: auto;
+  bottom: 43px;
+}
+
+@media (forced-colors: active) {
+  html.custom-cursor-active,
+  html.custom-cursor-active * {
+    cursor: auto !important;
+  }
+
+  .custom-cursor {
+    display: none !important;
+  }
 }
 
 .site-header-bar {
@@ -3370,7 +3410,7 @@ h3.todd-text.todd-service-row__title {
   margin-top: clamp(36px, 4vw, 52px);
 }
 
-@media (min-width: 810px) and (max-width: 1199.98px) {
+@media (min-width: 810px) {
   .todd-services__container.todd-card-shell {
     height: auto !important;
     min-height: min(760px, calc(100svh - 24px));
@@ -3379,9 +3419,14 @@ h3.todd-text.todd-service-row__title {
 
   .todd-intro__wrapper-25 .todd-intro__wrapper-8 {
     height: auto !important;
+    place-content: flex-start;
+    align-items: center;
     gap: clamp(12px, 1.5vw, 18px);
+    overflow: visible;
   }
+}
 
+@media (min-width: 810px) and (max-width: 1199.98px) {
   .todd-service-row {
     height: auto !important;
     min-height: 100px;
@@ -3410,6 +3455,24 @@ h3.todd-text.todd-service-row__title {
 }
 
 @media (min-width: 1200px) {
+  .todd-services__container.todd-card-shell {
+    padding-block: clamp(24px, 2.5vw, 40px);
+  }
+
+  .todd-intro__wrapper-25 .todd-intro__wrapper-8 {
+    gap: clamp(12px, 1.2vw, 18px);
+  }
+
+  .todd-services__title {
+    overflow: visible;
+    padding-block: clamp(24px, 2vw, 36px) clamp(20px, 2vw, 32px);
+  }
+
+  .todd-page-root .todd-services__ompass {
+    margin-top: clamp(36px, 4vw, 52px);
+    padding-bottom: clamp(16px, 2vw, 24px);
+  }
+
   .todd-service-row {
     height: auto !important;
     min-height: 96px;

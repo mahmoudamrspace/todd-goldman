@@ -316,6 +316,60 @@ test.describe("services hierarchy (1024px)", () => {
   });
 });
 
+test.describe("services hierarchy (1440px)", () => {
+  test.use({
+    viewport: { width: 1440, height: 900 },
+    colorScheme: "light",
+  });
+
+  test.beforeEach(async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(`${BASE_URL}/#services`);
+    await page.waitForLoadState("networkidle");
+  });
+
+  test("keeps section title and compass fully inside the card", async ({ page }) => {
+    const result = await page.evaluate(() => {
+      const container = document.querySelector(".todd-services__container");
+      const sectionTitle = document.querySelector("#todd-services-title");
+      const compass = document.querySelector(".todd-services__ompass");
+
+      if (!container || !sectionTitle || !compass) {
+        return { ok: false, reason: "missing services card nodes" };
+      }
+
+      const containerRect = container.getBoundingClientRect();
+      const titleRect = sectionTitle.getBoundingClientRect();
+      const compassRect = compass.getBoundingClientRect();
+      const titleTopInset = titleRect.top - containerRect.top;
+      const compassBottomInset = containerRect.bottom - compassRect.bottom;
+      const tolerance = 2;
+
+      const ok =
+        titleRect.height > 0 &&
+        titleTopInset >= 16 - tolerance &&
+        titleRect.top >= containerRect.top + 16 - tolerance &&
+        titleRect.bottom <= containerRect.bottom + tolerance &&
+        compassRect.height > 0 &&
+        compassBottomInset >= 8 - tolerance &&
+        compassRect.bottom <= containerRect.bottom + tolerance &&
+        container.scrollHeight <= container.clientHeight + 1;
+
+      return {
+        ok,
+        titleTopInset,
+        titleHeight: titleRect.height,
+        compassBottomInset,
+        compassHeight: compassRect.height,
+        containerScrollHeight: container.scrollHeight,
+        containerClientHeight: container.clientHeight,
+      };
+    });
+
+    expect(result.ok, JSON.stringify(result)).toBe(true);
+  });
+});
+
 for (const viewport of MOBILE_BOOK_VIEWPORTS) {
   test.describe(`mobile books carousel (${viewport.label} ${viewport.width}px)`, () => {
     test.use({
@@ -1271,5 +1325,198 @@ test.describe("homepage nav active section", () => {
       "aria-current",
       "page",
     );
+  });
+});
+
+test.describe("todd global cursor (1440px)", () => {
+  test.use({
+    viewport: { width: 1440, height: 900 },
+    colorScheme: "light",
+  });
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto(`${BASE_URL}/`);
+    await page.waitForLoadState("networkidle");
+  });
+
+  test("shows the middle finger after movement over ordinary content", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.mouse.move(640, 420);
+    await page.waitForTimeout(180);
+
+    const result = await page.evaluate(() => ({
+      hasCursor: Boolean(document.querySelector(".custom-cursor")),
+      activeClass: document.documentElement.classList.contains("custom-cursor-active"),
+      hasLabel: Boolean(document.querySelector(".custom-cursor__label")),
+      cursorZIndex: Number.parseInt(
+        getComputedStyle(document.querySelector(".custom-cursor")!).zIndex,
+        10,
+      ),
+      headerZIndex: Number.parseInt(
+        getComputedStyle(document.querySelector(".site-header-bar")!).zIndex,
+        10,
+      ),
+      highlighted: document.querySelector(".custom-cursor")?.classList.contains(
+        "custom-cursor--highlighted",
+      ),
+    }));
+
+    expect(result.hasCursor).toBe(true);
+    expect(result.activeClass).toBe(true);
+    expect(result.hasLabel).toBe(false);
+    expect(result.highlighted).toBe(false);
+    expect(result.cursorZIndex).toBeGreaterThan(result.headerZIndex);
+  });
+
+  test("uses restrained feedback on ordinary interactive controls", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    const navLink = page.locator(".desktop-nav-links__link").first();
+    await navLink.hover();
+    await page.waitForTimeout(180);
+
+    await expect(page.locator(".custom-cursor")).toHaveClass(/custom-cursor--interactive/);
+    await expect(page.locator(".custom-cursor")).not.toHaveClass(
+      /custom-cursor--highlighted/,
+    );
+    await expect(page.locator(".custom-cursor__label")).toHaveCount(0);
+  });
+
+  test("shows contextual label on highlight targets", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto(`${BASE_URL}/#services`);
+    await page.waitForLoadState("networkidle");
+
+    const target = page.locator("#services .todd-service-row__link[data-highlight]").first();
+    await target.scrollIntoViewIfNeeded();
+    await target.hover();
+    await page.waitForTimeout(180);
+
+    await expect(page.locator(".custom-cursor")).toHaveClass(/custom-cursor--highlighted/);
+    await expect(page.locator(".custom-cursor__label")).toBeVisible();
+    await expect(page.locator(".custom-cursor__label")).toHaveText("View");
+  });
+
+  test("keeps contextual labels inside viewport edges", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.evaluate(() => {
+      const target = document.createElement("button");
+      target.type = "button";
+      target.dataset.highlight = "true";
+      target.dataset.cursorLabel = "Open";
+      target.setAttribute("aria-label", "Cursor edge test");
+      Object.assign(target.style, {
+        position: "fixed",
+        right: "0",
+        bottom: "0",
+        width: "48px",
+        height: "48px",
+        zIndex: "2",
+      });
+      document.body.append(target);
+    });
+
+    await page.getByRole("button", { name: "Cursor edge test" }).hover();
+    await page.waitForTimeout(180);
+
+    await expect(page.locator(".custom-cursor")).toHaveClass(/custom-cursor--flip-x/);
+    await expect(page.locator(".custom-cursor")).toHaveClass(/custom-cursor--flip-y/);
+    await expect(page.locator(".custom-cursor__label")).toHaveText("Open");
+  });
+
+  test("hides when the pointer leaves the document", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.mouse.move(640, 420);
+    await page.waitForTimeout(120);
+    await page.mouse.move(-20, -20);
+    await page.waitForTimeout(120);
+
+    const result = await page.evaluate(() => ({
+      hasCursor: Boolean(document.querySelector(".custom-cursor")),
+      activeClass: document.documentElement.classList.contains("custom-cursor-active"),
+    }));
+
+    expect(result.hasCursor).toBe(false);
+    expect(result.activeClass).toBe(false);
+  });
+
+  test("stays disabled in forced-colors mode", async ({ page }) => {
+    await page.emulateMedia({
+      reducedMotion: "no-preference",
+      forcedColors: "active",
+    });
+    await page.reload();
+    await page.waitForLoadState("networkidle");
+    await page.mouse.move(640, 420);
+    await page.waitForTimeout(180);
+
+    const result = await page.evaluate(() => ({
+      hasCursor: Boolean(document.querySelector(".custom-cursor")),
+      activeClass: document.documentElement.classList.contains("custom-cursor-active"),
+    }));
+
+    expect(result.hasCursor).toBe(false);
+    expect(result.activeClass).toBe(false);
+  });
+
+  test("stays disabled with reduced motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.reload();
+    await page.waitForLoadState("networkidle");
+    await page.mouse.move(640, 420);
+    await page.waitForTimeout(180);
+
+    const result = await page.evaluate(() => ({
+      hasCursor: Boolean(document.querySelector(".custom-cursor")),
+      activeClass: document.documentElement.classList.contains("custom-cursor-active"),
+    }));
+
+    expect(result.hasCursor).toBe(false);
+    expect(result.activeClass).toBe(false);
+  });
+
+  test("restores native cursor over native escape zones", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto(`${BASE_URL}/#contact`);
+    await page.waitForLoadState("networkidle");
+
+    const email = page.locator(".todd-contact-email[data-native-cursor]").first();
+    const box = await email.boundingBox();
+    expect(box).not.toBeNull();
+    await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
+    await page.waitForTimeout(180);
+
+    const result = await page.evaluate(() => {
+      const emailEl = document.querySelector(".todd-contact-email");
+      return {
+        hasCursor: Boolean(document.querySelector(".custom-cursor")),
+        activeClass: document.documentElement.classList.contains("custom-cursor-active"),
+        emailCursor: emailEl ? getComputedStyle(emailEl).cursor : null,
+      };
+    });
+
+    expect(result.hasCursor).toBe(false);
+    expect(result.activeClass).toBe(false);
+    expect(result.emailCursor).not.toBe("none");
+  });
+
+  test("keeps keyboard focus visible without custom cursor override", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.keyboard.press("Tab");
+
+    const focused = page.locator(":focus-visible");
+    await expect(focused).toBeVisible();
+
+    const focusStyle = await focused.evaluate((node) => {
+      const style = getComputedStyle(node);
+      return {
+        outlineWidth: style.outlineWidth,
+        outlineStyle: style.outlineStyle,
+        cursor: style.cursor,
+      };
+    });
+
+    expect(Number.parseFloat(focusStyle.outlineWidth)).toBeGreaterThan(0);
+    expect(focusStyle.outlineStyle).not.toBe("none");
+    expect(focusStyle.cursor).not.toBe("none");
   });
 });

@@ -4,6 +4,7 @@ export function ContactEmailLink({ email }: { email: string }) {
   return (
     <a
       className="todd-contact-email"
+      data-native-cursor={true}
       href={`mailto:${email}`}
       aria-label={`Email Todd at ${email}`}
     >

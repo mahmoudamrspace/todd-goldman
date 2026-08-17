@@ -44,6 +44,7 @@ export function NavMenuLink({
         className={className}
         data-todd-name={dataToddName}
         data-highlight={true}
+        data-cursor-label={external ? "Visit" : "Open"}
         href={href}
         aria-current={active ? "page" : undefined}
         style={{
@@ -64,6 +65,7 @@ export function NavMenuLink({
       className={className}
       data-todd-name={dataToddName}
       data-highlight={true}
+      data-cursor-label={external ? "Visit" : "Open"}
       href={href}
       aria-current={active ? "page" : undefined}
       style={{ willChange: "transform", pointerEvents: open ? undefined : "none" }}

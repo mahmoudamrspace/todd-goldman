@@ -1,9 +1,36 @@
 "use client";
 
 import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react";
-import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { cn } from "@/shared/lib/cn";
+import { useMediaQuery } from "@/shared/lib/use-media-query";
 
 const SPRING = { stiffness: 680, damping: 44, mass: 0.38 };
+
+const NATIVE_CURSOR_SELECTOR =
+  'input, textarea, select, [contenteditable="true"], [data-native-cursor], :focus-visible';
+const INTERACTIVE_CURSOR_SELECTOR =
+  'a[href], button, summary, [role="button"], [role="link"], [data-cursor-interactive]';
+const EDGE_GUTTER_X = 96;
+const EDGE_GUTTER_Y = 84;
+
+function isNativeCursorTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof Element)) return false;
+  return Boolean(target.closest(NATIVE_CURSOR_SELECTOR));
+}
+
+function cursorLabelFor(target: HTMLElement): string {
+  const explicitLabel = target.dataset.cursorLabel?.trim();
+  if (explicitLabel) return explicitLabel;
+
+  const link = target.closest("a[href]") as HTMLAnchorElement | null;
+  const href = link?.getAttribute("href") ?? "";
+  if (href.startsWith("mailto:")) return "Email";
+  if (link?.target === "_blank" || /^https?:/i.test(href)) return "Visit";
+  if (target.closest("nav")) return "Open";
+  if (target.closest("button, [role=\"button\"]")) return "Open";
+  return "View";
+}
 
 function PixelMiddleFinger() {
   return (
@@ -41,21 +68,19 @@ function PixelMiddleFinger() {
   );
 }
 
-/** Todd-style pixel cursor — opt-in on [data-highlight] artwork targets only. */
+/** Todd-style pixel cursor — global on fine pointers; labels on [data-highlight] targets. */
 export function CustomCursor() {
   const reduced = useReducedMotion();
-  const coarsePointer = useSyncExternalStore(
-    (onStoreChange) => {
-      const mq = window.matchMedia("(pointer: coarse)");
-      mq.addEventListener("change", onStoreChange);
-      return () => mq.removeEventListener("change", onStoreChange);
-    },
-    () => window.matchMedia("(pointer: coarse)").matches,
-    () => false,
-  );
-  const enabled = !reduced && !coarsePointer;
-  const [active, setActive] = useState(false);
+  const coarsePointer = useMediaQuery("(pointer: coarse)");
+  const forcedColors = useMediaQuery("(forced-colors: active)");
+  const enabled = !reduced && !coarsePointer && !forcedColors;
+  const [visible, setVisible] = useState(false);
+  const [highlighted, setHighlighted] = useState(false);
+  const [interactive, setInteractive] = useState(false);
+  const [nativeEscape, setNativeEscape] = useState(false);
   const [pressed, setPressed] = useState(false);
+  const [flipX, setFlipX] = useState(false);
+  const [flipY, setFlipY] = useState(false);
   const [label, setLabel] = useState("View");
 
   const rawX = useMotionValue(0);
@@ -63,17 +88,33 @@ export function CustomCursor() {
   const x = useSpring(rawX, SPRING);
   const y = useSpring(rawY, SPRING);
 
+  const syncPointerState = useCallback((target: EventTarget | null) => {
+    const escapeNative = isNativeCursorTarget(target);
+    const highlightTarget =
+      target instanceof Element
+        ? (target.closest("[data-highlight]") as HTMLElement | null)
+        : null;
+    const interactiveTarget =
+      target instanceof Element
+        ? target.closest(INTERACTIVE_CURSOR_SELECTOR)
+        : null;
+
+    setNativeEscape(escapeNative);
+    setHighlighted(!escapeNative && Boolean(highlightTarget));
+    setInteractive(!escapeNative && Boolean(interactiveTarget));
+    if (highlightTarget) setLabel(cursorLabelFor(highlightTarget));
+  }, []);
+
   const onMove = useCallback(
     (event: MouseEvent) => {
       rawX.set(event.clientX);
       rawY.set(event.clientY);
-      const target = event.target as HTMLElement | null;
-      const highlight = target?.closest?.("[data-highlight]") as HTMLElement | null;
-      const onHighlight = Boolean(highlight);
-      setActive(onHighlight);
-      setLabel(highlight?.dataset.cursorLabel?.trim() || "View");
+      setVisible(true);
+      setFlipX(event.clientX > window.innerWidth - EDGE_GUTTER_X);
+      setFlipY(event.clientY > window.innerHeight - EDGE_GUTTER_Y);
+      syncPointerState(event.target);
     },
-    [rawX, rawY],
+    [rawX, rawY, syncPointerState],
   );
 
   useEffect(() => {
@@ -83,7 +124,10 @@ export function CustomCursor() {
     const onDown = () => setPressed(true);
     const onUp = () => setPressed(false);
     const onLeave = () => {
-      setActive(false);
+      setVisible(false);
+      setHighlighted(false);
+      setInteractive(false);
+      setNativeEscape(false);
       setPressed(false);
     };
 
@@ -101,43 +145,51 @@ export function CustomCursor() {
     };
   }, [enabled, onMove]);
 
+  const cursorActive = visible && !nativeEscape;
+
   useEffect(() => {
     if (!enabled) return;
     const root = window.document.documentElement;
-    if (active) {
+    if (cursorActive) {
       root.classList.add("custom-cursor-active");
     } else {
       root.classList.remove("custom-cursor-active");
     }
     return () => root.classList.remove("custom-cursor-active");
-  }, [active, enabled]);
+  }, [cursorActive, enabled]);
 
-  if (!enabled || !active) return null;
+  if (!enabled || !cursorActive) return null;
 
   return (
     <motion.div
       aria-hidden
-      className="custom-cursor"
+      className={cn(
+        "custom-cursor",
+        interactive && "custom-cursor--interactive",
+        highlighted && "custom-cursor--highlighted",
+        flipX && "custom-cursor--flip-x",
+        flipY && "custom-cursor--flip-y",
+      )}
       style={{
         position: "fixed",
         top: 0,
         left: 0,
         x,
         y,
-        zIndex: 13,
+        zIndex: 10001,
         pointerEvents: "none",
         translateX: "-50%",
         translateY: "-4%",
       }}
       animate={{
         opacity: 1,
-        scale: pressed ? 0.88 : 1.12,
-        rotate: pressed ? -4 : 5,
+        scale: pressed ? 0.88 : highlighted ? 1.12 : interactive ? 1.05 : 1,
+        rotate: pressed ? -4 : highlighted ? 5 : interactive ? -2 : 0,
       }}
       transition={{ type: "spring", stiffness: 460, damping: 30 }}
     >
       <PixelMiddleFinger />
-      <span className="custom-cursor__label">{label}</span>
+      {highlighted ? <span className="custom-cursor__label">{label}</span> : null}
     </motion.div>
   );
 }

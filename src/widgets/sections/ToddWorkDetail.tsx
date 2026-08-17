@@ -233,6 +233,7 @@ export function ToddWorkDetail({ work, navLabels }: ToddWorkDetailProps) {
                 href={work.ctaHref}
                 {...(ctaExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 data-highlight
+                data-cursor-label={ctaExternal ? "Visit" : "Open"}
               >
                 {work.ctaLabel} →
               </a>
