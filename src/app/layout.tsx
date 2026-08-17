@@ -42,6 +42,23 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
     },
+    icons: {
+      icon: [
+        { url: "/favicon/boo-boo-buddies-angel.ico" },
+        {
+          url: "/favicon/web-app-manifest-192x192.png",
+          sizes: "192x192",
+          type: "image/png",
+        },
+        {
+          url: "/favicon/web-app-manifest-512x512.png",
+          sizes: "512x512",
+          type: "image/png",
+        },
+      ],
+      apple: "/favicon/web-app-manifest-192x192.png",
+    },
+    manifest: "/favicon/site.webmanifest",
   };
 }
 

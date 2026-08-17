@@ -105,14 +105,43 @@ export function Intro({ content }: { content: IntroContent }) {
               transform: "translateY(36px)",
             }}
           >
-            <img
-              src={toddSceneArt.introNeverGrowUpSecond}
-              alt=""
-              aria-hidden={true}
-            />
-            <span className="todd-intro-snow-mask" aria-hidden={true} />
-            <span className="todd-intro-snowball" aria-hidden={true} />
-            <span className="todd-intro-snow-impact" aria-hidden={true} />
+            <div className="todd-intro-snow-stage">
+              <img
+                src={toddSceneArt.introNeverGrowUpSecond}
+                alt=""
+                aria-hidden={true}
+                className="todd-intro-snow-base"
+              />
+              <span
+                className="todd-intro-snow-restoration todd-intro-snow-restoration--thrower"
+                aria-hidden={true}
+              />
+              <img
+                src={toddSceneArt.introNeverGrowUpSecond}
+                alt=""
+                aria-hidden={true}
+                className="todd-intro-snow-actor todd-intro-snow-actor--thrower"
+              />
+              <span className="todd-intro-snow-launch" aria-hidden={true} />
+              <span className="todd-intro-snow-trail" aria-hidden={true} />
+              <span className="todd-intro-snowball" aria-hidden={true} />
+              <span className="todd-intro-snow-contact" aria-hidden={true} />
+              <span className="todd-intro-snow-impact" aria-hidden={true}>
+                <span className="todd-intro-snow-particle todd-intro-snow-particle--1" />
+                <span className="todd-intro-snow-particle todd-intro-snow-particle--2" />
+                <span className="todd-intro-snow-particle todd-intro-snow-particle--3" />
+              </span>
+              <span className="todd-intro-snow-eye todd-intro-snow-eye--yeti-left">
+                <span className="todd-intro-snow-eye__iris">
+                  <span className="todd-intro-snow-eye__glint" />
+                </span>
+              </span>
+              <span className="todd-intro-snow-eye todd-intro-snow-eye--yeti-right">
+                <span className="todd-intro-snow-eye__iris">
+                  <span className="todd-intro-snow-eye__glint" />
+                </span>
+              </span>
+            </div>
           </HiddenReveal>
           <HiddenReveal variant="intro-character" className={"todd-intro__wrapper-27"} data-todd-name={"Character"} style={{"willChange": "transform", "opacity": "0", "transform": "translateY(50px) scale(0.5)"}}>
             <div className={responsiveHiddenOn("mobile")}>

@@ -196,6 +196,288 @@ test.describe("twisted mind ground-impact motion", () => {
   });
 });
 
+test.describe("never grow up intro motion", () => {
+  const scrollToIntro = async (page: import("@playwright/test").Page) => {
+    await page.evaluate(() => {
+      document.querySelector("#text_intro")?.scrollIntoView({ block: "center", behavior: "instant" });
+    });
+    await page.waitForTimeout(2500);
+  };
+
+  for (const width of [390, 768, 1440]) {
+    test(`reveals both illustrations and starts decor motion at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.emulateMedia({ reducedMotion: "no-preference" });
+      await page.goto(`${BASE_URL}/`);
+      await page.waitForLoadState("networkidle");
+      await scrollToIntro(page);
+
+      const firstIllustration = page.locator(".todd-intro-art").first();
+      const snowScene = page.locator(".todd-intro-snow-scene").first();
+
+      await expect(firstIllustration).toHaveAttribute("data-revealed", "true");
+      await expect(snowScene).toHaveAttribute("data-revealed", "true");
+      await expect(firstIllustration.locator(".todd-ngu-eye__iris").first()).toHaveCSS(
+        "animation-play-state",
+        "running",
+      );
+      await expect(firstIllustration.locator(".todd-intro-art-stage")).toHaveCSS(
+        "animation-play-state",
+        "running",
+      );
+      await expect(firstIllustration.locator(".todd-ngu-ornament--yellow .todd-ngu-ornament__ball")).toHaveCSS(
+        "animation-play-state",
+        "running",
+      );
+      await expect(snowScene.locator(".todd-intro-snow-eye__iris").first()).toHaveCSS(
+        "animation-play-state",
+        "running",
+      );
+    });
+  }
+
+  test("synchronizes the yeti throw, snowball, and child-face impact", async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 900 });
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto(`${BASE_URL}/`);
+    await page.waitForLoadState("networkidle");
+    await scrollToIntro(page);
+
+    const snowball = page.locator(".todd-intro-snow-scene .todd-intro-snowball").first();
+    const impact = page.locator(".todd-intro-snow-scene .todd-intro-snow-impact").first();
+    const base = page.locator(".todd-intro-snow-scene .todd-intro-snow-base").first();
+    const thrower = page.locator(".todd-intro-snow-scene .todd-intro-snow-actor--thrower").first();
+    const launch = page.locator(".todd-intro-snow-scene .todd-intro-snow-launch").first();
+    const trail = page.locator(".todd-intro-snow-scene .todd-intro-snow-trail").first();
+    const contact = page.locator(".todd-intro-snow-scene .todd-intro-snow-contact").first();
+    const particle = page.locator(".todd-intro-snow-scene .todd-intro-snow-particle").first();
+
+    await expect(snowball).toHaveCSS("animation-name", "todd-snowball-throw");
+    await expect(impact).toHaveCSS("animation-name", "todd-snow-impact");
+    await expect(base).toHaveCSS("animation-name", "none");
+    await expect(base).toHaveCSS("transform", "none");
+    await expect(thrower).toHaveCSS("animation-name", "todd-snow-thrower");
+    await expect(launch).toHaveCSS("animation-name", "todd-snow-launch");
+    await expect(trail).toHaveCSS("animation-name", "todd-snow-trail");
+    await expect(contact).toHaveCSS("animation-name", "todd-snow-contact");
+    await expect(particle).toHaveCSS("animation-name", "todd-snow-particle");
+
+    for (const animatedLayer of [
+      snowball,
+      impact,
+      thrower,
+      launch,
+      trail,
+      contact,
+      particle,
+    ]) {
+      await expect(animatedLayer).toHaveCSS("animation-duration", "5.8s");
+      await expect(animatedLayer).toHaveCSS("animation-play-state", "running");
+    }
+
+    const actorMotion = await page.evaluate(() => {
+      const throwerNode = document.querySelector(".todd-intro-snow-actor--thrower");
+      if (!(throwerNode instanceof HTMLElement)) return null;
+
+      const throwerAnimation = throwerNode.getAnimations()[0];
+      throwerAnimation?.pause();
+      if (throwerAnimation) throwerAnimation.currentTime = 5800 * 0.25;
+
+      return getComputedStyle(throwerNode).transform;
+    });
+
+    expect(actorMotion).not.toBeNull();
+    expect(actorMotion).not.toBe("none");
+  });
+
+  test("keeps the snow sequence paused until its illustration reveals", async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 900 });
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto(`${BASE_URL}/`);
+    await page.waitForLoadState("networkidle");
+
+    const snowScene = page.locator(".todd-intro-snow-scene").first();
+    await expect(snowScene).not.toHaveAttribute("data-revealed", "true");
+    await expect(snowScene.locator(".todd-intro-snowball")).toHaveCSS(
+      "animation-play-state",
+      "paused",
+    );
+    await expect(snowScene.locator(".todd-intro-snow-impact")).toHaveCSS(
+      "animation-play-state",
+      "paused",
+    );
+    await expect(snowScene.locator(".todd-intro-snow-actor--thrower")).toHaveCSS(
+      "animation-play-state",
+      "paused",
+    );
+  });
+
+  for (const width of [390, 768]) {
+    test(`keeps the snow throw static but animates eyes at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.emulateMedia({ reducedMotion: "no-preference" });
+      await page.goto(`${BASE_URL}/`);
+      await page.waitForLoadState("networkidle");
+      await scrollToIntro(page);
+
+      const scene = page.locator(".todd-intro-snow-scene").first();
+      await expect(scene.locator(".todd-intro-snow-base")).toBeVisible();
+      await expect(scene.locator(".todd-intro-snowball")).toHaveCSS("display", "none");
+      await expect(scene.locator(".todd-intro-snow-actor--thrower")).toHaveCSS("display", "none");
+      await expect(scene.locator(".todd-intro-snow-impact")).toHaveCSS("display", "none");
+      await expect(scene.locator(".todd-intro-snow-eye--yeti-left .todd-intro-snow-eye__iris")).toHaveCSS(
+        "animation-name",
+        "todd-snow-eye-look-yeti",
+      );
+      await expect(scene.locator(".todd-intro-snow-eye__iris").first()).toHaveCSS(
+        "animation-play-state",
+        "running",
+      );
+
+      const before = await scene
+        .locator(".todd-intro-snow-eye--yeti-left .todd-intro-snow-eye__iris")
+        .evaluate((node) => getComputedStyle(node).transform);
+      await page.waitForTimeout(1800);
+      const after = await scene
+        .locator(".todd-intro-snow-eye--yeti-left .todd-intro-snow-eye__iris")
+        .evaluate((node) => getComputedStyle(node).transform);
+      expect(after).not.toBe(before);
+    });
+  }
+
+  for (const width of [1024, 1440]) {
+    test(`lands the snowball on its target at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.emulateMedia({ reducedMotion: "no-preference" });
+      await page.goto(`${BASE_URL}/`);
+      await page.waitForLoadState("networkidle");
+      await scrollToIntro(page);
+
+      const scene = page.locator(".todd-intro-snow-scene").first();
+      await expect(scene.locator(".todd-intro-snow-base")).toHaveCount(1);
+      await expect(scene.locator(".todd-intro-snow-actor--thrower")).toHaveCount(1);
+      await expect(scene.locator(".todd-intro-snow-actor--recipient")).toHaveCount(0);
+      await expect(scene.locator(".todd-intro-snow-restoration--recipient")).toHaveCount(0);
+
+      const alignment = await page.evaluate(() => {
+        const scene = document.querySelector(".todd-intro-snow-scene");
+        const ball = scene?.querySelector(".todd-intro-snowball");
+        const impact = scene?.querySelector(".todd-intro-snow-impact");
+        if (!(scene instanceof HTMLElement) || !(ball instanceof HTMLElement) || !(impact instanceof HTMLElement)) {
+          return null;
+        }
+
+        const originRect = ball.getBoundingClientRect();
+        const impactRect = impact.getBoundingClientRect();
+        const originCenterX = originRect.left + originRect.width / 2;
+        const impactCenterX = impactRect.left + impactRect.width / 2;
+
+        const animation = ball.getAnimations()[0];
+        animation?.pause();
+        if (animation) animation.currentTime = 5800 * 0.54;
+
+        const ballRect = ball.getBoundingClientRect();
+        const ballCenter = {
+          x: ballRect.left + ballRect.width / 2,
+          y: ballRect.top + ballRect.height / 2,
+        };
+        const impactCenter = {
+          x: impactRect.left + impactRect.width / 2,
+          y: impactRect.top + impactRect.height / 2,
+        };
+
+        return {
+          travelsRightToLeft: originCenterX > impactCenterX,
+          distance: Math.hypot(ballCenter.x - impactCenter.x, ballCenter.y - impactCenter.y),
+          tolerance: Math.max(impactRect.width, 18),
+          insideScene:
+            ballRect.right > scene.getBoundingClientRect().left &&
+            ballRect.left < scene.getBoundingClientRect().right &&
+            ballRect.bottom > scene.getBoundingClientRect().top &&
+            ballRect.top < scene.getBoundingClientRect().bottom,
+        };
+      });
+
+      expect(alignment).not.toBeNull();
+      expect(alignment?.travelsRightToLeft).toBe(true);
+      expect(alignment?.insideScene).toBe(true);
+      expect(alignment?.distance).toBeLessThan(alignment?.tolerance ?? 0);
+    });
+  }
+
+  test("animates decor elements with natural idle motion", async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 900 });
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto(`${BASE_URL}/`);
+    await page.waitForLoadState("networkidle");
+    await scrollToIntro(page);
+
+    const iris = page.locator(".todd-intro-art .todd-ngu-eye__iris").first();
+    const needle = page.locator(".todd-intro-art .todd-ngu-needle").first();
+    const yellowBall = page.locator(".todd-intro-art .todd-ngu-ornament--yellow .todd-ngu-ornament__ball").first();
+
+    await expect(iris).toHaveCSS("animation-name", "todd-ngu-look");
+    await expect(needle).toHaveCSS("animation-name", "todd-ngu-needle-drift");
+    await expect(yellowBall).toHaveCSS("animation-name", "todd-ngu-ball-fall");
+
+    const beforeNeedle = await needle.evaluate((node) => getComputedStyle(node).transform);
+    const beforeYellowBall = await yellowBall.evaluate((node) => getComputedStyle(node).transform);
+    await page.waitForTimeout(1800);
+    const afterNeedle = await needle.evaluate((node) => getComputedStyle(node).transform);
+    const afterYellowBall = await yellowBall.evaluate((node) => getComputedStyle(node).transform);
+
+    expect(afterNeedle).not.toBe(beforeNeedle);
+    expect(afterYellowBall).not.toBe(beforeYellowBall);
+  });
+
+  test("disables intro decor and snow motion for reduced motion", async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 900 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(`${BASE_URL}/`);
+    await page.waitForLoadState("networkidle");
+    await scrollToIntro(page);
+
+    await expect(page.locator(".todd-intro-art .todd-ngu-eye__iris").first()).toHaveCSS(
+      "animation-name",
+      "none",
+    );
+    await expect(page.locator(".todd-intro-art .todd-ngu-needle").first()).toHaveCSS(
+      "display",
+      "none",
+    );
+    await expect(page.locator(".todd-intro-snow-scene .todd-intro-snowball").first()).toHaveCSS(
+      "animation-name",
+      "none",
+    );
+    await expect(page.locator(".todd-intro-snow-scene .todd-intro-snow-eye__iris").first()).toHaveCSS(
+      "animation-name",
+      "none",
+    );
+    await expect(page.locator(".todd-intro-snow-scene .todd-intro-snow-impact").first()).toHaveCSS(
+      "display",
+      "none",
+    );
+    for (const selector of [
+      ".todd-intro-snow-restoration",
+      ".todd-intro-snow-actor",
+      ".todd-intro-snow-launch",
+      ".todd-intro-snow-trail",
+      ".todd-intro-snow-contact",
+      ".todd-intro-snow-particle",
+    ]) {
+      await expect(page.locator(`.todd-intro-snow-scene ${selector}`).first()).toHaveCSS(
+        "display",
+        "none",
+      );
+    }
+    await expect(page.locator(".todd-intro-snow-scene .todd-intro-snow-base").first()).toBeVisible();
+    await expect(page.locator(".todd-intro-snow-scene .todd-intro-snow-base").first()).toHaveCSS(
+      "transform",
+      "none",
+    );
+  });
+});
+
 const CHECKS = [
   {
     name: "intro never-grow-up decor animations",
@@ -203,10 +485,9 @@ const CHECKS = [
     section: "#text_intro",
   },
   {
-    name: "intro snowball animation",
-    selector: ".todd-intro-snow-scene .todd-intro-snowball",
+    name: "intro snow scene eye animations",
+    selector: ".todd-intro-snow-scene .todd-intro-snow-eye__iris",
     section: "#text_intro",
-    skipPlayState: true,
   },
   {
     name: "footer headline reveal",

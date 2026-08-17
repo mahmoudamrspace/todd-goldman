@@ -2165,39 +2165,74 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   display: none !important;
 }
 
+#text_intro {
+  --ngu-float-cycle: 9.2s;
+  --ngu-look-cycle: 9.8s;
+  --ngu-blink-cycle: 7.1s;
+  --ngu-snow-cycle: 5.8s;
+}
+
 @keyframes todd-intro-art-float {
   0%,
   100% {
-    transform: translateY(0);
+    transform: translateY(0) rotate(0deg);
   }
 
-  50% {
-    transform: translateY(-6px);
+  16% {
+    transform: translateY(-2px) rotate(-0.12deg);
+  }
+
+  34% {
+    transform: translateY(-4px) rotate(0.08deg);
+  }
+
+  52% {
+    transform: translateY(-1px) rotate(0.05deg);
+  }
+
+  68% {
+    transform: translateY(-3px) rotate(-0.06deg);
+  }
+
+  84% {
+    transform: translateY(-1px) rotate(0.04deg);
   }
 }
 
 @keyframes todd-ngu-look {
   0%,
-  16% {
+  14% {
     transform: translate(10%, 6%);
   }
 
-  22%,
-  40% {
+  20% {
+    transform: translate(-16%, 7%);
+  }
+
+  24%,
+  36% {
     transform: translate(-22%, 8%);
   }
 
-  48%,
-  62% {
+  42% {
+    transform: translate(2%, -8%);
+  }
+
+  46%,
+  58% {
     transform: translate(6%, -10%);
   }
 
-  70%,
-  82% {
+  64% {
+    transform: translate(14%, 0%);
+  }
+
+  68%,
+  80% {
     transform: translate(18%, 2%);
   }
 
-  90%,
+  88%,
   100% {
     transform: translate(10%, 6%);
   }
@@ -2205,16 +2240,16 @@ nav[data-nav-state="closing"] .nav-phone-contact {
 
 @keyframes todd-ngu-blink {
   0%,
-  34%,
-  40%,
-  71%,
-  77%,
+  32%,
+  38%,
+  68%,
+  74%,
   100% {
     transform: translateY(-110%);
   }
 
-  37%,
-  74% {
+  35%,
+  71% {
     transform: translateY(0);
   }
 }
@@ -2222,38 +2257,89 @@ nav[data-nav-state="closing"] .nav-phone-contact {
 @keyframes todd-ngu-ball-sway {
   0%,
   100% {
-    transform: rotate(-8deg);
+    transform: rotate(-5deg);
   }
 
-  50% {
-    transform: rotate(9deg);
+  32% {
+    transform: rotate(4deg);
+  }
+
+  52% {
+    transform: rotate(6deg);
+  }
+
+  74% {
+    transform: rotate(-3deg);
   }
 }
 
 @keyframes todd-ngu-ball-fall {
   0%,
-  12% {
-    transform: translate(0, 0) rotate(-8deg);
+  6% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(-6deg);
   }
 
-  50% {
-    transform: translate(10%, 22%) rotate(14deg);
+  38% {
+    opacity: 1;
+    transform: translate(8%, 20%) rotate(11deg);
   }
 
+  54% {
+    opacity: 1;
+    transform: translate(9%, 32%) rotate(10deg);
+  }
+
+  68% {
+    opacity: 1;
+    transform: translate(4%, 40%) rotate(4deg);
+  }
+
+  78%,
+  86% {
+    opacity: 1;
+    transform: translate(-3%, 44%) rotate(-9deg);
+  }
+
+  90% {
+    opacity: 0;
+    transform: translate(-3%, 44%) rotate(-9deg);
+  }
+
+  94%,
   100% {
-    transform: translate(-4%, 44%) rotate(-12deg);
+    opacity: 0;
+    transform: translate(0, 0) rotate(-6deg);
   }
 }
 
 @keyframes todd-ngu-needle-drift {
   0% {
-    opacity: 0.9;
-    transform: translate(0, 0) rotate(var(--needle-rot, -18deg));
+    opacity: 0;
+    transform: translate(0, -10%) rotate(var(--needle-rot, -18deg)) scale(0.82);
+  }
+
+  10% {
+    opacity: 0.95;
+    transform: translate(0, 0) rotate(var(--needle-rot, -18deg)) scale(1);
+  }
+
+  55% {
+    opacity: 0.78;
+    transform: translate(calc(var(--needle-x, 12%) * 0.55), 24%)
+      rotate(calc(var(--needle-rot, -18deg) + 18deg));
+  }
+
+  82% {
+    opacity: 0.35;
+    transform: translate(calc(var(--needle-x, 12%) * 0.85), 42%)
+      rotate(calc(var(--needle-rot, -18deg) + 36deg)) scale(0.92);
   }
 
   100% {
     opacity: 0;
-    transform: translate(var(--needle-x, 12%), 46%) rotate(calc(var(--needle-rot, -18deg) + 42deg));
+    transform: translate(var(--needle-x, 12%), 54%)
+      rotate(calc(var(--needle-rot, -18deg) + 52deg)) scale(0.72);
   }
 }
 
@@ -2269,7 +2355,7 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   position: relative;
   width: 100%;
   height: 100%;
-  animation: todd-intro-art-float 7s ease-in-out infinite;
+  animation: todd-intro-art-float var(--ngu-float-cycle) ease-in-out infinite;
 }
 
 .todd-intro-art img {
@@ -2314,7 +2400,7 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   height: 74%;
   border-radius: 50%;
   background: #0f0f0f;
-  animation: todd-ngu-look 8.6s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+  animation: todd-ngu-look var(--ngu-look-cycle) cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
 }
 
 .todd-ngu-eye__glint {
@@ -2333,7 +2419,11 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   z-index: 2;
   background: rgb(196, 218, 234);
   transform: translateY(-110%);
-  animation: todd-ngu-blink 6.4s ease-in-out infinite;
+  animation: todd-ngu-blink var(--ngu-blink-cycle) ease-in-out infinite;
+}
+
+.todd-ngu-eye--right .todd-ngu-eye__lid {
+  animation-delay: -0.18s;
 }
 
 .todd-ngu-ornament {
@@ -2379,7 +2469,7 @@ nav[data-nav-state="closing"] .nav-phone-contact {
 
 .todd-ngu-ornament--purple .todd-ngu-ornament__ball {
   background: radial-gradient(circle at 32% 30%, #d9a8de 0 22%, #9f5ea6 68%, #7a3d84 100%);
-  animation: todd-ngu-ball-sway 2.8s ease-in-out infinite;
+  animation: todd-ngu-ball-sway 3.1s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
 .todd-ngu-ornament--red {
@@ -2394,8 +2484,8 @@ nav[data-nav-state="closing"] .nav-phone-contact {
 
 .todd-ngu-ornament--red .todd-ngu-ornament__ball {
   background: radial-gradient(circle at 32% 30%, #ff8a86 0 22%, #e8434c 68%, #c22736 100%);
-  animation: todd-ngu-ball-sway 3.4s ease-in-out infinite;
-  animation-delay: -0.6s;
+  animation: todd-ngu-ball-sway 3.55s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation-delay: -0.75s;
 }
 
 .todd-ngu-ornament--orange {
@@ -2410,8 +2500,8 @@ nav[data-nav-state="closing"] .nav-phone-contact {
 
 .todd-ngu-ornament--orange .todd-ngu-ornament__ball {
   background: radial-gradient(circle at 32% 30%, #ffd0a4 0 22%, #faaa67 68%, #e8883a 100%);
-  animation: todd-ngu-ball-sway 3.05s ease-in-out infinite;
-  animation-delay: -1.1s;
+  animation: todd-ngu-ball-sway 3.25s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation-delay: -1.35s;
 }
 
 .todd-ngu-ornament--yellow {
@@ -2426,7 +2516,7 @@ nav[data-nav-state="closing"] .nav-phone-contact {
 
 .todd-ngu-ornament--yellow .todd-ngu-ornament__ball {
   background: radial-gradient(circle at 32% 30%, #fff4a8 0 22%, #f0cd3e 68%, #dbb20c 100%);
-  animation: todd-ngu-ball-fall 3.6s ease-in-out infinite;
+  animation: todd-ngu-ball-fall 4.2s cubic-bezier(0.34, 0.72, 0.42, 1) infinite;
 }
 
 .todd-ngu-needle {
@@ -2434,7 +2524,7 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   height: 3.1%;
   background: #00764b;
   clip-path: polygon(50% 0, 100% 100%, 0 100%);
-  animation: todd-ngu-needle-drift 4.4s linear infinite;
+  animation: todd-ngu-needle-drift 5.2s cubic-bezier(0.22, 0.65, 0.45, 1) infinite;
 }
 
 .todd-ngu-needle--1 {
@@ -2463,6 +2553,8 @@ nav[data-nav-state="closing"] .nav-phone-contact {
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .todd-intro-art:not([data-revealed="true"]) .todd-intro-art-stage,
+  .todd-intro__decor-never-grow-up:not([data-revealed="true"]) .todd-intro-art-stage,
   .todd-intro-art:not([data-revealed="true"]) .todd-ngu-eye__iris,
   .todd-intro__decor-never-grow-up:not([data-revealed="true"]) .todd-ngu-eye__iris,
   .todd-intro-art:not([data-revealed="true"]) .todd-ngu-eye__lid,
@@ -2470,156 +2562,533 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   .todd-intro-art:not([data-revealed="true"]) .todd-ngu-ornament__ball,
   .todd-intro__decor-never-grow-up:not([data-revealed="true"]) .todd-ngu-ornament__ball,
   .todd-intro-art:not([data-revealed="true"]) .todd-ngu-needle,
-  .todd-intro__decor-never-grow-up:not([data-revealed="true"]) .todd-ngu-needle {
+  .todd-intro__decor-never-grow-up:not([data-revealed="true"]) .todd-ngu-needle,
+  .todd-intro-snow-scene:not([data-revealed="true"]) .todd-intro-snow-actor,
+  .todd-intro-snow-scene:not([data-revealed="true"]) .todd-intro-snow-launch,
+  .todd-intro-snow-scene:not([data-revealed="true"]) .todd-intro-snow-trail,
+  .todd-intro-snow-scene:not([data-revealed="true"]) .todd-intro-snowball,
+  .todd-intro-snow-scene:not([data-revealed="true"]) .todd-intro-snow-contact,
+  .todd-intro-snow-scene:not([data-revealed="true"]) .todd-intro-snow-impact,
+  .todd-intro-snow-scene:not([data-revealed="true"]) .todd-intro-snow-particle,
+  .todd-intro-snow-scene:not([data-revealed="true"]) .todd-intro-snow-eye__iris {
     animation-play-state: paused;
+  }
+}
+
+@keyframes todd-snow-eye-look-yeti {
+  0%,
+  14% {
+    transform: translate(0, 0);
+  }
+
+  20%,
+  34% {
+    transform: translate(-5%, 2%);
+  }
+
+  42%,
+  56% {
+    transform: translate(-3%, -3%);
+  }
+
+  64%,
+  78% {
+    transform: translate(-4%, 1%);
+  }
+
+  88%,
+  100% {
+    transform: translate(0, 0);
   }
 }
 
 @keyframes todd-snowball-throw {
   0%,
-  24% {
-    opacity: 1;
+  20% {
+    opacity: 0;
     transform: translate(0, 0) scale(0.92);
   }
 
-  34% {
+  23% {
     opacity: 1;
-    transform: translate(380%, -180%) scale(1);
+    transform: translate(var(--snow-windup-x), var(--snow-windup-y)) scale(0.84, 1.06);
   }
 
-  50% {
+  28% {
     opacity: 1;
-    transform: translate(920%, -440%) scale(1.04);
+    transform: translate(var(--snow-launch-x), var(--snow-launch-y)) scale(0.96);
   }
 
-  68% {
+  38% {
     opacity: 1;
-    transform: translate(1440%, -170%) scale(0.96);
+    transform: translate(var(--snow-apex-x), var(--snow-apex-y)) scale(1.04);
   }
 
-  73%,
-  96% {
+  48% {
+    opacity: 1;
+    transform: translate(var(--snow-descent-x), var(--snow-descent-y)) scale(1);
+  }
+
+  53% {
+    opacity: 1;
+    transform: translate(var(--snow-prehit-x), var(--snow-prehit-y)) scale(1.02);
+  }
+
+  54% {
+    opacity: 1;
+    transform: translate(var(--snow-hit-x), var(--snow-hit-y)) scale(0.66, 1.16);
+  }
+
+  57% {
     opacity: 0;
-    transform: translate(1500%, -110%) scale(0.7);
+    transform: translate(var(--snow-hit-x), var(--snow-hit-y)) scale(0.38, 0.58);
+  }
+
+  58%,
+  92% {
+    opacity: 0;
+    transform: translate(var(--snow-hit-x), var(--snow-hit-y)) scale(0.32);
   }
 
   100% {
     opacity: 0;
-    transform: translate(0, 0) scale(0.75);
+    transform: translate(0, 0) scale(0.92);
   }
 }
 
-@keyframes todd-snow-scene-react {
+@keyframes todd-snow-launch {
   0%,
-  20%,
+  21% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.35);
+  }
+
+  24% {
+    opacity: 0.88;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+
+  30% {
+    opacity: 0.32;
+    transform: translate(-58%, -50%) scale(1.55);
+  }
+
+  34%,
   100% {
-    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+    transform: translate(-62%, -50%) scale(1.8);
+  }
+}
+
+@keyframes todd-snow-trail {
+  0%,
+  26% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(14deg) scaleX(0.35);
   }
 
-  27% {
-    transform: translate(-2px, 2px) rotate(-0.18deg);
+  34% {
+    opacity: 0.34;
+    transform: translate(var(--snow-trail-early-x), var(--snow-trail-early-y)) rotate(22deg)
+      scaleX(1);
   }
 
-  35% {
-    transform: translate(3px, -2px) rotate(0.25deg);
+  46% {
+    opacity: 0.22;
+    transform: translate(var(--snow-trail-mid-x), var(--snow-trail-mid-y)) rotate(2deg)
+      scaleX(1.25);
   }
 
+  54% {
+    opacity: 0.08;
+    transform: translate(var(--snow-trail-late-x), var(--snow-trail-late-y)) rotate(-16deg)
+      scaleX(0.8);
+  }
+
+  58%,
+  100% {
+    opacity: 0;
+    transform: translate(var(--snow-trail-late-x), var(--snow-trail-late-y)) rotate(-16deg)
+      scaleX(0.4);
+  }
+}
+
+@keyframes todd-snow-thrower {
+  0%,
+  17%,
+  42%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  21% {
+    transform: translate(0.28cqw, 0.1cqw) rotate(1.8deg);
+  }
+
+  25% {
+    transform: translate(-0.38cqw, -0.12cqw) rotate(-2deg);
+  }
+
+  31% {
+    transform: translate(-0.18cqw, -0.04cqw) rotate(-0.8deg);
+  }
+
+  36% {
+    transform: translate(0.06cqw, 0.02cqw) rotate(0.25deg);
+  }
+}
+
+@keyframes todd-snow-contact {
+  0%,
   52% {
-    transform: translate(1px, -4px) rotate(0.08deg);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2, 0.65);
   }
 
-  72% {
-    transform: translate(-1px, 1px) rotate(-0.1deg);
+  54% {
+    opacity: 0.82;
+    transform: translate(-50%, -50%) scale(1, 0.72);
+  }
+
+  59% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1.65, 0.42);
+  }
+
+  65%,
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.05, 0.28);
   }
 }
 
 @keyframes todd-snow-impact {
   0%,
-  65% {
+  52% {
     opacity: 0;
-    transform: scale(0.2);
+    transform: translate(-50%, -50%) scale(0.18) rotate(-8deg);
   }
 
-  70% {
-    opacity: 0.9;
-    transform: scale(1);
+  54% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(0.9) rotate(0deg);
   }
 
-  77%,
+  58% {
+    opacity: 0.62;
+    transform: translate(-50%, -50%) scale(1.2) rotate(5deg);
+  }
+
+  65% {
+    opacity: 0.18;
+    transform: translate(-50%, -50%) scale(1.55) rotate(8deg);
+  }
+
+  70%,
   100% {
     opacity: 0;
-    transform: scale(1.7);
+    transform: translate(-50%, -50%) scale(1.7) rotate(10deg);
+  }
+}
+
+@keyframes todd-snow-particle {
+  0%,
+  52% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.35);
+  }
+
+  55% {
+    opacity: var(--snow-particle-opacity, 0.95);
+    transform: translate(var(--snow-particle-mid-x), var(--snow-particle-mid-y)) scale(1);
+  }
+
+  63% {
+    opacity: 0.45;
+    transform: translate(var(--snow-particle-end-x), var(--snow-particle-end-y)) scale(0.72);
+  }
+
+  70%,
+  100% {
+    opacity: 0;
+    transform: translate(var(--snow-particle-end-x), var(--snow-particle-end-y)) scale(0.4);
   }
 }
 
 .todd-intro-snow-scene {
+  --ngu-snow-look-cycle: 8.4s;
+  --snow-windup-x: 0.2cqw;
+  --snow-windup-y: 0.1cqw;
+  --snow-launch-x: -4.5cqw;
+  --snow-launch-y: -3.8cqw;
+  --snow-apex-x: -14.5cqw;
+  --snow-apex-y: -10.5cqw;
+  --snow-descent-x: -23.5cqw;
+  --snow-descent-y: -6.3cqw;
+  --snow-prehit-x: -28.2cqw;
+  --snow-prehit-y: -1.1cqw;
+  --snow-hit-x: -29.4cqw;
+  --snow-hit-y: 0;
+  --snow-trail-early-x: -7.5cqw;
+  --snow-trail-early-y: -6cqw;
+  --snow-trail-mid-x: -17.5cqw;
+  --snow-trail-mid-y: -9cqw;
+  --snow-trail-late-x: -26cqw;
+  --snow-trail-late-y: -3.8cqw;
   position: relative;
   width: min(680px, 74vw);
   aspect-ratio: 54 / 41;
+  container-type: inline-size;
   flex: none;
   margin: clamp(12px, 3vw, 36px) auto 0;
   overflow: visible !important;
 }
 
-.todd-intro-snow-scene img {
+.todd-intro-snow-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.todd-intro-snow-base,
+.todd-intro-snow-actor {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transform-origin: 44% 72%;
-  animation: todd-snow-scene-react 6.8s ease-in-out infinite;
 }
 
-.todd-intro-snow-mask,
+.todd-intro-snow-base {
+  position: relative;
+  z-index: 0;
+}
+
+.todd-intro-snow-restoration,
+.todd-intro-snow-actor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.todd-intro-snow-restoration {
+  z-index: 1;
+}
+
+.todd-intro-snow-restoration--thrower,
+.todd-intro-snow-actor--thrower {
+  -webkit-mask-image: radial-gradient(
+    ellipse 9% 10% at 49% 48%,
+    #000 0 58%,
+    rgb(0 0 0 / 82%) 72%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 9% 10% at 49% 48%,
+    #000 0 58%,
+    rgb(0 0 0 / 82%) 72%,
+    transparent 100%
+  );
+}
+
+.todd-intro-snow-restoration--thrower {
+  background: var(--todd-paper);
+}
+
+.todd-intro-snow-actor {
+  z-index: 2;
+  will-change: transform;
+}
+
+.todd-intro-snow-actor--thrower {
+  transform-origin: 53% 48%;
+  animation: todd-snow-thrower var(--ngu-snow-cycle) ease-out infinite;
+}
+
+.todd-intro-snow-launch,
+.todd-intro-snow-trail,
 .todd-intro-snowball {
   position: absolute;
-  left: 19.1%;
-  top: 43.7%;
-  width: 4.4%;
+  left: 48.4%;
+  top: 48.5%;
+  width: 2.8%;
   aspect-ratio: 1;
   border-radius: 50%;
   pointer-events: none;
 }
 
-.todd-intro-snow-mask {
-  background: var(--todd-paper);
-  transform: scale(1.24);
+.todd-intro-snow-launch {
+  z-index: 3;
+  width: 3.8%;
+  background:
+    radial-gradient(circle at 28% 35%, #fff 0 11%, transparent 13%),
+    radial-gradient(circle at 70% 24%, #eef8ff 0 9%, transparent 11%),
+    radial-gradient(circle, rgb(222 239 250 / 72%) 0 38%, transparent 41%);
+  opacity: 0;
+  animation: todd-snow-launch var(--ngu-snow-cycle) ease-out infinite;
+}
+
+.todd-intro-snow-trail {
+  z-index: 3;
+  left: 48.7%;
+  top: 49%;
+  width: 4%;
+  aspect-ratio: 3.2;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #fff, rgb(211 233 248 / 58%) 42%, transparent);
+  opacity: 0;
+  transform-origin: 0 50%;
+  animation: todd-snow-trail var(--ngu-snow-cycle) linear infinite;
 }
 
 .todd-intro-snowball {
-  z-index: 2;
+  z-index: 4;
   border: 1px solid rgb(105 175 235 / 26%);
   background: radial-gradient(circle at 35% 28%, #fff 0 32%, #f5fbff 56%, #dceefa 100%);
   box-shadow:
     inset -2px -2px 3px rgb(105 175 235 / 18%),
     0 2px 3px rgb(15 15 15 / 12%);
-  animation: todd-snowball-throw 6.8s cubic-bezier(0.3, 0.05, 0.35, 1) infinite;
+  animation: todd-snowball-throw var(--ngu-snow-cycle) linear infinite;
+  will-change: transform, opacity;
+}
+
+.todd-intro-snow-contact {
+  position: absolute;
+  left: 19%;
+  top: 48.5%;
+  z-index: 4;
+  width: 5%;
+  height: 2%;
+  border-radius: 50%;
+  background: rgb(136 181 213 / 34%);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 58%);
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: center;
+  animation: todd-snow-contact var(--ngu-snow-cycle) ease-out infinite;
 }
 
 .todd-intro-snow-impact {
   position: absolute;
-  left: 64%;
-  top: 37%;
-  z-index: 3;
-  width: 5%;
+  left: 19%;
+  top: 48.5%;
+  z-index: 5;
+  width: 4.5%;
   aspect-ratio: 1;
-  border: 2px solid rgb(220 238 250 / 90%);
-  border-radius: 50%;
-  box-shadow:
-    -8px -5px 0 -5px #fff,
-    9px -2px 0 -6px #fff,
-    1px 9px 0 -6px #dceefa;
+  background:
+    radial-gradient(circle at 50% 50%, #fff 0 16%, transparent 18%),
+    conic-gradient(
+      from 18deg,
+      transparent 0 8%,
+      rgb(237 248 255 / 92%) 9% 18%,
+      transparent 19% 32%,
+      #fff 33% 43%,
+      transparent 44% 62%,
+      rgb(220 238 250 / 92%) 63% 73%,
+      transparent 74% 100%
+    );
+  clip-path: polygon(50% 0, 61% 31%, 92% 18%, 72% 46%, 100% 61%, 65% 63%, 75% 100%, 51% 72%, 25% 100%, 34% 65%, 0 70%, 29% 48%, 7% 20%, 40% 32%);
   pointer-events: none;
   opacity: 0;
-  animation: todd-snow-impact 6.8s ease-out infinite;
+  animation: todd-snow-impact var(--ngu-snow-cycle) ease-out infinite;
+}
+
+.todd-intro-snow-particle {
+  --snow-particle-size: 18%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--snow-particle-size);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff 0 40%, #dceefa 100%);
+  opacity: 0;
+  pointer-events: none;
+  animation: todd-snow-particle var(--ngu-snow-cycle) ease-out infinite;
+}
+
+.todd-intro-snow-particle--1 {
+  --snow-particle-mid-x: -150%;
+  --snow-particle-mid-y: -190%;
+  --snow-particle-end-x: -245%;
+  --snow-particle-end-y: -80%;
+  --snow-particle-size: 17%;
+}
+
+.todd-intro-snow-particle--2 {
+  --snow-particle-mid-x: -25%;
+  --snow-particle-mid-y: -225%;
+  --snow-particle-end-x: -45%;
+  --snow-particle-end-y: -115%;
+  --snow-particle-size: 14%;
+  --snow-particle-opacity: 0.8;
+}
+
+.todd-intro-snow-particle--3 {
+  --snow-particle-mid-x: 105%;
+  --snow-particle-mid-y: -160%;
+  --snow-particle-end-x: 190%;
+  --snow-particle-end-y: -55%;
+  --snow-particle-size: 15%;
+}
+
+.todd-intro-snow-eye {
+  position: absolute;
+  z-index: 6;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #fff;
+  pointer-events: none;
+}
+
+.todd-intro-snow-eye--yeti-left {
+  left: 55.49%;
+  top: 28.66%;
+  width: 3.8%;
+  height: 4.8%;
+  background: #bed8e8;
+}
+
+.todd-intro-snow-eye--yeti-right {
+  left: 62.8%;
+  top: 23.28%;
+  width: 4%;
+  height: 5%;
+  background: #bed8e8;
+}
+
+.todd-intro-snow-eye__iris {
+  position: absolute;
+  top: 9%;
+  left: 9%;
+  width: 82%;
+  height: 82%;
+  border-radius: 50%;
+  background: #0f0f0f;
+  animation: todd-snow-eye-look-yeti var(--ngu-snow-look-cycle)
+    cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+}
+
+.todd-intro-snow-eye__glint {
+  position: absolute;
+  top: 18%;
+  left: 22%;
+  width: 28%;
+  height: 28%;
+  border-radius: 50%;
+  background: #fff;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .todd-intro-art-stage,
   .todd-intro-art img,
-  .todd-intro-snow-scene img,
+  .todd-intro-snow-actor,
+  .todd-intro-snow-launch,
+  .todd-intro-snow-trail,
   .todd-intro-snowball,
+  .todd-intro-snow-contact,
   .todd-intro-snow-impact,
+  .todd-intro-snow-particle,
+  .todd-intro-snow-eye__iris,
   .todd-ngu-eye__iris,
   .todd-ngu-eye__lid,
   .todd-ngu-ornament__ball,
@@ -2627,6 +3096,7 @@ nav[data-nav-state="closing"] .nav-phone-contact {
     animation: none;
   }
 
+  .todd-intro-snow-eye__iris,
   .todd-ngu-eye__iris {
     transform: translate(0, 0);
   }
@@ -2639,12 +3109,14 @@ nav[data-nav-state="closing"] .nav-phone-contact {
     display: none;
   }
 
-  .todd-intro-snowball {
-    opacity: 1;
-    transform: scale(0.92);
-  }
-
-  .todd-intro-snow-impact {
+  .todd-intro-snow-restoration,
+  .todd-intro-snow-actor,
+  .todd-intro-snow-launch,
+  .todd-intro-snow-trail,
+  .todd-intro-snowball,
+  .todd-intro-snow-contact,
+  .todd-intro-snow-impact,
+  .todd-intro-snow-particle {
     display: none;
   }
 }
@@ -2726,7 +3198,18 @@ nav[data-nav-state="closing"] .nav-phone-contact {
   .todd-intro-snow-scene {
     width: min(100%, 92vw);
     margin-top: 4px;
-    overflow: hidden;
+    overflow: visible;
+  }
+
+  .todd-intro-snow-restoration,
+  .todd-intro-snow-actor,
+  .todd-intro-snow-launch,
+  .todd-intro-snow-trail,
+  .todd-intro-snowball,
+  .todd-intro-snow-contact,
+  .todd-intro-snow-impact,
+  .todd-intro-snow-particle {
+    display: none !important;
   }
 
   #text_intro .todd-intro__wrapper-26 {
@@ -3374,27 +3857,146 @@ h3.todd-text.todd-service-row__title {
 }
 
 @media (max-width: 809.98px) {
+  .todd-services__container.todd-card-shell {
+    border-radius: clamp(28px, 9vw, 40px);
+  }
+
+  .todd-intro__wrapper-25 .todd-intro__wrapper-8 {
+    gap: 0;
+    padding: 30px 16px 34px !important;
+  }
+
+  .todd-services__title {
+    min-height: 0;
+    padding: 6px 4px 30px !important;
+  }
+
+  .todd-services__title h2.todd-text {
+    --todd-font-size: clamp(25px, 7.2vw, 30px);
+    --todd-line-height: 1.05;
+  }
+
+  .todd-services__scribble {
+    bottom: 8px !important;
+    width: min(220px, 70vw) !important;
+    height: 64px !important;
+  }
+
+  .todd-services__scribble > div,
+  .todd-services__scribble > div > div,
+  .todd-services__scribble svg {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
   .todd-service-row {
+    position: relative;
+    width: 100% !important;
+    max-width: none;
     height: auto !important;
-    min-height: 84px;
+    min-height: 88px;
+  }
+
+  .todd-service-row + .todd-service-row::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 10px;
+    left: 10px;
+    height: 1px;
+    background: rgb(247 244 237 / 24%);
+    pointer-events: none;
   }
 
   .todd-service-row__link.todd-services__tablet-10 {
-    cursor: unset;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 34px;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
     height: auto;
-    min-height: 84px;
-    padding: 6px 8px 10px;
+    min-height: 88px;
+    padding: 15px 10px;
+    border-radius: 14px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .todd-service-row__link::after {
+    content: "→" / "";
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid var(--todd-ink);
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--todd-paper) 90%, var(--todd-yellow));
+    color: var(--todd-ink);
+    box-shadow: 2px 2px 0 rgb(15 15 15 / 22%);
+    font-family: var(--font-sans);
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1;
+    transition:
+      transform 180ms ease,
+      box-shadow 180ms ease;
   }
 
   .todd-service-row__link .todd-services__icon-and-title {
-    justify-content: center;
-    width: min(247px, 100%);
+    justify-content: flex-start;
+    width: 100%;
+    min-width: 0;
   }
 
   .todd-service-row__link .todd-services__tablet-11 {
     flex-direction: column;
     align-items: flex-start;
+    width: 100%;
+    min-width: 0;
+  }
+
+  h3.todd-text.todd-service-row__title {
+    --todd-font-size: clamp(23px, 6.8vw, 29px);
+    --todd-line-height: 1.02;
+    --todd-letter-spacing: -0.045em;
+  }
+
+  .todd-page-root .todd-service-row__subtitle.todd-text {
+    min-height: 25px;
+    margin-top: 7px;
+    padding: 4px 9px;
+    font-size: 13px;
+  }
+
+  .todd-page-root .todd-service-row__link:hover,
+  .todd-page-root .todd-service-row__link:focus-visible {
+    outline-offset: 2px;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .todd-page-root .todd-service-row__link:hover::after,
+  .todd-page-root .todd-service-row__link:focus-visible::after {
+    transform: translateX(2px);
+    box-shadow: 1px 1px 0 rgb(15 15 15 / 22%);
+  }
+
+  .todd-page-root .todd-service-row__link:active {
+    background: rgb(247 244 237 / 16%);
+    transform: scale(0.985);
+  }
+
+  .todd-page-root .todd-services__ompass {
+    margin-top: 24px;
+    padding-bottom: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .todd-service-row__link,
+    .todd-service-row__link::after {
+      transition: none;
+    }
   }
 }
 

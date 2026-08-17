@@ -224,6 +224,11 @@ const MOBILE_BOOK_VIEWPORTS = [
   { width: 768, height: 900, label: "wide mobile" },
 ] as const;
 
+const MOBILE_SERVICES_VIEWPORTS = [
+  { width: 390, height: 900, label: "mobile" },
+  { width: 768, height: 900, label: "wide mobile" },
+] as const;
+
 test.describe("services hierarchy (1024px)", () => {
   test.use({
     viewport: { width: 1024, height: 667 },
@@ -369,6 +374,128 @@ test.describe("services hierarchy (1440px)", () => {
     expect(result.ok, JSON.stringify(result)).toBe(true);
   });
 });
+
+for (const viewport of MOBILE_SERVICES_VIEWPORTS) {
+  test.describe(`mobile services card (${viewport.label} ${viewport.width}px)`, () => {
+    test.use({
+      viewport: { width: viewport.width, height: viewport.height },
+      colorScheme: "light",
+    });
+
+    test.beforeEach(async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await page.goto(`${BASE_URL}/#services`);
+      await page.waitForLoadState("networkidle");
+    });
+
+    test("keeps every service readable, tappable, and inside the card", async ({ page }) => {
+      const result = await page.evaluate(() => {
+        const card = document.querySelector<HTMLElement>(
+          ".todd-services__container.todd-card-shell",
+        );
+        const sectionTitle = document.querySelector<HTMLElement>("#todd-services-title");
+        const links = Array.from(
+          document.querySelectorAll<HTMLElement>(".todd-service-row__link"),
+        );
+        const titles = Array.from(
+          document.querySelectorAll<HTMLElement>(".todd-service-row__title"),
+        );
+        const subtitles = Array.from(
+          document.querySelectorAll<HTMLElement>(".todd-service-row__subtitle"),
+        );
+        const compass = document.querySelector<HTMLElement>(".todd-services__ompass");
+
+        if (
+          !card ||
+          !sectionTitle ||
+          links.length !== 4 ||
+          titles.length !== 4 ||
+          subtitles.length !== 4 ||
+          !compass
+        ) {
+          return null;
+        }
+
+        const cardRect = card.getBoundingClientRect();
+        const titleRect = sectionTitle.getBoundingClientRect();
+        const linkRects = links.map((link) => link.getBoundingClientRect());
+        const titleRects = titles.map((title) => title.getBoundingClientRect());
+        const subtitleRects = subtitles.map((subtitle) => subtitle.getBoundingClientRect());
+        const compassRect = compass.getBoundingClientRect();
+        const arrowStyles = links.map((link) => getComputedStyle(link, "::after"));
+
+        return {
+          documentOverflows:
+            document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+          cardClipsContent: card.scrollHeight > card.clientHeight + 1,
+          titleInsideCard:
+            titleRect.left >= cardRect.left &&
+            titleRect.right <= cardRect.right &&
+            titleRect.top >= cardRect.top,
+          linksInsideCard: linkRects.every(
+            (rect) => rect.left >= cardRect.left && rect.right <= cardRect.right,
+          ),
+          minimumTapHeight: Math.min(...linkRects.map((rect) => rect.height)),
+          rowsDoNotOverlap: linkRects.slice(0, -1).every(
+            (rect, index) => linkRects[index + 1]!.top >= rect.bottom - 1,
+          ),
+          titlesStayClearOfArrow: titleRects.every(
+            (rect, index) => rect.right <= linkRects[index]!.right - 44,
+          ),
+          subtitlesAreVisible: subtitleRects.every(
+            (rect) => rect.width > 0 && rect.height >= 24,
+          ),
+          arrowsAreVisible: arrowStyles.every(
+            (style) =>
+              style.content.includes("→") &&
+              Number.parseFloat(style.width) >= 32 &&
+              Number.parseFloat(style.height) >= 32,
+          ),
+          compassInsideCard:
+            compassRect.left >= cardRect.left &&
+            compassRect.right <= cardRect.right &&
+            compassRect.bottom <= cardRect.bottom,
+          compassBottomInset: cardRect.bottom - compassRect.bottom,
+        };
+      });
+
+      expect(result).not.toBeNull();
+      expect(result!.documentOverflows).toBe(false);
+      expect(result!.cardClipsContent).toBe(false);
+      expect(result!.titleInsideCard).toBe(true);
+      expect(result!.linksInsideCard).toBe(true);
+      expect(result!.minimumTapHeight).toBeGreaterThanOrEqual(44);
+      expect(result!.rowsDoNotOverlap).toBe(true);
+      expect(result!.titlesStayClearOfArrow).toBe(true);
+      expect(result!.subtitlesAreVisible).toBe(true);
+      expect(result!.arrowsAreVisible).toBe(true);
+      expect(result!.compassInsideCard).toBe(true);
+      expect(result!.compassBottomInset).toBeGreaterThanOrEqual(24);
+    });
+
+    test("uses stable keyboard focus feedback without shifting the row", async ({ page }) => {
+      const firstLink = page.locator(".todd-service-row__link").first();
+      await firstLink.focus();
+
+      const focusedStyle = await firstLink.evaluate((node) => {
+        const style = getComputedStyle(node);
+        const arrowStyle = getComputedStyle(node, "::after");
+
+        return {
+          backgroundColor: style.backgroundColor,
+          outlineWidth: style.outlineWidth,
+          transform: style.transform,
+          arrowTransform: arrowStyle.transform,
+        };
+      });
+
+      expect(focusedStyle.backgroundColor).not.toBe("rgba(0, 0, 0, 0)");
+      expect(Number.parseFloat(focusedStyle.outlineWidth)).toBeGreaterThanOrEqual(2);
+      expect(focusedStyle.transform).toBe("none");
+      expect(focusedStyle.arrowTransform).not.toBe("none");
+    });
+  });
+}
 
 for (const viewport of MOBILE_BOOK_VIEWPORTS) {
   test.describe(`mobile books carousel (${viewport.label} ${viewport.width}px)`, () => {
